@@ -15,6 +15,15 @@ module.exports = (sequelize, DataTypes) => {
       //   {
       //     foreignKey: 'organizerId'
       //   }
+      // );
+
+      // User.belongsToMany(
+      //   models.Group,
+      //   {
+      //     through: models.Membership,
+      //     foreignKey: 'userId',
+      //     otherKey: 'groupId'
+      //   }
       // )
     }
   }
