@@ -4,36 +4,46 @@ let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;
 }
-
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('Groups', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstName: {
+      organizerId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        // references: {
+        //   model: 'Users',
+        //   key: 'id'
+        // }
+      },
+      name: {
+        type: Sequelize.STRING(60),
+        allowNull: false
+      },
+      about: {
+        type: Sequelize.TEXT,
+        allowNull: false
+      },
+      type: {
+        type: Sequelize.ENUM('Online', 'In person'),
+        allowNull: false
+      },
+      private: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+      },
+      city: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
-      lastName: {
+      state: {
         type: Sequelize.STRING,
-        allowNull: false,
-      },
-      username: {
-        type: Sequelize.STRING(30),
-        allowNull: false,
-        unique: true
-      },
-      email: {
-        type: Sequelize.STRING(256),
-        allowNull: false,
-        unique: true
-      },
-      hashedPassword: {
-        type: Sequelize.STRING.BINARY
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -48,7 +58,7 @@ module.exports = {
     }, options);
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = "Users";
+    options.tableName = "Groups";
     await queryInterface.dropTable(options);
   }
 };
