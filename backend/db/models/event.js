@@ -3,58 +3,57 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Venue extends Model {
+  class Event extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // Venue.belongsTo(
-      //   models.Group,
-      //   {
-      //     foreignKey: 'groupId'
-      //   }
-      // );
-
-      // Venue.belongsToMany(
-      //   models.Group,
-      //   {
-      //     through: models.Event,
-      //     foreignKey: 'venueId',
-      //     otherKey: 'groupId'
-      //   }
-      // );
+      // define association here
     }
   }
-  Venue.init({
+  Event.init({
+    venueId: {
+      type: DataTypes.INTEGER
+    },
     groupId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    address: {
+    name: {
       type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [5, 256]
+      }
+    },
+    description: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
-    city: {
-      type: DataTypes.STRING,
+    type: {
+      type: DataTypes.ENUM('Online', 'In person'),
       allowNull: false
     },
-    state: {
-      type: DataTypes.STRING,
+    capacity: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    lat: {
-      type: DataTypes.DECIMAL,
+    price: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    lng: {
-      type: DataTypes.DECIMAL,
+    startDate: {
+      type: DataTypes.DATE
+    },
+    endDate: {
+      type: DataTypes.DATE,
       allowNull: false
     }
   }, {
     sequelize,
-    modelName: 'Venue',
+    modelName: 'Event',
   });
-  return Venue;
+  return Event;
 };
