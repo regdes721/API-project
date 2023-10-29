@@ -18,10 +18,10 @@ module.exports = {
       eventId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-         // references: {
-        //   model: 'Events',
-        //   key: 'id'
-        // }
+        references: {
+          model: 'Events',
+          key: 'id'
+        }
       },
       url: {
         type: Sequelize.STRING,

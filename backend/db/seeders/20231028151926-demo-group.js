@@ -31,7 +31,7 @@ module.exports = {
     {
       organizerId: 3,
       name: "Evening Dinners in NYC",
-      about: "Join us for exquisite evening dinners in NYC!",
+      about: "Join us for unforgettable evening dinners in the heart of New York City, where delicious cuisine meets vibrant city lights.",
       type: 'In person',
       private: true,
       city: "New York",
@@ -40,7 +40,7 @@ module.exports = {
     {
       organizerId: 2,
       name: "Brooklyn Visions Debate Club",
-      about: "Unlock your voice at our dynamic school debate club!",
+      about: "Elevate your voice and critical thinking at our dynamic school debate club. Join the discourse!",
       type: 'In person',
       private: true,
       city: "New York",
@@ -49,7 +49,7 @@ module.exports = {
     {
       organizerId: 3,
       name: "Community Garden Club",
-      about: "Cultivate community bonds in our Garden Club.",
+      about: "Grow together, nurture nature! Join our vibrant community garden club and cultivate green spaces with us.",
       type: 'In person',
       private: false,
       city: "New York",
@@ -68,7 +68,7 @@ module.exports = {
     options.tableName = 'Groups';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      name: { [Op.in]: ["Evening Dinners in NYC", "Brooklyn Visions Debate Club", "Community Garden Club"]}
+      name: { [Op.in]: ["Evening Tennis on the Water", "Evening Dinners in NYC", "Brooklyn Visions Debate Club", "Community Garden Club"]}
     });
   }
 };

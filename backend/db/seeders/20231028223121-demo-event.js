@@ -47,7 +47,7 @@ module.exports = {
       groupId: 3,
       name: "Designing with Succulents",
       description: "Martha Stewart will share practical and appealing uses for succulents, and how to use these low-water lovelies to enhance gardens large and small.",
-      type: "In Person",
+      type: "In person",
       capacity: 20,
       price: 20,
       startDate: "2023-11-11 12:00:00",
