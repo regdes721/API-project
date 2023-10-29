@@ -23,8 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     status: {
-      type: DataTypes.ENUM("attending", "waitlist", "pending"),
-      allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [["attending", "waitlist", "pending"]]
+      }
     }
   }, {
     sequelize,

@@ -39,8 +39,11 @@ module.exports = {
         allowNull: false
       },
       type: {
-        type: Sequelize.ENUM('Online', 'In person'),
-        allowNull: false
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          isIn: [['Online', 'In person']]
+        }
       },
       capacity: {
         type: Sequelize.INTEGER,

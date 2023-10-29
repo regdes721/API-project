@@ -32,7 +32,7 @@ module.exports = {
         }
       },
       status: {
-        type: Sequelize.ENUM("co-host", "member", "pending"),
+        type: Sequelize.STRING,
         allowNull: false
       },
       createdAt: {
