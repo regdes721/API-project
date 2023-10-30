@@ -2,8 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
-const { User } = require('../models');
-const bcrypt = require("bcryptjs");
+const { GroupImage } = require('../models');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -21,27 +20,21 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   await User.bulkCreate([
+   await GroupImage.bulkCreate([
     {
-      firstName: 'Peter',
-      lastName: 'Parker',
-      email: 'peterparker@oscorp.io',
-      username: 'PeterParker',
-      hashedPassword: bcrypt.hashSync('spiderman')
+      groupId: 1,
+      url: "image url 1",
+      preview: true
     },
     {
-      firstName: 'Miles',
-      lastName: 'Morales',
-      email: 'brooklynvisionary@bv.edu',
-      username: 'MilesMorales',
-      hashedPassword: bcrypt.hashSync('ny1andonly')
+      groupId: 2,
+      url: "image url 2",
+      preview: true
     },
     {
-      firstName: 'Harry',
-      lastName: 'Osborn',
-      email: 'harryosborn@oscorp.io',
-      username: 'EmilyMayFoundation',
-      hashedPassword: bcrypt.hashSync('healtheworld')
+      groupId: 3,
+      url: "image url 3",
+      preview: true
     }
    ], { validate: true })
   },
@@ -53,10 +46,10 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    options.tableName = 'Users';
+    options.tableName = 'GroupImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      username: { [Op.in]: ['PeterParker', 'MilesMorales', 'EmilyMayFoundation'] }
-    }, {})
+      url: { [Op.in]: ["image url 1", "image url 2", "image url 3"]}
+    })
   }
 };
