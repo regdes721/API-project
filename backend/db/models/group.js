@@ -16,21 +16,18 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'organizerId'
         }
       );
-
       Group.hasMany(
         models.GroupImage,
         {
           foreignKey: 'groupId'
         }
       );
-
       Group.hasMany(
         models.Venue,
         {
           foreignKey: 'groupId'
         }
       );
-
       Group.belongsToMany(
         models.User,
         {
