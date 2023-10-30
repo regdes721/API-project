@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router();
 const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
 const { Op } = require('sequelize');
+const { requireAuth } = require('../../utils/auth');
 
 router.get('/', async (req, res) => {
     const groups = await Group.findAll();
@@ -35,6 +36,21 @@ router.get('/', async (req, res) => {
 
     res.json(groupsBody);
 });
+
+router.get('/current', requireAuth, async (req, res) => {
+    console.log(user)
+
+});
+
+    // const { credential, password } = req.body;
+    // const user = await User.findOne({
+    //     where: {
+    //         [Op.or]: {
+    //           username: credential,
+    //           email: credential
+    //         }
+    //       }
+    // });
 
 router.get('/:groupId', async (req, res) => {
     const groupId = req.params.groupId;
@@ -84,6 +100,12 @@ router.get('/:groupId', async (req, res) => {
         })
         // next(err)
     }
+
+    router.post('', requireAuth, async (req, res) => {
+        const { name, about, type, private, city, state } = req.body;
+
+        
+    });
 });
 
 module.exports = router;
