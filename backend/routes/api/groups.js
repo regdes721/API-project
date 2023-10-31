@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
                 groupId: group.id,
                 preview: true
             }
-        })
+        });
         groupData.previewImage = groupImage.url
         groupsList.push(groupData);
     }
@@ -37,20 +37,51 @@ router.get('/', async (req, res) => {
     res.json(groupsBody);
 });
 
-router.get('/current', requireAuth, async (req, res) => {
-    console.log("hi")
+router.get('/current', requireAuth, restoreUser, async (req, res) => {
+    const groupsBody = {
+        "Groups": []
+    }
+    let groupsList = [];
+    const groups = await Group.findAll({
+        include: User,
+        through: {
+            model: Membership,
+            where: {
+                userId: req.user.id
+            }
+        } ,
+        where: {
+            [Op.or]: {
+                organizerId: req.user.id,
+            }
+        }
+    });
+    for (const group of groups) {
+        const groupData = group.toJSON();
+        groupData.numMembers = await Membership.count({
+            where: {
+                groupId: group.id,
+                status: {
+                    [Op.not]: "pending"
+                }
+            }
+        });
+        groupImage = await GroupImage.findOne({
+            where: {
+                groupId: group.id,
+                preview: true
+            }
+        });
+        groupData.previewImage = groupImage.url
+        delete groupData.createdAt;
+        delete groupData.updatedAt;
+        delete groupData.User;
+        groupsList.push(groupData);
+    }
+    groupsBody["Groups"] = groupsList;
 
+    res.json(groupsBody);
 });
-
-    // const { credential, password } = req.body;
-    // const user = await User.findOne({
-    //     where: {
-    //         [Op.or]: {
-    //           username: credential,
-    //           email: credential
-    //         }
-    //       }
-    // });
 
 router.get('/:groupId', async (req, res) => {
     const groupId = req.params.groupId;
@@ -100,42 +131,45 @@ router.get('/:groupId', async (req, res) => {
         });
         // next(err)
     }
+});
 
-    router.post('/', requireAuth, async (req, res) => {
-        // const { name, about, type, private, city, state } = req.body;
-        console.log("hi")
+router.post('/', requireAuth, restoreUser, async (req, res) => {
+    const organizerId = req.user.id;
+    const { name, about, type, private, city, state } = req.body;
+    const newGroup = await Group.create({
+
+    })
+});
+
+router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
+    const user = req.user.toJSON();
+    const groupId = req.params.groupId;
+    const { url, preview } = req.body;
+    const group = await Group.findOne({
+        where: {
+            id: groupId
+        }
     });
-
-    router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
-        const user = req.user.toJSON();
-        const groupId = req.params.groupId;
-        const { url, preview } = req.body;
-        const group = await Group.findOne({
-            where: {
-                id: groupId
-            }
+    if (group && url && preview && req.user.id === group.organizerId) {
+        const newGroupImage = await GroupImage.create({
+            groupId,
+            url,
+            preview
         });
-        if (group && url && preview && req.user.id === group.organizerId) {
-            const newGroupImage = await GroupImage.create({
-                groupId,
-                url,
-                preview
-            });
-            let newGroupImageResult = newGroupImage.toJSON();
-            delete newGroupImageResult.groupId;
-            delete newGroupImageResult.updatedAt;
-            delete newGroupImageResult.createdAt;
-            res.json(newGroupImageResult);
-        }
-        if (!group) {
-            const err = new Error("Group couldn't be found");
-            err.status = 404;
-            res.json({
-                message: err.message
-            });
-            // next(err)
-        }
-    });
+        let newGroupImageResult = newGroupImage.toJSON();
+        delete newGroupImageResult.groupId;
+        delete newGroupImageResult.updatedAt;
+        delete newGroupImageResult.createdAt;
+        res.json(newGroupImageResult);
+    }
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        err.status = 404;
+        res.json({
+            message: err.message
+        });
+        // next(err)
+    }
 });
 
 module.exports = router;
