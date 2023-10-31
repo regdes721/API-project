@@ -28,7 +28,15 @@ router.get('/', async (req, res) => {
                 preview: true
             }
         });
-        groupData.previewImage = groupImage.url
+        if (groupImage) groupData.previewImage = groupImage.url;
+
+        const createdAt = new Date(groupData.createdAt);
+        const updatedAt = new Date(groupData.updatedAt);
+        const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+        const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+        groupData.createdAt = formattedCreatedAt;
+        groupData.updatedAt = formattedUpdatedAt;
+
         groupsList.push(groupData);
     }
 
@@ -72,7 +80,7 @@ router.get('/current', requireAuth, restoreUser, async (req, res) => {
                 preview: true
             }
         });
-        groupData.previewImage = groupImage.url
+        if (groupImage) groupData.previewImage = groupImage.url
         delete groupData.createdAt;
         delete groupData.updatedAt;
         delete groupData.User;
@@ -119,9 +127,19 @@ router.get('/:groupId', async (req, res) => {
             attributes: {
                 exclude: ['createdAt', 'updatedAt']
             }
-        })
+        });
 
-        res.json(groupData)
+        const createdAt = new Date(groupData.createdAt);
+        const updatedAt = new Date(groupData.updatedAt);
+        const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+        const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+        const formattedResponse = {
+            ...groupData,
+            createdAt: formattedCreatedAt,
+            updatedAt: formattedUpdatedAt
+        }
+
+        res.json(formattedResponse);
     }
     if (!group) {
         const err = new Error("Group couldn't be found");
@@ -133,12 +151,59 @@ router.get('/:groupId', async (req, res) => {
     }
 });
 
-router.post('/', requireAuth, restoreUser, async (req, res) => {
+router.post('/', requireAuth, restoreUser, async (req, res, next) => {
     const organizerId = req.user.id;
     const { name, about, type, private, city, state } = req.body;
-    const newGroup = await Group.create({
-
-    })
+    let errors = {};
+    if (name.length >  60) {
+        errors.name = "Name must be 60 characters or less";
+    }
+    if (about.length < 50) {
+        errors.about = "About must be 50 characters or more";
+    }
+    if (type !== 'Online' && type !== 'In person') {
+        errors.type = "Type must be 'Online' or 'In person'";
+    }
+    if (private !== true && private !== false) {
+        errors.private = "Private must be a boolean";
+    }
+    if (!city) {
+        errors.city = "City is required";
+    }
+    if (!state) {
+        errors.state = "State is required";
+    }
+    if (errors.name || errors.about || errors.type || errors.private || errors.city || errors.state) {
+        const err = new Error("Bad Request");
+        res.status(400);
+        err.errors = errors
+        return res.json({
+            message: err.message,
+            errors
+        });
+        // next(err)
+    }
+    let newGroup = await Group.create({
+        organizerId,
+        name,
+        about,
+        type,
+        private,
+        city,
+        state
+    });
+    newGroup = newGroup.toJSON();
+    const createdAt = new Date(newGroup.createdAt);
+    const updatedAt = new Date(newGroup.updatedAt);
+    const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedResponse = {
+        ...newGroup,
+        createdAt: formattedCreatedAt,
+        updatedAt: formattedUpdatedAt
+    }
+    res.status(201);
+    res.json(formattedResponse);
 });
 
 router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
@@ -170,6 +235,74 @@ router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err)
     }
+});
+
+router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
+    const organizerId = req.user.id;
+    const groupId = req.params.groupId;
+    let group = await Group.findOne({
+        where: {
+            id: groupId,
+            organizerId
+        }
+    });
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        err.status = 404;
+        res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    const { name, about, type, private, city, state } = req.body;
+    let errors = {};
+    if (name && name.length >  60) {
+        errors.name = "Name must be 60 characters or less";
+    }
+    if (about && about.length < 50) {
+        errors.about = "About must be 50 characters or more";
+    }
+    if (type && type !== 'Online' && type !== 'In person') {
+        errors.type = "Type must be 'Online' or 'In person'";
+    }
+    if (private && private !== true && private !== false) {
+        errors.private = "Private must be a boolean";
+    }
+    if (city === "") {
+        errors.city = "City is required";
+    }
+    if (state === "") {
+        errors.state = "State is required";
+    }
+    if (errors.name || errors.about || errors.type || errors.private || errors.city || errors.state) {
+        const err = new Error("Bad Request");
+        res.status(400);
+        err.errors = errors
+        return res.json({
+            message: err.message,
+            errors
+        });
+        // next(err)
+    }
+    if (name) group.name = name;
+    if (about) group.about = about;
+    if (type) group.type = type;
+    if (private) group.private = private;
+    if (city) group.city = city;
+    if (state) group.state = state;
+    group.updatedAt = new Date();
+    await group.save();
+    group = group.toJSON();
+    const createdAt = new Date(group.createdAt);
+    const updatedAt = new Date(group.updatedAt);
+    const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedResponse = {
+        ...group,
+        createdAt: formattedCreatedAt,
+        updatedAt: formattedUpdatedAt
+    }
+    res.json(formattedResponse);
 });
 
 module.exports = router;
