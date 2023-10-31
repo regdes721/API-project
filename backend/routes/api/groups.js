@@ -305,4 +305,27 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
     res.json(formattedResponse);
 });
 
+router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
+    const organizerId = req.user.id;
+    const groupId = req.params.groupId;
+    let group = await Group.findOne({
+        where: {
+            id: groupId,
+            organizerId
+        }
+    });
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        err.status = 404;
+        res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    await group.destroy();
+    res.json({
+        "message": "Successfully deleted"
+    })
+});
+
 module.exports = router;
