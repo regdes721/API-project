@@ -328,4 +328,39 @@ router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
     })
 });
 
+router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
+    const organizerId = req.user.id;
+    const groupId = req.params.groupId;
+    const venuesBody = {
+        "Venues": []
+    }
+    let venuesList = [];
+    let group = await Group.findOne({
+        where: {
+            id: groupId,
+            organizerId
+        },
+        include: Venue
+    });
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        err.status = 404;
+        res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    group = group.toJSON();
+    let venues = group.Venues;
+    for (const venue of venues) {
+        delete venue.createdAt;
+        delete venue.updatedAt;
+        delete venue.Event;
+        venuesList.push(venue);
+    }
+    venuesBody["Venues"] = venuesList;
+
+    res.json(venuesBody);
+});
+
 module.exports = router;
