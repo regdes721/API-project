@@ -36,7 +36,8 @@ router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
     let errors = {};
     if (!venueOrganizer && !userCoHost) {
         const err = new Error("Group couldn't be found");
-        err.status = 404;
+        res.status(404);
+        // err.status = 404;
         return res.json({
             message: err.message
         });
