@@ -19,13 +19,18 @@ module.exports = (sequelize, DataTypes) => {
       Group.hasMany(
         models.GroupImage,
         {
-          foreignKey: 'groupId'
+          foreignKey: 'groupId',
+          onDelete: 'CASCADE',
+          hooks: true
         }
       );
       Group.hasMany(
         models.Venue,
         {
-          foreignKey: 'groupId'
+          foreignKey: 'groupId',
+          onDelete: 'CASCADE',
+          hooks: true,
+          as: 'venues'
         }
       );
       Group.belongsToMany(
@@ -42,12 +47,19 @@ module.exports = (sequelize, DataTypes) => {
         {
           through: models.Event,
           foreignKey: 'groupId',
-          otherKey: 'venueId'
+          otherKey: 'venueId',
+          as: 'eventsVenues'
         }
       );
     }
   }
   Group.init({
+    // id: {
+    //   allowNull: false,
+    //   autoIncrement: true,
+    //   primaryKey: true,
+    //   type: DataTypes.INTEGER
+    // },
     organizerId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -56,7 +68,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(60),
       allowNull: false,
       validate: {
-        len: [1, 60]
+        len: {
+          args: [1, 60],
+          // msg: "Name must be 60 characters or less"
+        }
       }
     },
     about: {
