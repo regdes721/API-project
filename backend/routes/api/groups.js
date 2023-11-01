@@ -400,8 +400,8 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     if (!address) errors.address = "Street address is required";
     if (!city) errors.city = "City is required";
     if (!state) errors.state = "State is required";
-    if (typeof lat !== 'number') errors.lat = "Latitude is not valid";
-    if (typeof lng !== 'number') errors.lng = "Longitude is not valid";
+    if (typeof lat !== 'number' || lat < -90 || lat > 90) errors.lat = "Latitude is not valid";
+    if (typeof lng !== 'number' || lng < -180 || lng > 180) errors.lng = "Longitude is not valid";
     if (errors.address || errors.city || errors.state || errors.lat || errors.lng) {
         const err = new Error("Bad Request");
         res.status(400);
