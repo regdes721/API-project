@@ -336,32 +336,28 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     }
     let venuesList = [];
     let group = await Group.findByPk(id, {
-        where: {
-            organizerId
-        },
-        include: Venue
+        include: 'venues'
     });
-    res.json(group);
-    // if (!group) {
-    //     const err = new Error("Group couldn't be found");
-    //     err.status = 404;
-    //     return res.json({
-    //         message: err.message
-    //     });
-    //     // next(err)
-    // }
-    // group = group.toJSON();
-    // let venues = group.Venues;
-    // console.log(venues);
-    // for (const venue of venues) {
-    //     delete venue.createdAt;
-    //     delete venue.updatedAt;
-    //     delete venue.Event;
-    //     venuesList.push(venue);
-    // }
-    // venuesBody["Venues"] = venuesList;
+    if (!group || organizerId !== group.organizerId) {
+        const err = new Error("Group couldn't be found");
+        err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    group = group.toJSON();
+    let venues = group.venues;
+    console.log(venues);
+    for (const venue of venues) {
+        delete venue.createdAt;
+        delete venue.updatedAt;
+        delete venue.Event;
+        venuesList.push(venue);
+    }
+    venuesBody["Venues"] = venuesList;
 
-    // res.json(venuesBody);
+    res.json(venuesBody);
 });
 
 router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
