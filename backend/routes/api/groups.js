@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
                 }
             }
         });
-        groupImage = await GroupImage.findOne({
+        let groupImage = await GroupImage.findOne({
             where: {
                 groupId: group.id,
                 preview: true
@@ -418,6 +418,10 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     delete venue.createdAt;
     delete venue.updatedAt;
     res.json(venue);
+});
+
+router.get('/:groupId/events', async (req, res) => {
+
 });
 
 module.exports = router;
