@@ -379,8 +379,13 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
                 userId: req.user.id,
                 status: "co-host"
             }
+        },
+        where: {
+            id: groupId
         }
-    })
+    });
+    const { address, city, state, lat, lng } = req.body;
+    let errors = {};
     if (!groupOrganizer && !groupCoHost) {
         const err = new Error("Group couldn't be found");
         err.status = 404;
@@ -389,27 +394,27 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err)
     }
+    if (!address) errors.address = "Street address is required";
+    if (!city) errors.city = "City is required";
+    if (!state) errors.state = "State is required";
+    if (!lat || Number.isNaN(parseInt(lat))) errors.lat = "Latitude is not valid";
+    if (!lng || Number.isNaN(parseInt(lng))) errors.lng = "Longitude is not valid";
+    if (errors.address || errors.city || errors.state || errors.lat || errors.lng) {
+        const err = new Error("Bad Request");
+        res.status(400);
+        err.errors = errors;
+        return res.json({
+            message: err.message,
+            errors
+        });
+        // next(err)
+    }
     let group = groupOrganizer || groupCoHost;
-    group = group.toJSON();
-
-
-
-
-    res.json(group);
-    // const groups = await Group.findAll({
-    //     include: User,
-    //     through: {
-    //         model: Membership,
-    //         where: {
-    //             userId: req.user.id
-    //         }
-    //     } ,
-    //     where: {
-    //         [Op.or]: {
-    //             organizerId: req.user.id,
-    //         }
-    //     }
-    // });
+    let venue = await group.createVenue({ address, city, state, lat, lng });
+    venue = venue.toJSON();
+    delete venue.createdAt;
+    delete venue.updatedAt;
+    res.json(venue);
 });
 
 module.exports = router;
