@@ -42,7 +42,7 @@ router.get('/', async (req, res) => {
 
     groupsBody["Groups"] = groupsList;
 
-    res.json(groupsBody);
+    return res.json(groupsBody);
 });
 
 router.get('/current', requireAuth, restoreUser, async (req, res) => {
@@ -88,7 +88,7 @@ router.get('/current', requireAuth, restoreUser, async (req, res) => {
     }
     groupsBody["Groups"] = groupsList;
 
-    res.json(groupsBody);
+    return res.json(groupsBody);
 });
 
 router.get('/:groupId', async (req, res) => {
@@ -144,7 +144,7 @@ router.get('/:groupId', async (req, res) => {
     if (!group) {
         const err = new Error("Group couldn't be found");
         err.status = 404;
-        res.json({
+        return res.json({
             message: err.message
         });
         // next(err)
@@ -203,7 +203,7 @@ router.post('/', requireAuth, restoreUser, async (req, res, next) => {
         updatedAt: formattedUpdatedAt
     }
     res.status(201);
-    res.json(formattedResponse);
+    return res.json(formattedResponse);
 });
 
 router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
@@ -225,12 +225,12 @@ router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
         delete newGroupImageResult.groupId;
         delete newGroupImageResult.updatedAt;
         delete newGroupImageResult.createdAt;
-        res.json(newGroupImageResult);
+        return res.json(newGroupImageResult);
     }
     if (!group) {
         const err = new Error("Group couldn't be found");
         err.status = 404;
-        res.json({
+        return res.json({
             message: err.message
         });
         // next(err)
@@ -302,7 +302,7 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
         createdAt: formattedCreatedAt,
         updatedAt: formattedUpdatedAt
     }
-    res.json(formattedResponse);
+    return res.json(formattedResponse);
 });
 
 router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
@@ -317,7 +317,7 @@ router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
     if (!group) {
         const err = new Error("Group couldn't be found");
         err.status = 404;
-        res.json({
+        return res.json({
             message: err.message
         });
         // next(err)
@@ -345,7 +345,7 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     if (!group) {
         const err = new Error("Group couldn't be found");
         err.status = 404;
-        res.json({
+        return res.json({
             message: err.message
         });
         // next(err)
@@ -361,6 +361,55 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     venuesBody["Venues"] = venuesList;
 
     res.json(venuesBody);
+});
+
+router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
+    const groupId = req.params.groupId;
+    const groupOrganizer = await Group.findOne({
+        where: {
+            id: groupId,
+            organizerId: req.user.id
+        },
+    });
+    const groupCoHost = await Group.findOne({
+        include: User,
+        through: {
+            model: Membership,
+            where: {
+                userId: req.user.id,
+                status: "co-host"
+            }
+        }
+    })
+    if (!groupOrganizer && !groupCoHost) {
+        const err = new Error("Group couldn't be found");
+        err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    let group = groupOrganizer || groupCoHost;
+    group = group.toJSON();
+
+
+
+
+    res.json(group);
+    // const groups = await Group.findAll({
+    //     include: User,
+    //     through: {
+    //         model: Membership,
+    //         where: {
+    //             userId: req.user.id
+    //         }
+    //     } ,
+    //     where: {
+    //         [Op.or]: {
+    //             organizerId: req.user.id,
+    //         }
+    //     }
+    // });
 });
 
 module.exports = router;
