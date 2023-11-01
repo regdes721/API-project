@@ -17,7 +17,7 @@ router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
             id: venueId
         }
     });
-    const venueCoHost = await Venue.findOne({
+    const venueCheck = await Venue.findOne({
         include: {
             model: Group
         },
@@ -25,17 +25,23 @@ router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
             id: venueId
         }
     });
-    const userCoHost = await Membership.findOne({
+    const userCoHost = await Membership.findAll({
         where: {
             userId: req.user.id,
-            groupId: venueCoHost.Group.id,
+            // groupId: venueCheck.Group.id,
             status: "co-host"
         }
     });
+
+    let venueCoHost;
+    for (const membership of userCoHost) {
+        if (venueCheck && membership.groupId === venueCheck.Group.id && membership.status === 'co-host') venueCoHost = membership;
+    }
+
     const { address, city, state, lat, lng } = req.body;
     let errors = {};
-    if (!venueOrganizer && !userCoHost) {
-        const err = new Error("Group couldn't be found");
+    if (!venueOrganizer && !venueCoHost) {
+        const err = new Error("Venue couldn't be found");
         res.status(404);
         // err.status = 404;
         return res.json({
@@ -58,7 +64,7 @@ router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err)
     }
-    let venue = venueOrganizer || venueCoHost;
+    let venue = venueOrganizer || venueCheck;
     if (address) venue.address = address;
     if (city) venue.city = city;
     if (state) venue.state = state;
