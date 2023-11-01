@@ -143,7 +143,8 @@ router.get('/:groupId', async (req, res) => {
     }
     if (!group) {
         const err = new Error("Group couldn't be found");
-        err.status = 404;
+        res.status(404);
+        // err.status = 404;
         return res.json({
             message: err.message
         });
@@ -229,7 +230,8 @@ router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
     }
     if (!group) {
         const err = new Error("Group couldn't be found");
-        err.status = 404;
+        res.status(404);
+        // err.status = 404;
         return res.json({
             message: err.message
         });
@@ -248,8 +250,9 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
     });
     if (!group) {
         const err = new Error("Group couldn't be found");
-        err.status = 404;
-        res.json({
+        res.status(404);
+        // err.status = 404;
+        return res.json({
             message: err.message
         });
         // next(err)
@@ -316,7 +319,8 @@ router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
     });
     if (!group) {
         const err = new Error("Group couldn't be found");
-        err.status = 404;
+        res.status(404);
+        // err.status = 404;
         return res.json({
             message: err.message
         });
@@ -340,7 +344,8 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     });
     if (!group || organizerId !== group.organizerId) {
         const err = new Error("Group couldn't be found");
-        err.status = 404;
+        res.status(404);
+        // err.status = 404;
         return res.json({
             message: err.message
         });
@@ -385,7 +390,8 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     let errors = {};
     if (!groupOrganizer && !groupCoHost) {
         const err = new Error("Group couldn't be found");
-        err.status = 404;
+        res.status(404);
+        // err.status = 404;
         return res.json({
             message: err.message
         });
