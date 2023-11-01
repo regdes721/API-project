@@ -215,7 +215,7 @@ router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
             id: groupId
         }
     });
-    if (group && url && preview && req.user.id === group.organizerId) {
+    if (group && url && (preview === true || preview === false) && req.user.id === group.organizerId) {
         const newGroupImage = await GroupImage.create({
             groupId,
             url,
