@@ -341,27 +341,27 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
         },
         include: Venue
     });
-    // res.json(group);
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        err.status = 404;
-        return res.json({
-            message: err.message
-        });
-        // next(err)
-    }
-    group = group.toJSON();
-    let venues = group.Venues;
-    console.log(venues);
-    for (const venue of venues) {
-        delete venue.createdAt;
-        delete venue.updatedAt;
-        delete venue.Event;
-        venuesList.push(venue);
-    }
-    venuesBody["Venues"] = venuesList;
+    res.json(group);
+    // if (!group) {
+    //     const err = new Error("Group couldn't be found");
+    //     err.status = 404;
+    //     return res.json({
+    //         message: err.message
+    //     });
+    //     // next(err)
+    // }
+    // group = group.toJSON();
+    // let venues = group.Venues;
+    // console.log(venues);
+    // for (const venue of venues) {
+    //     delete venue.createdAt;
+    //     delete venue.updatedAt;
+    //     delete venue.Event;
+    //     venuesList.push(venue);
+    // }
+    // venuesBody["Venues"] = venuesList;
 
-    res.json(venuesBody);
+    // res.json(venuesBody);
 });
 
 router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
