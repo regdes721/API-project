@@ -330,18 +330,18 @@ router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
 
 router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     const organizerId = req.user.id;
-    const groupId = req.params.groupId;
+    const id = req.params.groupId;
     const venuesBody = {
         "Venues": []
     }
     let venuesList = [];
-    let group = await Group.findOne({
+    let group = await Group.findByPk(id, {
         where: {
-            id: groupId,
             organizerId
         },
         include: Venue
     });
+    // res.json(group);
     if (!group) {
         const err = new Error("Group couldn't be found");
         err.status = 404;
@@ -352,6 +352,7 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     }
     group = group.toJSON();
     let venues = group.Venues;
+    console.log(venues);
     for (const venue of venues) {
         delete venue.createdAt;
         delete venue.updatedAt;
@@ -397,7 +398,6 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     if (!address) errors.address = "Street address is required";
     if (!city) errors.city = "City is required";
     if (!state) errors.state = "State is required";
-    console.log(typeof lat);
     if (typeof lat !== 'number') errors.lat = "Latitude is not valid";
     if (typeof lng !== 'number') errors.lng = "Longitude is not valid";
     if (errors.address || errors.city || errors.state || errors.lat || errors.lng) {
