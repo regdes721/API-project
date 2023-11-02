@@ -21,7 +21,7 @@ module.exports = {
           model: 'Venues',
           key: 'id'
         },
-        onDelete: 'CASCADE'
+        onDelete: 'SET NULL'
       },
       groupId: {
         type: Sequelize.INTEGER,
@@ -52,7 +52,7 @@ module.exports = {
         allowNull: false
       },
       price: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL(9, 2),
         allowNull: false
       },
       startDate: {

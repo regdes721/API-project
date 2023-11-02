@@ -41,7 +41,6 @@ module.exports = (sequelize, DataTypes) => {
           otherKey: 'userId'
         }
       );
-
       Group.belongsToMany(
         models.Venue,
         {
@@ -51,15 +50,31 @@ module.exports = (sequelize, DataTypes) => {
           as: 'eventsVenues'
         }
       );
+      Group.hasMany(
+        models.Event,
+        {
+          foreignKey: 'groupId',
+          onDelete: 'CASCADE',
+          hooks: true
+        }
+      );
+      Group.hasMany(
+        models.Membership,
+        {
+          foreignKey: 'groupId',
+          onDelete: 'CASCADE',
+          hooks: true
+        }
+      );
     }
   }
   Group.init({
-    // id: {
-    //   allowNull: false,
-    //   autoIncrement: true,
-    //   primaryKey: true,
-    //   type: DataTypes.INTEGER
-    // },
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     organizerId: {
       type: DataTypes.INTEGER,
       allowNull: false

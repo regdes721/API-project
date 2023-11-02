@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const { Group, Membership, GroupImage, User, Venue } = require('../../db/models');
+const { Group, Membership, GroupImage, User, Venue, Event, Attendance, EventImage } = require('../../db/models');
 const { Op } = require('sequelize');
 const { requireAuth, restoreUser } = require('../../utils/auth');
 
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
                 }
             }
         });
-        groupImage = await GroupImage.findOne({
+        let groupImage = await GroupImage.findOne({
             where: {
                 groupId: group.id,
                 preview: true
@@ -327,9 +327,9 @@ router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
         // next(err)
     }
     await group.destroy();
-    res.json({
+    return res.json({
         "message": "Successfully deleted"
-    })
+    });
 });
 
 router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
@@ -374,8 +374,7 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
         },
     });
     const groupCoHost = await Group.findOne({
-        include: User,
-        through: {
+        include: {
             model: Membership,
             where: {
                 userId: req.user.id,
@@ -418,6 +417,149 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     delete venue.createdAt;
     delete venue.updatedAt;
     res.json(venue);
+});
+
+router.get('/:groupId/events', async (req, res) => {
+    const groupId = req.params.groupId;
+    let group = await Group.findByPk(groupId);
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    const events = await Event.findAll({
+        where: {
+            groupId
+        },
+        include: [
+            {
+                model: Group,
+                attributes: ['id', 'name', 'city', 'state']
+            },
+            {
+                model: Venue,
+                attributes: ['id', 'city', 'state']
+            }
+        ]
+    });
+    const eventsBody = {
+        "Events": []
+    }
+    let eventsList = [];
+    for (const event of events) {
+        const eventData = event.toJSON();
+        eventData.numAttending = await Attendance.count({
+            where: {
+                eventId: event.id,
+                status: "attending"
+            }
+        });
+        let eventImage = await EventImage.findOne({
+            where: {
+                eventId: event.id,
+                preview: true
+            }
+        });
+        if (eventImage) eventData.previewImage = eventImage.url;
+        const startDate = new Date(eventData.startDate);
+        const endDate = new Date(eventData.endDate);
+        const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
+        const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
+        eventData.startDate = formattedStartDate;
+        eventData.endDate = formattedEndDate;
+        delete eventData.description;
+        delete eventData.capacity;
+        delete eventData.price;
+        delete eventData.createdAt;
+        delete eventData.updatedAt;
+        eventsList.push(eventData);
+    }
+    eventsBody["Events"] = eventsList;
+    return res.json(eventsBody);
+});
+
+router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
+    const groupId = req.params.groupId;
+    const groupOrganizer = await Group.findOne({
+        where: {
+            id: groupId,
+            organizerId: req.user.id
+        },
+    });
+    const groupCoHost = await Group.findOne({
+        include: {
+            model: Membership,
+            where: {
+                userId: req.user.id,
+                status: "co-host"
+            }
+        },
+        where: {
+            id: groupId
+        }
+    });
+    if (!groupOrganizer && !groupCoHost) {
+        const err = new Error("Group couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    const priceRegex = /^\d{1,7}(\.\d{1,2})?$/;
+    const currentDate = new Date();
+    let parsedStartDate;
+    let parsedEndDate;
+    let venue;
+    if (startDate) parsedStartDate = new Date(startDate);
+    if (endDate) parsedEndDate = new Date(endDate);
+    let errors = {};
+    if (venueId) {
+        venue = await Venue.findOne({
+            where: {
+                id: venueId,
+                groupId
+            }
+        });
+    }
+    if ((venueId && !venue)) errors.venueId = "Venue does not exist";
+    if ((name && name.length < 5) || !name) errors.name = "Name must be at least 5 characters";
+    if (type !== "Online" && type !== "In person") errors.type = "Type must be Online or In person";
+    if (!Number.isInteger(capacity) || typeof capacity !== 'number' || !capacity) errors.capacity = "Capacity must be an integer";
+    if (!priceRegex.test(price) || typeof price !== 'number' || !price) errors.price = "Price is invalid";
+    if (!description) errors.description = "Description is required";
+    if ((parsedStartDate && parsedStartDate <= currentDate) || !parsedStartDate) errors.startDate = "Start date must be in the future";
+    if ((parsedEndDate && parsedEndDate <= parsedStartDate) || !parsedEndDate) errors.endDate = "End date is less than start date";
+    if (errors.venueId || errors.name || errors.type || errors.capacity || errors.price || errors.description || errors.startDate || errors.endDate) {
+        const err = new Error("Bad Request");
+        res.status(400);
+        err.errors = errors;
+        return res.json({
+            message: err.message,
+            errors
+        });
+        // next(err)
+    }
+    if (!venueId) venueId = null;
+    let group = groupOrganizer || groupCoHost;
+    let event = await group.createEvent({ venueId, name, type, capacity, price, description, startDate, endDate });
+    event = event.toJSON();
+    const formattedStartDate = parsedStartDate.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedEndDate = parsedEndDate.toISOString().replace('T', ' ').slice(0, 19);
+    delete event.createdAt;
+    delete event.updatedAt;
+    const formattedResponse = {
+        ...event,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate
+    }
+    res.json(formattedResponse);
 });
 
 module.exports = router;

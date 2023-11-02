@@ -25,9 +25,23 @@ module.exports = (sequelize, DataTypes) => {
           otherKey: 'groupId'
         }
       );
+      Venue.hasMany(
+        models.Event,
+        {
+          foreignKey: 'venueId',
+          onDelete: 'SET NULL',
+          hooks: true
+        }
+      )
     }
   }
   Venue.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     groupId: {
       type: DataTypes.INTEGER,
       allowNull: false
