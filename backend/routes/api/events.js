@@ -148,8 +148,8 @@ router.post('/:eventId/images', requireAuth, restoreUser, async (req, res) => {
     let eventImage = await event.createEventImage({ url, preview });
     eventImage = eventImage.toJSON();
     delete eventImage.eventId;
-    delete eventImage.updatedAt;
     delete eventImage.createdAt;
+    delete eventImage.updatedAt;
     res.json(eventImage);
 });
 
@@ -392,6 +392,79 @@ router.get('/:eventId/attendees', async (req, res) => {
     }
     attendeesBody["Attendees"] = attendeesList;
     return res.json(attendeesBody);
+});
+
+router.post('/:eventId/attendance', requireAuth, restoreUser, async (req, res) => {
+    const eventId = req.params.eventId;
+    const userId = req.user.id;
+    let groupId;
+    let member;
+    let attendee;
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+        const err = new Error("Event couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    if (event)  groupId = event.groupId;
+    if (groupId) {
+        member = await Membership.findOne({
+            where: {
+                userId: req.user.id,
+                groupId,
+                status: {
+                    [Op.not]: 'pending'
+                }
+            }
+        });
+    }
+    if (!member) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    attendee = await Attendance.findOne({
+        where: {
+            eventId,
+            userId
+        }
+    });
+    if (attendee && attendee.status === 'pending') {
+        const err = new Error("Attendance has already been requested");
+        res.status(400);
+        // err.status = 400;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    if (attendee && (attendee.status === 'attending' || attendee.status === 'waitlist')) {
+        const err = new Error("User is already an attendee of the event");
+        res.status(400);
+        // err.status = 400;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    const status = 'pending';
+    if (!attendee) {
+        attendee = await event.createAttendance({ userId, status });
+        attendee = attendee.toJSON();
+        delete attendee.id;
+        delete attendee.eventId;
+        delete attendee.createdAt;
+        delete attendee.updatedAt;
+        return res.json(attendee)
+    }
 });
 
 module.exports = router;

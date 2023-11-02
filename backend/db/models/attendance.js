@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'userId'
         }
       );
+      Attendance.belongsTo(
+        models.Event,
+        {
+          foreignKey: 'eventId'
+        }
+      );
     }
   }
   Attendance.init({

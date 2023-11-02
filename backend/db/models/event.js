@@ -41,6 +41,14 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'groupId'
         }
       );
+      Event.hasMany(
+        models.Attendance,
+        {
+          foreignKey: 'eventId',
+          onDelete: 'CASCADE',
+          hooks: true
+        }
+      )
     }
   }
   Event.init({
