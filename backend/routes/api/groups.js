@@ -559,7 +559,7 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
         startDate: formattedStartDate,
         endDate: formattedEndDate
     }
-    res.json(event);
+    res.json(formattedResponse);
 });
 
 module.exports = router;
