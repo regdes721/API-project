@@ -511,8 +511,55 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err)
     }
-    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
-
+    let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    const priceRegex = /^\d{1,7}(\.\d{1,2})?$/;
+    const currentDate = new Date();
+    let parsedStartDate;
+    let parsedEndDate;
+    let venue;
+    if (startDate) parsedStartDate = new Date(startDate);
+    if (endDate) parsedEndDate = new Date(endDate);
+    let errors = {};
+    if (venueId) {
+        venue = await Venue.findOne({
+            where: {
+                id: venueId,
+                groupId
+            }
+        });
+    }
+    if ((venueId && !venue)) errors.venueId = "Venue does not exist";
+    if ((name && name.length < 5) || !name) errors.name = "Name must be at least 5 characters";
+    if (type !== "Online" && type !== "In person") errors.type = "Type must be Online or In person";
+    if (!Number.isInteger(capacity) || typeof capacity !== 'number' || !capacity) errors.capacity = "Capacity must be an integer";
+    if (!priceRegex.test(price) || typeof price !== 'number' || !price) errors.price = "Price is invalid";
+    if (!description) errors.description = "Description is required";
+    if ((parsedStartDate && parsedStartDate <= currentDate) || !parsedStartDate) errors.startDate = "Start date must be in the future";
+    if ((parsedEndDate && parsedEndDate <= parsedStartDate) || !parsedEndDate) errors.endDate = "End date is less than start date";
+    if (errors.venueId || errors.name || errors.type || errors.capacity || errors.price || errors.description || errors.startDate || errors.endDate) {
+        const err = new Error("Bad Request");
+        res.status(400);
+        err.errors = errors;
+        return res.json({
+            message: err.message,
+            errors
+        });
+        // next(err)
+    }
+    if (!venueId) venueId = null;
+    let group = groupOrganizer || groupCoHost;
+    let event = await group.createEvent({ venueId, name, type, capacity, price, description, startDate, endDate });
+    event = event.toJSON();
+    const formattedStartDate = parsedStartDate.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedEndDate = parsedEndDate.toISOString().replace('T', ' ').slice(0, 19);
+    delete event.createdAt;
+    delete event.updatedAt;
+    const formattedResponse = {
+        ...event,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate
+    }
+    res.json(event);
 });
 
 module.exports = router;
