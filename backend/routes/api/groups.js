@@ -327,9 +327,9 @@ router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
         // next(err)
     }
     await group.destroy();
-    res.json({
+    return res.json({
         "message": "Successfully deleted"
-    })
+    });
 });
 
 router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {

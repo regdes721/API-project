@@ -3,6 +3,7 @@ const router = express.Router();
 const { Event, Venue, EventImage, Attendance, Group, User, Membership } = require('../../db/models');
 const { Op } = require('sequelize');
 const { requireAuth, restoreUser } = require('../../utils/auth');
+const { route } = require('./groups');
 
 router.get('/', async (req, res) => {
     const events = await Event.findAll({
@@ -150,6 +151,51 @@ router.post('/:eventId/images', requireAuth, restoreUser, async (req, res) => {
     delete eventImage.updatedAt;
     delete eventImage.createdAt;
     res.json(eventImage);
+});
+
+router.delete('/:eventId', requireAuth, restoreUser, async (req, res) => {
+    const eventId = req.params.eventId;
+    let groupId;
+    let groupCoHost;
+    let groupOrganizer;
+    const event = await Event.findByPk(eventId);
+    if (event)  groupId = event.groupId;
+    if (groupId) {
+        groupOrganizer = await Group.findOne({
+            where: {
+                id: groupId,
+                organizerId: req.user.id
+            },
+        });
+    }
+    if (groupId) {
+        groupCoHost = await Group.findOne({
+            include: {
+                model: Membership,
+                where: {
+                    userId: req.user.id,
+                    status: "co-host"
+                }
+            },
+            where: {
+                id: groupId
+            }
+        });
+    }
+    if ((event && !groupOrganizer && !groupCoHost) || !event) {
+        const err = new Error("Event couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    await event.destroy();
+    res.json({
+        "message": "Successfully deleted"
+    });
+
 });
 
 module.exports = router;
