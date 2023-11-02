@@ -672,7 +672,7 @@ router.post('/:groupId/membership', requireAuth, restoreUser, async (req, res) =
         const status = "pending";
         newMember = await group.createMembership({ userId, status });
         newMember = newMember.toJSON();
-        newMember.memberId = newMember.id;
+        newMember.memberId = newMember.userId;
         delete newMember.id;
         delete newMember.userId;
         delete newMember.groupId;
@@ -680,6 +680,138 @@ router.post('/:groupId/membership', requireAuth, restoreUser, async (req, res) =
         delete newMember.updatedAt;
     }
     return res.json(newMember);
+});
+
+router.put('/:groupId/membership', requireAuth, restoreUser, async (req, res) => {
+    const groupId = req.params.groupId;
+    let group = await Group.findByPk(groupId);
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    const { memberId, status } = req.body;
+    let user;
+    let member;
+    if (memberId) {
+        user = await User.findByPk(memberId);
+        member = await Membership.findOne({
+            where: {
+                groupId,
+                userId: memberId
+            }
+        });
+    };
+    if (!user) {
+        const err = new Error("Validation Error");
+        res.status(400);
+        // err.status = 400;
+        return res.json({
+            message: err.message,
+            errors: {
+                "memberId": "User couldn't be found"
+              }
+        });
+        // next(err);
+    }
+    if (!member) {
+        const err = new Error("Membership between the user and the group does not exist");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    if (status === 'pending') {
+        const err = new Error("Validation Error");
+        res.status(400);
+        // err.status = 400;
+        return res.json({
+            message: err.message,
+            errors: {
+                "status" : "Cannot change a membership status to pending"
+              }
+        });
+        // next(err);
+    }
+    const groupCoHost = await Group.findOne({
+        include: {
+            model: Membership,
+            where: {
+                userId: req.user.id,
+                status: "co-host"
+            }
+        },
+        where: {
+            id: groupId
+        }
+    });
+    if (status !== 'co-host' && status !== 'member' && status !== 'pending') {
+        const err = new Error("Validation Error");
+        res.status(400);
+        // err.status = 400;
+        return res.json({
+            message: err.message,
+            errors: {
+                "status" : "Allowed status values: co-host, member, pending"
+              }
+        });
+        // next(err);
+    }
+    if (group.organizerId !== req.user.id && !group.coHost && status === 'member') {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    if (group.organizerId !== req.user.id && status === 'co-host') {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    if ((group.organizerId === req.user.id || group.coHost) && status === 'member' && member.status === 'pending') {
+        member.status = 'member';
+        member.updatedAt = new Date();
+        await member.save();
+        member = member.toJSON();
+        member.memberId = member.userId;
+        delete member.userId;
+        delete member.createdAt;
+        delete member.updatedAt;
+        return res.json(member);
+    }
+    if (group.organizerId && status === 'co-host' && member.status === 'member') {
+        member.status = 'co-host';
+        member.updatedAt = new Date();
+        await member.save();
+        member = member.toJSON();
+        member.memberId = member.userId;
+        delete member.userId;
+        delete member.createdAt;
+        delete member.updatedAt;
+        return res.json(member);
+    }
+    else {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
 });
 
 module.exports = router;
