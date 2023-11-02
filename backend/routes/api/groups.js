@@ -562,4 +562,72 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
     res.json(formattedResponse);
 });
 
+router.get('/:groupId/members', async (req, res) => {
+    const groupId = req.params.groupId;
+    let group = await Group.findByPk(groupId);
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    const groupOrganizer = await Group.findOne({
+        where: {
+            id: groupId,
+            organizerId: req.user.id
+        },
+    });
+    const groupCoHost = await Group.findOne({
+        include: {
+            model: Membership,
+            where: {
+                userId: req.user.id,
+                status: "co-host"
+            }
+        },
+        where: {
+            id: groupId
+        }
+    });
+    let members = await User.findAll({
+        include: {
+            model: Membership,
+            attributes: ["status"],
+            where: {
+                groupId
+            }
+        },
+        attributes: ["id", "firstName", "lastName"]
+    });
+    const membersBody = {
+        "Members": []
+    }
+    let membersList = [];
+    for (const member of members) {
+        const memberData = member.toJSON();
+        memberData.Membership = {};
+        if (member.Memberships[0].status !== 'pending') {
+            memberData.Membership.status = member.Memberships[0].status;
+            delete memberData.Memberships;
+            membersList.push(memberData)
+        }
+    }
+    if (groupOrganizer || groupCoHost) {
+        for (const member of members) {
+            const memberData = member.toJSON();
+            memberData.Membership = {};
+            if (member.Memberships[0].status === 'pending') {
+                memberData.Membership.status = member.Memberships[0].status;
+            delete memberData.Memberships;
+            membersList.push(memberData)
+            }
+        }
+    }
+    membersBody["Members"] = membersList
+    return res.json(membersBody);
+});
+
 module.exports = router;

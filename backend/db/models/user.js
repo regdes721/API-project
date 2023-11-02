@@ -36,6 +36,15 @@ module.exports = (sequelize, DataTypes) => {
           otherKey: 'eventId'
         }
       );
+
+      User.hasMany(
+        models.Membership,
+        {
+          foreignKey: 'userId',
+          onDelete: 'CASCADE',
+          hooks: true
+        }
+      );
     }
   }
   User.init({

@@ -16,6 +16,13 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'groupId'
         }
       );
+
+      Membership.belongsTo(
+        models.User,
+        {
+          foreignKey: 'userId'
+        }
+      )
     }
   }
   Membership.init({
