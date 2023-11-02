@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const { Event, Venue, EventImage, Attendance, Group } = require('../../db/models');
+const { Event, Venue, EventImage, Attendance, Group, User, Membership } = require('../../db/models');
 const { Op } = require('sequelize');
 const { requireAuth, restoreUser } = require('../../utils/auth');
 
@@ -96,6 +96,60 @@ router.get('/:eventId', async (req, res) => {
     delete eventData.createdAt;
     delete eventData.updatedAt;
     res.json(eventData);
+});
+
+router.post('/:eventId/images', requireAuth, restoreUser, async (req, res) => {
+    const eventId = req.params.eventId;
+    let groupId;
+    let groupCoHost;
+    let groupOrganizer;
+    const event = await Event.findByPk(eventId);
+    if (event)  groupId = event.groupId;
+    if (groupId) {
+        groupOrganizer = await Group.findOne({
+            where: {
+                id: groupId,
+                organizerId: req.user.id
+            },
+        });
+    }
+    if (groupId) {
+        groupCoHost = await Group.findOne({
+            include: {
+                model: Membership,
+                where: {
+                    userId: req.user.id,
+                    status: "co-host"
+                }
+            },
+            where: {
+                id: groupId
+            }
+        });
+    }
+    const eventAttendee = await Attendance.findOne({
+        where: {
+            eventId,
+            userId: req.user.id,
+            status: "attending"
+        }
+    });
+    if ((event && !groupOrganizer && !groupCoHost && !eventAttendee) || !event) {
+        const err = new Error("Event couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    const { url, preview } = req.body;
+    let eventImage = await event.createEventImage({ url, preview });
+    eventImage = eventImage.toJSON();
+    delete eventImage.eventId;
+    delete eventImage.updatedAt;
+    delete eventImage.createdAt;
+    res.json(eventImage);
 });
 
 module.exports = router;

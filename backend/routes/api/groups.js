@@ -374,8 +374,7 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
         },
     });
     const groupCoHost = await Group.findOne({
-        include: User,
-        through: {
+        include: {
             model: Membership,
             where: {
                 userId: req.user.id,
@@ -481,6 +480,39 @@ router.get('/:groupId/events', async (req, res) => {
     }
     eventsBody["Events"] = eventsList;
     return res.json(eventsBody);
+});
+
+router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
+    const groupId = req.params.groupId;
+    const groupOrganizer = await Group.findOne({
+        where: {
+            id: groupId,
+            organizerId: req.user.id
+        },
+    });
+    const groupCoHost = await Group.findOne({
+        include: {
+            model: Membership,
+            where: {
+                userId: req.user.id,
+                status: "co-host"
+            }
+        },
+        where: {
+            id: groupId
+        }
+    });
+    if (!groupOrganizer && !groupCoHost) {
+        const err = new Error("Group couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+
 });
 
 module.exports = router;

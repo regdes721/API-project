@@ -58,6 +58,14 @@ module.exports = (sequelize, DataTypes) => {
           hooks: true
         }
       );
+      Group.hasMany(
+        models.Membership,
+        {
+          foreignKey: 'groupId',
+          onDelete: 'CASCADE',
+          hooks: true
+        }
+      );
     }
   }
   Group.init({
