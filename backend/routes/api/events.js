@@ -135,7 +135,7 @@ router.post('/:eventId/images', requireAuth, restoreUser, async (req, res) => {
             status: "attending"
         }
     });
-    if ((event && !groupOrganizer && !groupCoHost && !eventAttendee) || !event) {
+    if (!event) {
         const err = new Error("Event couldn't be found");
         res.status(404);
         // err.status = 404;
@@ -143,6 +143,15 @@ router.post('/:eventId/images', requireAuth, restoreUser, async (req, res) => {
             message: err.message
         });
         // next(err)
+    }
+    if (!groupOrganizer && !groupCoHost && !eventAttendee) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
     }
     const { url, preview } = req.body;
     let eventImage = await event.createEventImage({ url, preview });
@@ -182,7 +191,7 @@ router.put('/:eventId', requireAuth, restoreUser, async (req, res) => {
             }
         });
     }
-    if ((event && !groupOrganizer && !groupCoHost) || !event) {
+    if (!event) {
         const err = new Error("Event couldn't be found");
         res.status(404);
         // err.status = 404;
@@ -190,6 +199,15 @@ router.put('/:eventId', requireAuth, restoreUser, async (req, res) => {
             message: err.message
         });
         // next(err)
+    }
+    if (!groupOrganizer && !groupCoHost) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
     }
     let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
     const priceRegex = /^\d{1,7}(\.\d{1,2})?$/;
@@ -302,7 +320,7 @@ router.delete('/:eventId', requireAuth, restoreUser, async (req, res) => {
             }
         });
     }
-    if ((event && !groupOrganizer && !groupCoHost) || !event) {
+    if (!event) {
         const err = new Error("Event couldn't be found");
         res.status(404);
         // err.status = 404;
@@ -310,6 +328,15 @@ router.delete('/:eventId', requireAuth, restoreUser, async (req, res) => {
             message: err.message
         });
         // next(err)
+    }
+    if (!groupOrganizer && !groupCoHost) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
     }
     await event.destroy();
     return res.json({
@@ -463,7 +490,102 @@ router.post('/:eventId/attendance', requireAuth, restoreUser, async (req, res) =
         delete attendee.eventId;
         delete attendee.createdAt;
         delete attendee.updatedAt;
-        return res.json(attendee)
+        return res.json(attendee);
+    }
+});
+
+router.put('/:eventId/attendance', requireAuth, restoreUser, async (req, res) => {
+    const eventId = req.params.eventId;
+    let groupId;
+    let groupCoHost;
+    let groupOrganizer;
+    let attendee;
+    const event = await Event.findByPk(eventId);
+    if (event)  groupId = event.groupId;
+    if (groupId) {
+        groupOrganizer = await Group.findOne({
+            where: {
+                id: groupId,
+                organizerId: req.user.id
+            },
+        });
+    }
+    if (groupId) {
+        groupCoHost = await Group.findOne({
+            include: {
+                model: Membership,
+                where: {
+                    userId: req.user.id,
+                    status: "co-host"
+                }
+            },
+            where: {
+                id: groupId
+            }
+        });
+    }
+    if (!event) {
+        const err = new Error("Event couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    if (!groupOrganizer && !groupCoHost) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    const { userId, status } = req.body;
+    if (status !== 'attending' && status !== 'waitlist' && status !== 'pending') {
+        const err = new Error("Validation Error");
+        res.status(400);
+        // err.status = 400;
+        return res.json({
+            message: err.message,
+            errors: {
+                "status" : "Allowed status values: attending, waitlist, pending"
+              }
+        });
+        // next(err);
+    }
+    if (status === 'pending') {
+        const err = new Error("Cannot change an attendance status to pending");
+        res.status(400);
+        // err.status = 400;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    attendee = await Attendance.findOne({
+        where: {
+            eventId,
+            userId
+        }
+    });
+    if (!attendee) {
+        const err = new Error("Attendance between the user and the event does not exist");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    if (attendee) {
+        attendee.status = status;
+        await attendee.save();
+        attendee = attendee.toJSON();
+        delete attendee.createdAt;
+        delete attendee.updatedAt;
+        return res.json(attendee);
     }
 });
 
