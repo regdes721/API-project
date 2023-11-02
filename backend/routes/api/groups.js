@@ -458,7 +458,7 @@ router.get('/:groupId/events', async (req, res) => {
                 eventId: event.id,
                 status: "attending"
             }
-        })
+        });
         let eventImage = await EventImage.findOne({
             where: {
                 eventId: event.id,
