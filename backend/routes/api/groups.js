@@ -572,7 +572,7 @@ router.get('/:groupId/members', async (req, res) => {
         return res.json({
             message: err.message
         });
-        // next(err)
+        // next(err);
     }
     const groupOrganizer = await Group.findOne({
         where: {
@@ -628,6 +628,58 @@ router.get('/:groupId/members', async (req, res) => {
     }
     membersBody["Members"] = membersList
     return res.json(membersBody);
+});
+
+router.post('/:groupId/membership', requireAuth, restoreUser, async (req, res) => {
+    const groupId = req.params.groupId;
+    let group = await Group.findByPk(groupId);
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    const member = await Membership.findOne({
+        where: {
+            groupId,
+            userId: req.user.id
+        }
+    });
+    if ((member && member.status === 'member') || (member && member.status === 'co-host')) {
+        const err = new Error("User is already a member of the group");
+        res.status(400);
+        // err.status = 400;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    if (member && member.status === 'pending') {
+        const err = new Error("Membership has already been requested");
+        res.status(400);
+        // err.status = 400;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    let newMember;
+    if (!member) {
+        const userId = req.user.id;
+        const status = "pending";
+        newMember = await group.createMembership({ userId, status });
+        newMember = newMember.toJSON();
+        newMember.memberId = newMember.id;
+        delete newMember.id;
+        delete newMember.userId;
+        delete newMember.groupId;
+        delete newMember.createdAt;
+        delete newMember.updatedAt;
+    }
+    return res.json(newMember);
 });
 
 module.exports = router;
