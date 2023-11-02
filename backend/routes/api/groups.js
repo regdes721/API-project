@@ -342,7 +342,19 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     let group = await Group.findByPk(id, {
         include: 'venues'
     });
-    if (!group || organizerId !== group.organizerId) {
+    const groupCoHost = await Group.findOne({
+        include: {
+            model: Membership,
+            where: {
+                userId: req.user.id,
+                status: "co-host"
+            }
+        },
+        where: {
+            id: groupId
+        }
+    });
+    if (!group || organizerId !== group.organizerId || !groupCoHost) {
         const err = new Error("Group couldn't be found");
         res.status(404);
         // err.status = 404;
