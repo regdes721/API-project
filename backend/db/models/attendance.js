@@ -10,10 +10,21 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Attendance.belongsTo(
+        models.User,
+        {
+          foreignKey: 'userId'
+        }
+      );
     }
   }
   Attendance.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     eventId: {
       type: DataTypes.INTEGER,
       allowNull: false

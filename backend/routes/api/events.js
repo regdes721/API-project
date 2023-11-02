@@ -317,4 +317,81 @@ router.delete('/:eventId', requireAuth, restoreUser, async (req, res) => {
     });
 });
 
+router.get('/:eventId/attendees', async (req, res) => {
+    const eventId = req.params.eventId;
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+        const err = new Error("Event couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    let groupId;
+    let groupCoHost;
+    let groupOrganizer;
+    if (event)  groupId = event.groupId;
+    if (groupId) {
+        groupOrganizer = await Group.findOne({
+            where: {
+                id: groupId,
+                organizerId: req.user.id
+            },
+        });
+    }
+    if (groupId) {
+        groupCoHost = await Group.findOne({
+            include: {
+                model: Membership,
+                where: {
+                    userId: req.user.id,
+                    status: "co-host"
+                }
+            },
+            where: {
+                id: groupId
+            }
+        });
+    }
+    let attendees = await User.findAll({
+        include: {
+            model: Attendance,
+            attributes: ['status'],
+            where: {
+                eventId
+            }
+        },
+        attributes: ['id', 'firstName', 'lastName']
+    })
+    const attendeesBody = {
+        "Attendees": []
+    }
+
+    let attendeesList = [];
+    for (const attendee of attendees) {
+        const attendeeData = attendee.toJSON();
+        attendeeData.Attendance = {};
+        if (attendee.Attendances[0].status !== 'pending') {
+            attendeeData.Attendance.status = attendee.Attendances[0].status;
+            delete attendeeData.Attendances;
+            attendeesList.push(attendeeData);
+        }
+    }
+    if (groupOrganizer || groupCoHost) {
+        for (const attendee of attendees) {
+            const attendeeData = attendee.toJSON();
+            attendeeData.Attendance = {};
+            if (attendee.Attendances[0].status === 'pending') {
+                attendeeData.Attendance.status = attendee.Attendances[0].status;
+                delete attendeeData.Attendances;
+                attendeesList.push(attendeeData);
+            }
+        }
+    }
+    attendeesBody["Attendees"] = attendeesList;
+    return res.json(attendeesBody);
+});
+
 module.exports = router;
