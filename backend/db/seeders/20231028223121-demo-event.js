@@ -20,9 +20,16 @@ module.exports = {
      * }], {});
     */
    await Event.bulkCreate([
+    // {
+    //   groupId: 1,
+    //   name: "Tennis Group First Meet and Greet",
+    //   type: "Online",
+    //   startDate: "2021-11-19 20:00:00",
+    //   endDate: "2021-11-19 22:00:00"
+    // },
     {
       venueId: 1,
-      groupId: 1,
+      groupId: 2,
       name: "Dinner at Chazz Palminteri",
       description: "Indulge in an exquisite culinary experience at our upscale Italian restaurant. Join us for an evening of sophistication, where the finest ingredients and traditional recipes come together to create a symphony of flavors. From delectable pasta dishes to mouthwatering desserts, our menu is a celebration of Italy's culinary heritage. Savor the ambiance, impeccable service, and a memorable dining experience that's perfect for special occasions or a romantic evening out. Join us and elevate your taste buds to a new level of Italian elegance. Buon appetito!",
       type: "In person",
@@ -33,7 +40,7 @@ module.exports = {
     },
     {
       venueId: 2,
-      groupId: 2,
+      groupId: 3,
       name: "NYPDL December Invitational",
       description: "Join the excitement of intellectual sparring at our Debate Club Tournament! Are you ready to articulate your ideas, challenge perspectives, and engage in thoughtful discourse? This is your chance to hone your public speaking skills, refine your argumentative prowess, and meet like-minded individuals who share your passion for debate. Whether you're a seasoned debater or a novice looking to dive into the world of rhetoric, our tournament offers a platform for growth and camaraderie. Take the stage, embrace the challenge, and let your voice be heard in this thrilling intellectual arena. Come be a part of our next debate showdown!",
       type: "Online",
@@ -44,7 +51,7 @@ module.exports = {
     },
     {
       venueId: 3,
-      groupId: 3,
+      groupId: 4,
       name: "Designing with Succulents",
       description: "Martha Stewart will share practical and appealing uses for succulents, and how to use these low-water lovelies to enhance gardens large and small.",
       type: "In person",

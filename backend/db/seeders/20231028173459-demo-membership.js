@@ -23,27 +23,27 @@ module.exports = {
    await Membership.bulkCreate([
     {
       userId: 1,
-      groupId: 2,
+      groupId: 3,
       status: "pending"
     },
     {
       userId: 1,
-      groupId: 3,
+      groupId: 4,
       status: "member"
     },
     {
       userId: 2,
-      groupId: 2,
+      groupId: 3,
       status: "member"
     },
     {
       userId: 3,
-      groupId: 1,
+      groupId: 2,
       status: "co-host"
     },
     {
       userId: 3,
-      groupId: 3,
+      groupId: 4,
       status: "co-host"
     }
    ], { validate: true })
