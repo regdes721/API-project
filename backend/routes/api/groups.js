@@ -30,12 +30,12 @@ router.get('/', async (req, res) => {
         });
         if (groupImage) groupData.previewImage = groupImage.url;
 
-        const createdAt = new Date(groupData.createdAt);
-        const updatedAt = new Date(groupData.updatedAt);
-        const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
-        const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-        groupData.createdAt = formattedCreatedAt;
-        groupData.updatedAt = formattedUpdatedAt;
+        // const createdAt = new Date(groupData.createdAt);
+        // const updatedAt = new Date(groupData.updatedAt);
+        // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+        // const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+        // groupData.createdAt = formattedCreatedAt;
+        // groupData.updatedAt = formattedUpdatedAt;
 
         groupsList.push(groupData);
     }
@@ -138,16 +138,16 @@ router.get('/:groupId', async (req, res) => {
             }
         });
         if (!groupData.Venues.length) groupData.Venues = null;
-        const createdAt = new Date(groupData.createdAt);
-        const updatedAt = new Date(groupData.updatedAt);
-        const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
-        const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-        const formattedResponse = {
-            ...groupData,
-            createdAt: formattedCreatedAt,
-            updatedAt: formattedUpdatedAt
-        }
-        res.json(formattedResponse);
+        // const createdAt = new Date(groupData.createdAt);
+        // const updatedAt = new Date(groupData.updatedAt);
+        // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+        // const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+        // const formattedResponse = {
+        //     ...groupData,
+        //     createdAt: formattedCreatedAt,
+        //     updatedAt: formattedUpdatedAt
+        // }
+        res.json(groupData);
     }
 });
 
@@ -193,17 +193,17 @@ router.post('/', requireAuth, restoreUser, async (req, res, next) => {
         state
     });
     newGroup = newGroup.toJSON();
-    const createdAt = new Date(newGroup.createdAt);
-    const updatedAt = new Date(newGroup.updatedAt);
-    const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
-    const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-    const formattedResponse = {
-        ...newGroup,
-        createdAt: formattedCreatedAt,
-        updatedAt: formattedUpdatedAt
-    }
+    // const createdAt = new Date(newGroup.createdAt);
+    // const updatedAt = new Date(newGroup.updatedAt);
+    // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+    // const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+    // const formattedResponse = {
+    //     ...newGroup,
+    //     createdAt: formattedCreatedAt,
+    //     updatedAt: formattedUpdatedAt
+    // }
     res.status(201);
-    return res.json(formattedResponse);
+    return res.json(newGroup);
 });
 
 router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
@@ -315,16 +315,16 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
     group.updatedAt = new Date();
     await group.save();
     group = group.toJSON();
-    const createdAt = new Date(group.createdAt);
-    const updatedAt = new Date(group.updatedAt);
-    const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
-    const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-    const formattedResponse = {
-        ...group,
-        createdAt: formattedCreatedAt,
-        updatedAt: formattedUpdatedAt
-    }
-    return res.json(formattedResponse);
+    // const createdAt = new Date(group.createdAt);
+    // const updatedAt = new Date(group.updatedAt);
+    // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+    // const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+    // const formattedResponse = {
+    //     ...group,
+    //     createdAt: formattedCreatedAt,
+    //     updatedAt: formattedUpdatedAt
+    // }
+    return res.json(group);
 });
 
 router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
@@ -523,12 +523,12 @@ router.get('/:groupId/events', async (req, res) => {
             }
         });
         if (eventImage) eventData.previewImage = eventImage.url;
-        const startDate = new Date(eventData.startDate);
-        const endDate = new Date(eventData.endDate);
-        const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
-        const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
-        eventData.startDate = formattedStartDate;
-        eventData.endDate = formattedEndDate;
+        // const startDate = new Date(eventData.startDate);
+        // const endDate = new Date(eventData.endDate);
+        // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
+        // const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
+        // eventData.startDate = formattedStartDate;
+        // eventData.endDate = formattedEndDate;
         delete eventData.description;
         delete eventData.capacity;
         delete eventData.price;
@@ -618,16 +618,16 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
     group = groupOrganizer || groupCoHost;
     let event = await group.createEvent({ venueId, name, type, capacity, price, description, startDate, endDate });
     event = event.toJSON();
-    const formattedStartDate = parsedStartDate.toISOString().replace('T', ' ').slice(0, 19);
-    const formattedEndDate = parsedEndDate.toISOString().replace('T', ' ').slice(0, 19);
+    // const formattedStartDate = parsedStartDate.toISOString().replace('T', ' ').slice(0, 19);
+    // const formattedEndDate = parsedEndDate.toISOString().replace('T', ' ').slice(0, 19);
     delete event.createdAt;
     delete event.updatedAt;
-    const formattedResponse = {
-        ...event,
-        startDate: formattedStartDate,
-        endDate: formattedEndDate
-    }
-    res.json(formattedResponse);
+    // const formattedResponse = {
+    //     ...event,
+    //     startDate: formattedStartDate,
+    //     endDate: formattedEndDate
+    // }
+    res.json(event);
 });
 
 router.get('/:groupId/members', async (req, res) => {
