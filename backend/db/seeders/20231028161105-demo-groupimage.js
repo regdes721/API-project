@@ -35,6 +35,11 @@ module.exports = {
       groupId: 3,
       url: "image url 3",
       preview: true
+    },
+    {
+      groupId: 4,
+      url: "image url 4",
+      preview: true
     }
    ], { validate: true })
   },

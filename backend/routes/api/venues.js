@@ -6,7 +6,7 @@ const { requireAuth, restoreUser } = require('../../utils/auth');
 
 router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
     const venueId = req.params.venueId;
-    let venue = Venue.findByPk(venueId);
+    let venue = await Venue.findByPk(venueId);
     const venueOrganizer = await Venue.findOne({
         include: {
             model: Group,
@@ -79,6 +79,7 @@ router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
     if (state) venue.state = state;
     if (lat) venue.lat = lat;
     if (lng) venue.lng = lng;
+    venue.updatedAt = new Date();
     await venue.save();
     venue = venue.toJSON();
     delete venue.createdAt;

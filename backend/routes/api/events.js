@@ -6,7 +6,57 @@ const { requireAuth, restoreUser } = require('../../utils/auth');
 const { route } = require('./groups');
 
 router.get('/', async (req, res) => {
+    const where = {};
+    const errors = {};
+    let { name, type, startDate, page, size } = req.query;
+    // return res.json(type)
+
+    if (name) name = name.replace(/"/g, '');
+    if (type) type = type.replace(/"/g, '');
+    if (startDate) startDate = startDate.replace(/"/g, '');
+    // if (name) NumName = parseInt(name)
+    // return res.json(isNaN(name))
+    if (page && !isNaN(page)) page = parseInt(page);
+    if (size && !isNaN(size)) size = parseInt(size);
+    // return res.json(isNaN(page))
+    if (!page || page > 10) page = 1;
+    if (!size || size > 20) size = 20;
+    if ((page && isNaN(page)) || (page && page <= 0) || page === "") {
+        errors.page = "Page must be greater than or equal to 1"
+    }
+    if (isNaN(size) || (size && size <= 0) || size === "") {
+        errors.size = "Size must be greater than or equal to 1"
+    }
+    if (name && isNaN(name)) {
+        where.name = name
+    } else if (name && !isNaN(name)) {
+        errors.name = "Name must be a string"
+    }
+    if (type && type === 'Online') {
+        where.type = 'Online'
+    } else if (type && (type === 'In person' || type === 'In Person')) {
+        where.type = 'In person'
+    } else if (type && type !== 'Online' && type !== 'In person') {
+        errors.type = "Type must be 'Online' or 'In Person'"
+    }
+    if (!isNaN(Date.parse(startDate))) {
+        where.startDate = new Date(startDate);
+    } else if (startDate === "" || (startDate && isNaN(Date.parse(startDate)))) {
+        errors.startDate = "startDate must be a valid datetime"
+    }
+
+    // return res.json(name)
+    if (errors.name || errors.type || errors.startDate || errors.page || errors.size) {
+        const err = new Error("Bad Request");
+        res.status(400);
+        err.errors = errors;
+        return res.json({
+            message: err.message,
+            errors
+        })
+    }
     const events = await Event.findAll({
+        where,
         include: [
             {
                 model: Group,
@@ -16,7 +66,9 @@ router.get('/', async (req, res) => {
                 model: Venue,
                 attributes: ['id', 'city', 'state']
             }
-        ]
+        ],
+        limit: size,
+        offset: (page - 1) * size
     });
     const eventsBody = {
         "Events": []
@@ -37,12 +89,15 @@ router.get('/', async (req, res) => {
             }
         });
         if (eventImage) eventData.previewImage = eventImage.url;
-        const startDate = new Date(eventData.startDate);
-        const endDate = new Date(eventData.endDate);
-        const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
-        const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
-        eventData.startDate = formattedStartDate;
-        eventData.endDate = formattedEndDate;
+        // if (!eventData.Venue.length) eventData.Venue = null;
+        // const startDate = new Date(eventData.startDate);
+        // const endDate = new Date(eventData.endDate);
+        // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
+        // const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
+        // eventData.startDate = formattedStartDate;
+        // eventData.endDate = formattedEndDate;
+        eventData.startDate = new Date(new Date(eventData.startDate).getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+        eventData.endDate = new Date(new Date(eventData.endDate).getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
         delete eventData.description;
         delete eventData.capacity;
         delete eventData.price;
@@ -88,12 +143,14 @@ router.get('/:eventId', async (req, res) => {
             status: "attending"
         }
     });
-    const startDate = new Date(eventData.startDate);
-    const endDate = new Date(eventData.endDate);
-    const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
-    const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
-    eventData.startDate = formattedStartDate;
-    eventData.endDate = formattedEndDate;
+    // const startDate = new Date(eventData.startDate);
+    // const endDate = new Date(eventData.endDate);
+    // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
+    // const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
+    // eventData.startDate = formattedStartDate;
+    // eventData.endDate = formattedEndDate;
+    // eventData.startDate = new Date(new Date(eventData.startDate).getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+    // eventData.endDate = new Date(new Date(eventData.endDate).getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
     delete eventData.createdAt;
     delete eventData.updatedAt;
     res.json(eventData);

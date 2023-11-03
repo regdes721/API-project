@@ -23,6 +23,14 @@ module.exports = {
    await Venue.bulkCreate([
     {
       groupId: 1,
+      address: "96 Central Park W",
+      city: "New York",
+      state: "NY",
+      lat: 40.713050,
+      lng: -74.007230
+    },
+    {
+      groupId: 2,
       address: "30 W 46th Street",
       city: "New York",
       state: "NY",
@@ -30,7 +38,7 @@ module.exports = {
       lng: -73.9805346
     },
     {
-      groupId: 2,
+      groupId: 3,
       address: "330 Alexander Street",
       city: "Princeton",
       state: "NJ",
@@ -38,7 +46,7 @@ module.exports = {
       lng: -74.6554635
     },
     {
-      groupId: 3,
+      groupId: 4,
       address: "105 E 103rd Street",
       city: "New York",
       state: "NY",

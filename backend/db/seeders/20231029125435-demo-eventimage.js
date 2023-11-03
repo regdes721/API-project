@@ -35,7 +35,18 @@ module.exports = {
         eventId: 3,
         url: "image url 3",
         preview: true
-      }
+      },
+      {
+        eventId: 4,
+        url: "image url 4",
+        preview: true
+      },
+      {
+        eventId: 5,
+        url: "image url 5",
+        preview: true
+      },
+
      ], { validate: true })
   },
 

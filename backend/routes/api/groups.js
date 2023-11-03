@@ -87,7 +87,7 @@ router.get('/current', requireAuth, restoreUser, async (req, res) => {
         groupsList.push(groupData);
     }
     groupsBody["Groups"] = groupsList;
-
+    if (!groupsBody["Groups"].length) groupsBody["Groups"] = null;
     return res.json(groupsBody);
 });
 
@@ -98,6 +98,15 @@ router.get('/:groupId', async (req, res) => {
             id: groupId
         }
     });
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
     if (group) {
         const groupData = group.toJSON();
         groupData.numMembers = await Membership.count({
@@ -128,7 +137,7 @@ router.get('/:groupId', async (req, res) => {
                 exclude: ['createdAt', 'updatedAt']
             }
         });
-
+        if (!groupData.Venues.length) groupData.Venues = null;
         const createdAt = new Date(groupData.createdAt);
         const updatedAt = new Date(groupData.updatedAt);
         const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
@@ -138,17 +147,7 @@ router.get('/:groupId', async (req, res) => {
             createdAt: formattedCreatedAt,
             updatedAt: formattedUpdatedAt
         }
-
         res.json(formattedResponse);
-    }
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        res.status(404);
-        // err.status = 404;
-        return res.json({
-            message: err.message
-        });
-        // next(err)
     }
 });
 
@@ -252,7 +251,7 @@ router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
 
 router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
     const groupId = req.params.groupId;
-    let group = Group.findByPk(groupId);
+    let group = await Group.findByPk(groupId);
     if (!group) {
         const err = new Error("Group couldn't be found");
         res.status(404);
@@ -543,7 +542,7 @@ router.get('/:groupId/events', async (req, res) => {
 
 router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
     const groupId = req.params.groupId;
-    let group = Group.findByPk(groupId);
+    let group = await Group.findByPk(groupId);
     const groupOrganizer = await Group.findOne({
         where: {
             id: groupId,
