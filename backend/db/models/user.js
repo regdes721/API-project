@@ -45,6 +45,15 @@ module.exports = (sequelize, DataTypes) => {
           hooks: true
         }
       );
+
+      User.hasMany(
+        models.Attendance,
+        {
+          foreignKey: 'userId',
+          onDelete: 'CASCADE',
+          hooks: true
+        }
+      )
     }
   }
   User.init({

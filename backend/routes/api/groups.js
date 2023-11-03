@@ -804,7 +804,7 @@ router.put('/:groupId/membership', requireAuth, restoreUser, async (req, res) =>
         delete member.updatedAt;
         return res.json(member);
     }
-    if (group.organizerId && status === 'co-host' && member.status === 'member') {
+    if (group.organizerId && status === 'co-host' && (member.status === 'member' || member.status === 'pending')) {
         member.status = 'co-host';
         member.updatedAt = new Date();
         await member.save();
