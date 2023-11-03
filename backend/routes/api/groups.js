@@ -333,14 +333,15 @@ router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
 });
 
 router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
-    const organizerId = req.user.id;
     const groupId = req.params.groupId;
-    const venuesBody = {
-        "Venues": []
-    }
-    let venuesList = [];
     let group = await Group.findByPk(groupId, {
         include: 'venues'
+    });
+    const groupOrganizer = await Group.findOne({
+        where: {
+            id: groupId,
+            organizerId: req.user.id
+        },
     });
     const groupCoHost = await Group.findOne({
         include: {
@@ -354,7 +355,7 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
             id: groupId
         }
     });
-    if (!group || organizerId !== group.organizerId || !groupCoHost) {
+    if (!group) {
         const err = new Error("Group couldn't be found");
         res.status(404);
         // err.status = 404;
@@ -363,6 +364,19 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err)
     }
+    if (!groupOrganizer && !groupCoHost) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
+    const venuesBody = {
+        "Venues": []
+    }
+    let venuesList = [];
     group = group.toJSON();
     let venues = group.venues;
     console.log(venues);
@@ -379,6 +393,7 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
 
 router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     const groupId = req.params.groupId;
+    let group = await Group.findByPk(groupId);
     const groupOrganizer = await Group.findOne({
         where: {
             id: groupId,
@@ -399,7 +414,7 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     });
     const { address, city, state, lat, lng } = req.body;
     let errors = {};
-    if (!groupOrganizer && !groupCoHost) {
+    if (!group) {
         const err = new Error("Group couldn't be found");
         res.status(404);
         // err.status = 404;
@@ -407,6 +422,15 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
             message: err.message
         });
         // next(err)
+    }
+    if (!groupOrganizer && !groupCoHost) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
     }
     if (!address) errors.address = "Street address is required";
     if (!city) errors.city = "City is required";
@@ -423,7 +447,7 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err)
     }
-    let group = groupOrganizer || groupCoHost;
+    group = groupOrganizer || groupCoHost;
     let venue = await group.createVenue({ address, city, state, lat, lng });
     venue = venue.toJSON();
     delete venue.createdAt;
