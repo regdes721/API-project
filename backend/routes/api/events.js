@@ -96,10 +96,15 @@ router.get('/', async (req, res) => {
         // const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
         // eventData.startDate = formattedStartDate;
         // eventData.endDate = formattedEndDate;
-        // eventData.startDate = new Date(new Date(eventData.startDate).getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
-        // eventData.endDate = new Date(new Date(eventData.endDate).getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
-        eventData.startDate = new Date(new Date(eventData.startDate).getTime() * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
-        eventData.endDate = new Date(new Date(eventData.endDate).getTime() * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+        eventData.startDate = new Date(new Date(eventData.startDate).getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+        eventData.endDate = new Date(new Date(eventData.endDate).getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+
+        // eventData.startDate = new Date(new Date(eventData.startDate).getTime() * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+        // eventData.endDate = new Date(new Date(eventData.endDate).getTime() * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+
+        // eventData.startDate = new Date(eventData.startDate).toISOString().slice(0, 19).replace('T', ' ');
+        // eventData.endDate = new Date(eventData.endDate).toISOString().slice(0, 19).replace('T', ' ');
+
         delete eventData.description;
         delete eventData.capacity;
         delete eventData.price;
