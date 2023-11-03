@@ -42,10 +42,7 @@ module.exports = {
       },
       type: {
         type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-          isIn: [['Online', 'In person']]
-        }
+        allowNull: false
       },
       capacity: {
         type: Sequelize.INTEGER,
