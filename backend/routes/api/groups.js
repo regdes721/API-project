@@ -334,12 +334,12 @@ router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
 
 router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     const organizerId = req.user.id;
-    const id = req.params.groupId;
+    const groupId = req.params.groupId;
     const venuesBody = {
         "Venues": []
     }
     let venuesList = [];
-    let group = await Group.findByPk(id, {
+    let group = await Group.findByPk(groupId, {
         include: 'venues'
     });
     const groupCoHost = await Group.findOne({
