@@ -211,11 +211,31 @@ router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
     const user = req.user.toJSON();
     const groupId = req.params.groupId;
     const { url, preview } = req.body;
-    const group = await Group.findOne({
+    const group = await Group.findByPk(groupId);
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        res.status(404);
+        // err.status = 404;
+        return res.json({
+            message: err.message
+        });
+        // next(err)
+    }
+    const groupOrganizer = await Group.findOne({
         where: {
-            id: groupId
-        }
+            id: groupId,
+            organizerId: req.user.id
+        },
     });
+    if (!groupOrganizer) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
+    }
     if (group && url && (preview === true || preview === false) && req.user.id === group.organizerId) {
         const newGroupImage = await GroupImage.create({
             groupId,
@@ -228,6 +248,11 @@ router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
         delete newGroupImageResult.createdAt;
         return res.json(newGroupImageResult);
     }
+});
+
+router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
+    const groupId = req.params.groupId;
+    let group = Group.findByPk(groupId);
     if (!group) {
         const err = new Error("Group couldn't be found");
         res.status(404);
@@ -237,25 +262,20 @@ router.post('/:groupId/images', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err)
     }
-});
-
-router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
-    const organizerId = req.user.id;
-    const groupId = req.params.groupId;
-    let group = await Group.findOne({
+    const groupOrganizer = await Group.findOne({
         where: {
             id: groupId,
-            organizerId
-        }
+            organizerId: req.user.id
+        },
     });
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        res.status(404);
-        // err.status = 404;
+    if (!groupOrganizer) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
         return res.json({
             message: err.message
         });
-        // next(err)
+        // next(err);
     }
     const { name, about, type, private, city, state } = req.body;
     let errors = {};
@@ -309,14 +329,8 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
 });
 
 router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
-    const organizerId = req.user.id;
     const groupId = req.params.groupId;
-    let group = await Group.findOne({
-        where: {
-            id: groupId,
-            organizerId
-        }
-    });
+    let group = await Group.findByPk(groupId);
     if (!group) {
         const err = new Error("Group couldn't be found");
         res.status(404);
@@ -325,6 +339,15 @@ router.delete('/:groupId', requireAuth, restoreUser, async (req, res) => {
             message: err.message
         });
         // next(err)
+    }
+    if (group.organizerId !== req.user.id) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
     }
     await group.destroy();
     return res.json({
@@ -520,6 +543,7 @@ router.get('/:groupId/events', async (req, res) => {
 
 router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
     const groupId = req.params.groupId;
+    let group = Group.findByPk(groupId);
     const groupOrganizer = await Group.findOne({
         where: {
             id: groupId,
@@ -538,7 +562,7 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
             id: groupId
         }
     });
-    if (!groupOrganizer && !groupCoHost) {
+    if (!group) {
         const err = new Error("Group couldn't be found");
         res.status(404);
         // err.status = 404;
@@ -546,6 +570,15 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
             message: err.message
         });
         // next(err)
+    }
+    if (!groupOrganizer && !groupCoHost) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
     }
     let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
     const priceRegex = /^\d{1,7}(\.\d{1,2})?$/;
@@ -583,7 +616,7 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
         // next(err)
     }
     if (!venueId) venueId = null;
-    let group = groupOrganizer || groupCoHost;
+    group = groupOrganizer || groupCoHost;
     let event = await group.createEvent({ venueId, name, type, capacity, price, description, startDate, endDate });
     event = event.toJSON();
     const formattedStartDate = parsedStartDate.toISOString().replace('T', ' ').slice(0, 19);
