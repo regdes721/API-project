@@ -27,19 +27,24 @@ module.exports = {
       status: "co-host"
     },
     {
-      userId: 1,
-      groupId: 3,
-      status: "pending"
+      userId: 4,
+      groupId: 1,
+      status: 'member'
     },
     {
-      userId: 1,
-      groupId: 4,
-      status: "member"
+      userId: 5,
+      groupId: 1,
+      status: 'co-host'
     },
     {
-      userId: 2,
-      groupId: 3,
-      status: "member"
+      userId: 6,
+      groupId: 1,
+      status: 'pending'
+    },
+    {
+      userId: 8,
+      groupId: 1,
+      status: 'member'
     },
     {
       userId: 3,
@@ -47,10 +52,50 @@ module.exports = {
       status: "co-host"
     },
     {
+      userId: 4,
+      groupId: 2,
+      status: 'pending'
+    },
+    {
+      userId: 5,
+      groupId: 2,
+      status: 'member'
+    },
+    {
+      userId: 9,
+      groupId: 2,
+      status: 'pending'
+    },
+    {
+      userId: 1,
+      groupId: 3,
+      status: "pending"
+    },
+    {
+      userId: 2,
+      groupId: 3,
+      status: "member"
+    },
+    {
+      userId: 4,
+      groupId: 3,
+      status: "member"
+    },
+    {
+      userId: 1,
+      groupId: 4,
+      status: "member"
+    },
+    {
       userId: 3,
       groupId: 4,
       status: "co-host"
-    }
+    },
+    {
+      userId: 8,
+      groupId: 4,
+      status: "member"
+    },
    ], { validate: true })
   },
 
