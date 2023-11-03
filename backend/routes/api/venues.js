@@ -6,6 +6,7 @@ const { requireAuth, restoreUser } = require('../../utils/auth');
 
 router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
     const venueId = req.params.venueId;
+    let venue = Venue.findByPk(venueId);
     const venueOrganizer = await Venue.findOne({
         include: {
             model: Group,
@@ -37,10 +38,9 @@ router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
     for (const membership of userCoHost) {
         if (venueCheck && membership.groupId === venueCheck.Group.id && membership.status === 'co-host') venueCoHost = membership;
     }
-
     const { address, city, state, lat, lng } = req.body;
     let errors = {};
-    if (!venueOrganizer && !venueCoHost) {
+    if (!venue) {
         const err = new Error("Venue couldn't be found");
         res.status(404);
         // err.status = 404;
@@ -48,6 +48,15 @@ router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
             message: err.message
         });
         // next(err)
+    }
+    if (!venueOrganizer && !venueCoHost) {
+        const err = new Error("Forbidden");
+        res.status(403);
+        // err.status = 403;
+        return res.json({
+            message: err.message
+        });
+        // next(err);
     }
     if (address === "") errors.address = "Street address is required";
     if (city === "") errors.city = "City is required";
@@ -64,7 +73,7 @@ router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err)
     }
-    let venue = venueOrganizer || venueCheck;
+    venue = venueOrganizer || venueCheck;
     if (address) venue.address = address;
     if (city) venue.city = city;
     if (state) venue.state = state;
