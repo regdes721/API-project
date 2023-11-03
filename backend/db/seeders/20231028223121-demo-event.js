@@ -39,7 +39,7 @@ module.exports = {
       capacity: 30,
       price: 10,
       startDate: "2023-11-20 20:00:00",
-      endDate: "2021-11-19 22:00:00"
+      endDate: "2023-11-20 22:00:00"
     },
     {
       venueId: 2,
