@@ -30,12 +30,12 @@ router.get('/', async (req, res) => {
             });
             if (groupImage) groupData.previewImage = groupImage.url;
 
-            // const createdAt = new Date(groupData.createdAt);
-            // const updatedAt = new Date(groupData.updatedAt);
-            // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
-            // const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-            // groupData.createdAt = formattedCreatedAt;
-            // groupData.updatedAt = formattedUpdatedAt;
+            const createdAt = new Date(groupData.createdAt);
+            const updatedAt = new Date(groupData.updatedAt);
+            const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+            const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+            groupData.createdAt = formattedCreatedAt;
+            groupData.updatedAt = formattedUpdatedAt;
 
             groupsList.push(groupData);
         }
