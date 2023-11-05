@@ -151,6 +151,12 @@ router.get('/:eventId', async (req, res) => {
         }
     });
     eventData.price = parseFloat(eventData.price);
+    let venue = eventData.Venue;
+    if (venue) {
+        eventData.Venue.lat = parseFloat(eventData.Venue.lat);
+        eventData.Venue.lng = parseFloat(eventData.Venue.lng);
+    }
+    if (!venue) eventData.Venue = null;
     // const startDate = new Date(eventData.startDate);
     // const endDate = new Date(eventData.endDate);
     // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
