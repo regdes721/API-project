@@ -11,37 +11,37 @@ router.get('/', async (req, res) => {
     }
 
     let groupsList = [];
-
-    for (const group of groups) {
-        const groupData = group.toJSON();
-        groupData.numMembers = await Membership.count({
-            where: {
-                groupId: group.id,
-                status: {
-                    [Op.not]: "pending"
+    if (groups) {
+        for (const group of groups) {
+            const groupData = group.toJSON();
+            groupData.numMembers = await Membership.count({
+                where: {
+                    groupId: group.id,
+                    status: {
+                        [Op.not]: "pending"
+                    }
                 }
-            }
-        });
-        let groupImage = await GroupImage.findOne({
-            where: {
-                groupId: group.id,
-                preview: true
-            }
-        });
-        if (groupImage) groupData.previewImage = groupImage.url;
+            });
+            let groupImage = await GroupImage.findOne({
+                where: {
+                    groupId: group.id,
+                    preview: true
+                }
+            });
+            if (groupImage) groupData.previewImage = groupImage.url;
 
-        // const createdAt = new Date(groupData.createdAt);
-        // const updatedAt = new Date(groupData.updatedAt);
-        // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
-        // const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
-        // groupData.createdAt = formattedCreatedAt;
-        // groupData.updatedAt = formattedUpdatedAt;
+            // const createdAt = new Date(groupData.createdAt);
+            // const updatedAt = new Date(groupData.updatedAt);
+            // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+            // const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+            // groupData.createdAt = formattedCreatedAt;
+            // groupData.updatedAt = formattedUpdatedAt;
 
-        groupsList.push(groupData);
+            groupsList.push(groupData);
+        }
     }
-
     groupsBody["Groups"] = groupsList;
-
+    if (!groupsBody["Groups"].length) groupsBody["Groups"] = null;
     return res.json(groupsBody);
 });
 
@@ -64,27 +64,29 @@ router.get('/current', requireAuth, restoreUser, async (req, res) => {
             }
         }
     });
-    for (const group of groups) {
-        const groupData = group.toJSON();
-        groupData.numMembers = await Membership.count({
-            where: {
-                groupId: group.id,
-                status: {
-                    [Op.not]: "pending"
+    if (groups) {
+        for (const group of groups) {
+            const groupData = group.toJSON();
+            groupData.numMembers = await Membership.count({
+                where: {
+                    groupId: group.id,
+                    status: {
+                        [Op.not]: "pending"
+                    }
                 }
-            }
-        });
-        groupImage = await GroupImage.findOne({
-            where: {
-                groupId: group.id,
-                preview: true
-            }
-        });
-        if (groupImage) groupData.previewImage = groupImage.url
-        delete groupData.createdAt;
-        delete groupData.updatedAt;
-        delete groupData.User;
-        groupsList.push(groupData);
+            });
+            groupImage = await GroupImage.findOne({
+                where: {
+                    groupId: group.id,
+                    preview: true
+                }
+            });
+            if (groupImage) groupData.previewImage = groupImage.url
+            delete groupData.createdAt;
+            delete groupData.updatedAt;
+            delete groupData.User;
+            groupsList.push(groupData);
+        }
     }
     groupsBody["Groups"] = groupsList;
     if (!groupsBody["Groups"].length) groupsBody["Groups"] = null;
@@ -140,9 +142,11 @@ router.get('/:groupId', async (req, res) => {
         // console.log(typeof groupData.Venues[1].lat)
         if (!groupData.Venues.length) groupData.Venues = null;
         let venues = groupData.Venues;
-        for (const venue of venues) {
-            venue.lat = parseFloat(venue.lat);
-            venue.lng = parseFloat(venue.lng);
+        if (venues) {
+            for (const venue of venues) {
+                venue.lat = parseFloat(venue.lat);
+                venue.lng = parseFloat(venue.lng);
+            }
         }
         // const createdAt = new Date(groupData.createdAt);
         // const updatedAt = new Date(groupData.updatedAt);
@@ -408,17 +412,18 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     group = group.toJSON();
     let venues = group.venues;
     // console.log(venues);
-    for (const venue of venues) {
-        // console.log(typeof venue.lng)
-        venue.lat = parseFloat(venue.lat);
-        venue.lng = parseFloat(venue.lng);
-        delete venue.createdAt;
-        delete venue.updatedAt;
-        delete venue.Event;
-        venuesList.push(venue);
+    if (venues) {
+        for (const venue of venues) {
+            // console.log(typeof venue.lng)
+            venue.lat = parseFloat(venue.lat);
+            venue.lng = parseFloat(venue.lng);
+            delete venue.createdAt;
+            delete venue.updatedAt;
+            delete venue.Event;
+            venuesList.push(venue);
+        }
     }
     venuesBody["Venues"] = venuesList;
-
     res.json(venuesBody);
 });
 
@@ -520,35 +525,38 @@ router.get('/:groupId/events', async (req, res) => {
         "Events": []
     }
     let eventsList = [];
-    for (const event of events) {
-        const eventData = event.toJSON();
-        eventData.numAttending = await Attendance.count({
-            where: {
-                eventId: event.id,
-                status: "attending"
-            }
-        });
-        let eventImage = await EventImage.findOne({
-            where: {
-                eventId: event.id,
-                preview: true
-            }
-        });
-        if (eventImage) eventData.previewImage = eventImage.url;
-        // const startDate = new Date(eventData.startDate);
-        // const endDate = new Date(eventData.endDate);
-        // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
-        // const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
-        // eventData.startDate = formattedStartDate;
-        // eventData.endDate = formattedEndDate;
-        delete eventData.description;
-        delete eventData.capacity;
-        delete eventData.price;
-        delete eventData.createdAt;
-        delete eventData.updatedAt;
-        eventsList.push(eventData);
+    if (events) {
+        for (const event of events) {
+            const eventData = event.toJSON();
+            eventData.numAttending = await Attendance.count({
+                where: {
+                    eventId: event.id,
+                    status: "attending"
+                }
+            });
+            let eventImage = await EventImage.findOne({
+                where: {
+                    eventId: event.id,
+                    preview: true
+                }
+            });
+            if (eventImage) eventData.previewImage = eventImage.url;
+            // const startDate = new Date(eventData.startDate);
+            // const endDate = new Date(eventData.endDate);
+            // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
+            // const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
+            // eventData.startDate = formattedStartDate;
+            // eventData.endDate = formattedEndDate;
+            delete eventData.description;
+            delete eventData.capacity;
+            delete eventData.price;
+            delete eventData.createdAt;
+            delete eventData.updatedAt;
+            eventsList.push(eventData);
+        }
     }
     eventsBody["Events"] = eventsList;
+    if (!eventsBody["Events"].length) eventsBody["Events"] = null;
     return res.json(eventsBody);
 });
 
@@ -686,27 +694,32 @@ router.get('/:groupId/members', async (req, res) => {
         "Members": []
     }
     let membersList = [];
-    for (const member of members) {
-        const memberData = member.toJSON();
-        memberData.Membership = {};
-        if (member.Memberships[0].status !== 'pending') {
-            memberData.Membership.status = member.Memberships[0].status;
-            delete memberData.Memberships;
-            membersList.push(memberData)
-        }
-    }
-    if (groupOrganizer || groupCoHost) {
+    if (members) {
         for (const member of members) {
             const memberData = member.toJSON();
             memberData.Membership = {};
-            if (member.Memberships[0].status === 'pending') {
+            if (member.Memberships[0].status !== 'pending') {
                 memberData.Membership.status = member.Memberships[0].status;
-            delete memberData.Memberships;
-            membersList.push(memberData)
+                delete memberData.Memberships;
+                membersList.push(memberData)
             }
         }
     }
-    membersBody["Members"] = membersList
+    if (groupOrganizer || groupCoHost) {
+        if (members) {
+            for (const member of members) {
+                const memberData = member.toJSON();
+                memberData.Membership = {};
+                if (member.Memberships[0].status === 'pending') {
+                    memberData.Membership.status = member.Memberships[0].status;
+                delete memberData.Memberships;
+                membersList.push(memberData)
+                }
+            }
+        }
+    }
+    membersBody["Members"] = membersList;
+    if (!membersBody["Members"].length) membersBody["Members"] = null;
     return res.json(membersBody);
 });
 
