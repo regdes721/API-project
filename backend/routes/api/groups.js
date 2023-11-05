@@ -547,12 +547,12 @@ router.get('/:groupId/events', async (req, res) => {
                 }
             });
             if (eventImage) eventData.previewImage = eventImage.url;
-            // const startDate = new Date(eventData.startDate);
-            // const endDate = new Date(eventData.endDate);
-            // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
-            // const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
-            // eventData.startDate = formattedStartDate;
-            // eventData.endDate = formattedEndDate;
+            const startDate = new Date(eventData.startDate);
+            const endDate = new Date(eventData.endDate);
+            const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
+            const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
+            eventData.startDate = formattedStartDate;
+            eventData.endDate = formattedEndDate;
             delete eventData.description;
             delete eventData.capacity;
             delete eventData.price;
