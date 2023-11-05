@@ -322,7 +322,7 @@ router.put('/:eventId', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err)
     }
-    console.log(errors.venueId)
+    // console.log(errors.venueId)
     if (errors.venueId || errors.name || errors.type || errors.capacity || errors.price || errors.description || errors.startDate || errors.endDate) {
         const err = new Error("Bad Request");
         res.status(400);
