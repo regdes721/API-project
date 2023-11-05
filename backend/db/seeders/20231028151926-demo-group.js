@@ -54,6 +54,15 @@ module.exports = {
       private: false,
       city: "New York",
       state: "NY"
+    },
+    {
+      organizerId: 4,
+      name: "Machine Learning for App Architects",
+      about: "Join ML App where app development meets machine learning! Dive into case studies, engage in hands-on workshops, showcase your ML app projects, brainstorm revolutionary app ideas, and network with professionals and enthusiasts alike.",
+      type: "Online",
+      private: true,
+      city: "New York",
+      state: "NY"
     }
    ], { validate: true })
   },

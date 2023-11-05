@@ -41,6 +41,48 @@ module.exports = {
       email: 'harryosborn@oscorp.io',
       username: 'EmilyMayFoundation',
       hashedPassword: bcrypt.hashSync('healtheworld')
+    },
+    {
+      firstName: 'Nathaniel',
+      lastName: 'Richards',
+      email: 'kang.the.conqueror@timetraveler.com',
+      username: 'TimeMasterKang',
+      hashedPassword: bcrypt.hashSync('ravonna')
+    },
+    {
+      firstName: 'Victor',
+      lastName: 'Timely',
+      email: 'ceo@timelyindustries.com',
+      username: 'Victor',
+      hashedPassword: bcrypt.hashSync('SecureFuture$1901')
+    },
+    {
+      firstName: 'Sylvie',
+      lastName: 'Laufeydottir',
+      email: 'sylvie@gmail.com',
+      username: 'Enchantress',
+      hashedPassword: bcrypt.hashSync('FreeTheTimeline')
+    },
+    {
+      firstName: 'Mobius',
+      lastName: 'Mobius',
+      email: 'mobius.m.mobius@tva.org',
+      username: 'TimeCop',
+      hashedPassword: bcrypt.hashSync('4AllTimeAlways')
+    },
+    {
+      firstName: 'Wanda',
+      lastName: 'Maximoff',
+      email: 'scarletmaximoff@protonmail.com',
+      username: 'MotherFirst',
+      hashedPassword: bcrypt.hashSync('tommy&billy')
+    },
+    {
+      firstName: 'Loki',
+      lastName: 'Odinson',
+      email: 'kingloki@gmail.com',
+      username: 'King Loki',
+      hashedPassword: bcrypt.hashSync('gloriouspurpose')
     }
    ], { validate: true })
   },
