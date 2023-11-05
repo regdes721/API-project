@@ -645,8 +645,10 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
     let event = await group.createEvent({ venueId, name, type, capacity, price, description, startDate, endDate });
     event = event.toJSON();
     event.price = parseFloat(event.price);
-    // const formattedStartDate = parsedStartDate.toISOString().replace('T', ' ').slice(0, 19);
-    // const formattedEndDate = parsedEndDate.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedStartDate = parsedStartDate.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedEndDate = parsedEndDate.toISOString().replace('T', ' ').slice(0, 19);
+    event.startDate = formattedStartDate;
+    event.endDate = formattedEndDate;
     delete event.createdAt;
     delete event.updatedAt;
     // const formattedResponse = {
