@@ -474,6 +474,8 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     group = groupOrganizer || groupCoHost;
     let venue = await group.createVenue({ address, city, state, lat, lng });
     venue = venue.toJSON();
+    venue.lat = parseFloat(venue.lat);
+    venue.lng = parseFloat(venue.lng);
     delete venue.createdAt;
     delete venue.updatedAt;
     // console.log(typeof venue.lng)

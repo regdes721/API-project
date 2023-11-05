@@ -150,7 +150,7 @@ router.get('/:eventId', async (req, res) => {
             status: "attending"
         }
     });
-    eventData.price = parseFloat(eventData.price)
+    eventData.price = parseFloat(eventData.price);
     // const startDate = new Date(eventData.startDate);
     // const endDate = new Date(eventData.endDate);
     // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
