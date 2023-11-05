@@ -343,26 +343,26 @@ router.put('/:eventId', requireAuth, restoreUser, async (req, res) => {
     event.updatedAt = new Date();
     await event.save();
     event = event.toJSON();
-    // if (parsedStartDate) {
-    //     formattedStartDate = parsedStartDate.toISOString().replace('T', ' ').slice(0, 19);
-    // }
-    // if (parsedEndDate) {
-    //     formattedEndDate = parsedEndDate.toISOString().replace('T', ' ').slice(0, 19);
+    if (parsedStartDate) {
+        formattedStartDate = parsedStartDate.toISOString().replace('T', ' ').slice(0, 19);
+    }
+    if (parsedEndDate) {
+        formattedEndDate = parsedEndDate.toISOString().replace('T', ' ').slice(0, 19);
 
-    // }
-    // if (!parsedStartDate) {
-    //     formattedStartDate = parsedOGStartDate.toISOString().replace('T', ' ').slice(0, 19);
-    // }
-    // if (!parsedEndDate) {
-    //     formattedEndDate = parsedOGEndDate.toISOString().replace('T', ' ').slice(0, 19);
-    // }
+    }
+    if (!parsedStartDate) {
+        formattedStartDate = parsedOGStartDate.toISOString().replace('T', ' ').slice(0, 19);
+    }
+    if (!parsedEndDate) {
+        formattedEndDate = parsedOGEndDate.toISOString().replace('T', ' ').slice(0, 19);
+    }
     delete event.createdAt;
     delete event.updatedAt;
     // const formattedResponse = {
     //     ...event
     // }
-    // if (formattedStartDate) formattedResponse.startDate = formattedStartDate;
-    // if (formattedEndDate) formattedResponse.endDate = formattedEndDate;
+    if (formattedStartDate) event.startDate = formattedStartDate;
+    if (formattedEndDate) event.endDate = formattedEndDate;
     return res.json(event);
 });
 
