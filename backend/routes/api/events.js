@@ -157,6 +157,8 @@ router.get('/:eventId', async (req, res) => {
         eventData.Venue.lng = parseFloat(eventData.Venue.lng);
     }
     if (!venue) eventData.Venue = null;
+    let eventImages = eventData.EventImages;
+    if (!eventImages || !eventImages.length) eventData.eventImages = null;
     // const startDate = new Date(eventData.startDate);
     // const endDate = new Date(eventData.endDate);
     // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
