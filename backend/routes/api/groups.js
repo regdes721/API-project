@@ -203,10 +203,12 @@ router.post('/', requireAuth, restoreUser, async (req, res, next) => {
         state
     });
     newGroup = newGroup.toJSON();
-    // const createdAt = new Date(newGroup.createdAt);
-    // const updatedAt = new Date(newGroup.updatedAt);
-    // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
-    // const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+    const createdAt = new Date(newGroup.createdAt);
+    const updatedAt = new Date(newGroup.updatedAt);
+    const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+    newGroup.createdAt = formattedCreatedAt;
+    newGroup.updatedAt = formattedUpdatedAt;
     // const formattedResponse = {
     //     ...newGroup,
     //     createdAt: formattedCreatedAt,
