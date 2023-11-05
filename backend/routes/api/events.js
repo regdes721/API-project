@@ -89,7 +89,7 @@ router.get('/', async (req, res) => {
             }
         });
         if (eventImage) eventData.previewImage = eventImage.url;
-        // if (!eventData.Venue.length) eventData.Venue = null;
+        // if (!eventData.Venue || !eventData.Venue.length) eventData.Venue = null;
         // const startDate = new Date(eventData.startDate);
         // const endDate = new Date(eventData.endDate);
         // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
@@ -113,6 +113,7 @@ router.get('/', async (req, res) => {
         eventsList.push(eventData);
     }
     eventsBody["Events"] = eventsList;
+    if (!eventsBody["Events"] || !eventsBody["Events"].length) eventsBody["Events"] = null;
     return res.json(eventsBody);
 });
 
