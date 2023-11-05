@@ -139,6 +139,11 @@ router.get('/:groupId', async (req, res) => {
         });
         // console.log(typeof groupData.Venues[1].lat)
         if (!groupData.Venues.length) groupData.Venues = null;
+        let venues = groupData.Venues;
+        for (const venue of venues) {
+            venue.lat = parseFloat(venue.lat);
+            venue.lng = parseFloat(venue.lng);
+        }
         // const createdAt = new Date(groupData.createdAt);
         // const updatedAt = new Date(groupData.updatedAt);
         // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
