@@ -348,7 +348,6 @@ router.put('/:eventId', requireAuth, restoreUser, async (req, res) => {
     }
     if (parsedEndDate) {
         formattedEndDate = parsedEndDate.toISOString().replace('T', ' ').slice(0, 19);
-
     }
     if (!parsedStartDate) {
         formattedStartDate = parsedOGStartDate.toISOString().replace('T', ' ').slice(0, 19);
