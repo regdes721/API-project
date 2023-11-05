@@ -89,7 +89,7 @@ router.get('/', async (req, res) => {
             }
         });
         if (eventImage) eventData.previewImage = eventImage.url;
-        // if (!eventData.Venue.length) eventData.Venue = null;
+        // if (!eventData.Venue || !eventData.Venue.length) eventData.Venue = null;
         // const startDate = new Date(eventData.startDate);
         // const endDate = new Date(eventData.endDate);
         // const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
