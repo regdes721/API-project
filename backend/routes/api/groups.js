@@ -148,10 +148,12 @@ router.get('/:groupId', async (req, res) => {
                 venue.lng = parseFloat(venue.lng);
             }
         }
-        // const createdAt = new Date(groupData.createdAt);
-        // const updatedAt = new Date(groupData.updatedAt);
-        // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
-        // const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+        const createdAt = new Date(groupData.createdAt);
+        const updatedAt = new Date(groupData.updatedAt);
+        const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+        const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+        groupData.createdAt = formattedCreatedAt;
+        groupData.updatedAt = formattedUpdatedAt;
         // const formattedResponse = {
         //     ...groupData,
         //     createdAt: formattedCreatedAt,
