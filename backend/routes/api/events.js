@@ -113,6 +113,7 @@ router.get('/', async (req, res) => {
         eventsList.push(eventData);
     }
     eventsBody["Events"] = eventsList;
+    if (!eventsBody["Events"] || !eventsBody["Events"].length) eventsBody["Events"] = null;
     return res.json(eventsBody);
 });
 
