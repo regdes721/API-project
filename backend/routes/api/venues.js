@@ -85,6 +85,7 @@ router.put('/:venueId', requireAuth, restoreUser, async (req, res) => {
     delete venue.createdAt;
     delete venue.updatedAt;
     delete venue.Group;
+    // console.log(typeof venue.lat)
     res.json(venue)
 })
 

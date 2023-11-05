@@ -137,6 +137,7 @@ router.get('/:groupId', async (req, res) => {
                 exclude: ['createdAt', 'updatedAt']
             }
         });
+        // console.log(typeof groupData.Venues[1].lat)
         if (!groupData.Venues.length) groupData.Venues = null;
         // const createdAt = new Date(groupData.createdAt);
         // const updatedAt = new Date(groupData.updatedAt);
@@ -401,8 +402,9 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     let venuesList = [];
     group = group.toJSON();
     let venues = group.venues;
-    console.log(venues);
+    // console.log(venues);
     for (const venue of venues) {
+        // console.log(typeof venue.lng)
         delete venue.createdAt;
         delete venue.updatedAt;
         delete venue.Event;
@@ -474,6 +476,7 @@ router.post('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     venue = venue.toJSON();
     delete venue.createdAt;
     delete venue.updatedAt;
+    // console.log(typeof venue.lng)
     res.json(venue);
 });
 

@@ -160,6 +160,7 @@ router.get('/:eventId', async (req, res) => {
     // eventData.endDate = new Date(new Date(eventData.endDate).getTime() - 5 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' ');
     delete eventData.createdAt;
     delete eventData.updatedAt;
+    // console.log(typeof eventData.Venue.lng)
     res.json(eventData);
 });
 
