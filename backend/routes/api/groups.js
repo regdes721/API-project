@@ -140,9 +140,11 @@ router.get('/:groupId', async (req, res) => {
         // console.log(typeof groupData.Venues[1].lat)
         if (!groupData.Venues.length) groupData.Venues = null;
         let venues = groupData.Venues;
-        for (const venue of venues) {
-            venue.lat = parseFloat(venue.lat);
-            venue.lng = parseFloat(venue.lng);
+        if (venues) {
+            for (const venue of venues) {
+                venue.lat = parseFloat(venue.lat);
+                venue.lng = parseFloat(venue.lng);
+            }
         }
         // const createdAt = new Date(groupData.createdAt);
         // const updatedAt = new Date(groupData.updatedAt);
@@ -408,17 +410,18 @@ router.get('/:groupId/venues', requireAuth, restoreUser, async (req, res) => {
     group = group.toJSON();
     let venues = group.venues;
     // console.log(venues);
-    for (const venue of venues) {
-        // console.log(typeof venue.lng)
-        venue.lat = parseFloat(venue.lat);
-        venue.lng = parseFloat(venue.lng);
-        delete venue.createdAt;
-        delete venue.updatedAt;
-        delete venue.Event;
-        venuesList.push(venue);
+    if (venues) {
+        for (const venue of venues) {
+            // console.log(typeof venue.lng)
+            venue.lat = parseFloat(venue.lat);
+            venue.lng = parseFloat(venue.lng);
+            delete venue.createdAt;
+            delete venue.updatedAt;
+            delete venue.Event;
+            venuesList.push(venue);
+        }
     }
     venuesBody["Venues"] = venuesList;
-
     res.json(venuesBody);
 });
 
