@@ -329,10 +329,12 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
     group.updatedAt = new Date();
     await group.save();
     group = group.toJSON();
-    // const createdAt = new Date(group.createdAt);
-    // const updatedAt = new Date(group.updatedAt);
-    // const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
-    // const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+    const createdAt = new Date(group.createdAt);
+    const updatedAt = new Date(group.updatedAt);
+    const formattedCreatedAt = createdAt.toISOString().replace('T', ' ').slice(0, 19);
+    const formattedUpdatedAt = updatedAt.toISOString().replace('T', ' ').slice(0, 19);
+    group.createdAt = formattedCreatedAt;
+    group.updatedAt = formattedUpdatedAt;
     // const formattedResponse = {
     //     ...group,
     //     createdAt: formattedCreatedAt,
