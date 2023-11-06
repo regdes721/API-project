@@ -305,7 +305,15 @@ router.put('/:eventId', requireAuth, restoreUser, async (req, res) => {
             }
         });
     }
-    if (venueId && !venue) {
+    if ((venueId && !venue) || (venueId && !Number.isInteger(venueId)) || (venueId && typeof venueId !== 'number') || venueId === "") errors.venueId = "Venue does not exist";
+    if ((name && name.length < 5) || name === "") errors.name = "Name must be at least 5 characters";
+    if ((type && type !== "Online" && type !== "In person") || type === "") errors.type = "Type must be Online or In person";
+    if ((capacity && !Number.isInteger(capacity)) || (capacity && typeof capacity !== 'number') || capacity === "") errors.capacity = "Capacity must be an integer";
+    if ((price && !priceRegex.test(price)) || (price && typeof price !== 'number') || price === "") errors.price = "Price is invalid";
+    if (description === "") errors.description = "Description is required";
+    if ((parsedStartDate && parsedStartDate <= currentDate) || startDate === "") errors.startDate = "Start date must be in the future";
+    if ((parsedEndDate && parsedEndDate <= parsedStartDate) || endDate === "") errors.endDate = "End date is less than start date";
+    if (venueId && !venue && !errors.name && !errors.type && !errors.capacity && !errors.price && !errors.description && !errors.startDate && !errors.endDate) {
         const err = new Error("Venue couldn't be found");
         res.status(404);
         // err.status = 404;
@@ -314,14 +322,7 @@ router.put('/:eventId', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err)
     }
-    if ((venueId && !Number.isInteger(venueId)) || (venueId && typeof venueId !== 'number') || venueId === "") errors.venueId = "Venue does not exist";
-    if ((name && name.length < 5) || name === "") errors.name = "Name must be at least 5 characters";
-    if ((type && type !== "Online" && type !== "In person") || type === "") errors.type = "Type must be Online or In person";
-    if ((capacity && !Number.isInteger(capacity)) || (capacity && typeof capacity !== 'number') || capacity === "") errors.capacity = "Capacity must be an integer";
-    if ((price && !priceRegex.test(price)) || (price && typeof price !== 'number') || price === "") errors.price = "Price is invalid";
-    if (description === "") errors.description = "Description is required";
-    if ((parsedStartDate && parsedStartDate <= currentDate) || startDate === "") errors.startDate = "Start date must be in the future";
-    if ((parsedEndDate && parsedEndDate <= parsedStartDate) || endDate === "") errors.endDate = "End date is less than start date";
+    // console.log(errors.venueId)
     if (errors.venueId || errors.name || errors.type || errors.capacity || errors.price || errors.description || errors.startDate || errors.endDate) {
         const err = new Error("Bad Request");
         res.status(400);
