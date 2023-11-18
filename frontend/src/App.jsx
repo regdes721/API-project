@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet, NavLink} from 'react-router-dom';
 import Navigation from './components/Navigation';
 import GroupsPage from './components/GroupsPage';
+import GroupDetailsPage from './components/GroupsPage/GroupDetailsPage';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'groups/:groupId',
-        element: <h1>Hi from GroupsDetails Page</h1>
+        element: <GroupDetailsPage />
       }
     ]
   }

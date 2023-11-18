@@ -9,8 +9,10 @@ const GroupsPage = () => {
     const dispatch = useDispatch();
     const groupsObj = useSelector(state => state.groups.entries);
     const groups = Object.values(groupsObj);
+    // console.log(groups)
     const eventsObj = useSelector(state => state.events.entries)
     const events = Object.values(eventsObj)
+    // console.log(events)
 
     useEffect(() => {
         dispatch(fetchGroups())
