@@ -12,7 +12,6 @@ export const loadGroups = (groups) => {
 export const fetchGroups = () => async (dispatch) => {
     const response = await csrfFetch('/api/groups');
     const groups = await response.json();
-    // console.log(groups);
     dispatch(loadGroups(groups));
 }
 
@@ -20,10 +19,11 @@ const initialState = { entries: {} };
 
 const groupReducer = (state = initialState, action) => {
     switch (action.type) {
-        case LOAD_GROUPS:
+        case LOAD_GROUPS: {
             const entries = {}
             action.groups.Groups.forEach(group => {entries[group.id] = group})
             return {...state, entries};
+        }
         default:
             return state;
     }

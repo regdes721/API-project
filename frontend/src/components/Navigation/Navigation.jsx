@@ -9,7 +9,8 @@ function Navigation({ isLoaded }) {
   return (
     <header>
       <div className='logo-container'>
-        <NavLink exact to="/"><img src="https://logos-download.com/wp-content/uploads/2016/10/Meetup_logo-700x250.png" /></NavLink>
+        <NavLink to="/"><img src="https://logos-download.com/wp-content/uploads/2016/10/Meetup_logo-700x250.png" /></NavLink>
+        {/* <NavLink exact to="/"><img src="https://logos-download.com/wp-content/uploads/2016/10/Meetup_logo-700x250.png" /></NavLink> */}
       </div>
       <nav>
         {isLoaded && (
