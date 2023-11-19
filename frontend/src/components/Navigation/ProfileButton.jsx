@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
@@ -49,11 +49,11 @@ function ProfileButton({ user }) {
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
+            {/* <li>{user.username}</li> */}
+            <li>Hello, {user.firstName}</li>
             <li>{user.email}</li>
             <li>
-              <button onClick={logout}>Log Out</button>
+              <button onClick={logout}><Link to="/" className='logout-button-link'>Log Out</Link></button>
             </li>
           </>
         ) : (

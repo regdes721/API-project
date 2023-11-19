@@ -5,6 +5,7 @@ import Navigation from './components/Navigation';
 import GroupsPage from './components/GroupsPage';
 import GroupDetailsPage from './components/GroupsPage/GroupDetailsPage';
 import EventsPage from './components/EventsPage';
+import EventDetailsPage from './components/EventsPage/EventDetailsPage';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: 'events',
         element: <EventsPage />
+      },
+      {
+        path: 'events/:eventId',
+        element: <EventDetailsPage />
       }
     ]
   }

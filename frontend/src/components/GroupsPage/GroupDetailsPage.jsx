@@ -15,7 +15,9 @@ const GroupDetailsPage = () => {
     const events = Object.values(eventsObj)
     const sessionUser = useSelector((state) => state.session.user);
 
-    const buttonClassName = (!sessionUser || group.length === 1 && sessionUser.id === group[0].Organizer.id) ? "hidden" : null
+    const joinButtonClassName = (!sessionUser || group.length === 1 && sessionUser.id === group[0].Organizer.id) ? "hidden" : null
+
+    const organizerButtonClassName = (!sessionUser || group.length === 1 && sessionUser.id !== group[0].Organizer.id) ? "hidden" : null
 
     const sortedUpcomingEvents = group.length === 1 ? events.filter((event) => event.groupId === group[0].id && new Date(event.startDate) > new Date()).sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
         : []
@@ -29,7 +31,7 @@ const GroupDetailsPage = () => {
     const pastEventCount = group.length === 1 ? `(${events.filter((event) => event.groupId === group[0].id && new Date(event.startDate) < new Date()).length})`
         : `(0)`
 
-    console.log(sortedPastEvents)
+    // console.log(sortedPastEvents)
 
     useEffect(() => {
         dispatch(fetchGroupDetails(groupId))
@@ -39,7 +41,7 @@ const GroupDetailsPage = () => {
         <div>
             <div className="group-header-container">
                 <div>
-                    <p>{`<`} <NavLink to="/groups">Groups</NavLink></p>
+                    <p>{`<`} <NavLink to="/groups" className="breadcrumb">Groups</NavLink></p>
                     {group.length === 1 ? group.map((group) => (
                         group.GroupImages.map((image) => image.preview === true ? <img src={image.url} /> : null)
                     )) : null}
@@ -49,7 +51,12 @@ const GroupDetailsPage = () => {
                     {group.length === 1 ? <h3>{`${group[0].city}, ${group[0].state}`}</h3> : null}
                     {group.length === 1 ? <h3>{events.filter((event) => event.groupId === group[0].id).length === 1 ? `${events.filter((event) => event.groupId === group[0].id).length} Event` : `${events.filter((event) => event.groupId === group[0].id).length} Events`} · {group[0].private === true ? "Private" : "Public"}</h3> : null}
                     {group.length === 1 ? <h3>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</h3> : null}
-                    <button className={buttonClassName} onClick={() => (alert(`Feature Coming Soon...`))}>Join this group</button>
+                    <button className={`${joinButtonClassName} join-button`} onClick={() => (alert(`Feature Coming Soon...`))}>Join this group</button>
+                    <div className={`${organizerButtonClassName} organizer-button-container`}>
+                        <button className="organizer-button">Create Event</button>
+                        <button className="organizer-button">Update</button>
+                        <button className="organizer-button">Delete</button>
+                    </div>
                 </div>
             </div>
             <div className="group-body-container">

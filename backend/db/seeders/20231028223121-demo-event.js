@@ -26,7 +26,7 @@ module.exports = {
       description: "Don't miss this fantastic opportunity to connect with the tennis community, learn more about the sport, and make new friends who share your love for tennis. Whether you're a casual fan or a die-hard enthusiast, this online tennis meet and greet is the perfect place to connect, learn, and have a great time.",
       type: "Online",
       capacity: 50,
-      price: 0.99,
+      price: 0,
       startDate: "2023-11-19 20:00:00",
       endDate: "2023-11-19 22:00:00"
     },
@@ -36,7 +36,7 @@ module.exports = {
       description: "Don't miss this fantastic opportunity to connect with the tennis community, learn more about the sport, and make new friends who share your love for tennis. Whether you're a casual fan or a die-hard enthusiast, this online tennis meet and greet is the perfect place to connect, learn, and have a great time.",
       type: "Online",
       capacity: 50,
-      price: 0.99,
+      price: 0,
       startDate: "2024-02-11 20:00:00",
       endDate: "2024-02-11 22:00:00"
     },
@@ -46,7 +46,7 @@ module.exports = {
       description: "Don't miss this fantastic opportunity to connect with the tennis community, learn more about the sport, and make new friends who share your love for tennis. Whether you're a casual fan or a die-hard enthusiast, this online tennis meet and greet is the perfect place to connect, learn, and have a great time.",
       type: "Online",
       capacity: 50,
-      price: 0.99,
+      price: 0,
       startDate: "2024-04-21 20:00:00",
       endDate: "2024-04-21 22:00:00"
     },
@@ -89,7 +89,7 @@ module.exports = {
       description: "Don't miss this fantastic opportunity to connect with the tennis community, learn more about the sport, and make new friends who share your love for tennis. Whether you're a casual fan or a die-hard enthusiast, this online tennis meet and greet is the perfect place to connect, learn, and have a great time.",
       type: "Online",
       capacity: 50,
-      price: 0.99,
+      price: 0,
       startDate: "2020-11-19 20:00:00",
       endDate: "2020-11-19 22:00:00"
     },
