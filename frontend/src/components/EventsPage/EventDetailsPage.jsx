@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, NavLink } from "react-router-dom";
 import { fetchEventDetails } from "../../store/events";
 import './EventDetailsPage.css';
+import { fetchGroupDetails } from "../../store/groups";
 
 const EventDetailsPage = () => {
     const { eventId } = useParams();
@@ -12,18 +13,18 @@ const EventDetailsPage = () => {
     // const groupDetailsObj = useSelector(state => state.groups.entries);
     // const group = Object.values(groupDetailsObj);
 
-    // console.log("eventDetailsObj", eventDetailsObj)
-    // console.log("event", event)
+    console.log("eventDetailsObj", eventDetailsObj)
+    console.log("event", event)
 
     useEffect(() => {
         dispatch(fetchEventDetails(eventId))
-        // if (event.length === 1) console.log("hi")
     }, [dispatch])
     return (
         <div>
             <div className="event-header-container">
                 <p>{`<`} <NavLink to="/events" className="breadcrumb">Events</NavLink></p>
                 {event.length === 1 ? <h1>{event[0].name}</h1> : null}
+                <h3>{`Hosted by <Firstname> <Lastname>`}</h3>
             </div>
         </div>
     )

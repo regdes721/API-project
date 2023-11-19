@@ -6,6 +6,7 @@ import GroupsPage from './components/GroupsPage';
 import GroupDetailsPage from './components/GroupsPage/GroupDetailsPage';
 import EventsPage from './components/EventsPage';
 import EventDetailsPage from './components/EventsPage/EventDetailsPage';
+import CreateGroupPage from './components/GroupsPage/CreateGroupPage';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
           <div>
             <NavLink to="/groups">See all groups</NavLink>
             <NavLink to="/events">Find an event</NavLink>
+            <NavLink to="/groups/new">Start a new group</NavLink>
           </div>
         </>
       },
@@ -48,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: 'groups/:groupId',
         element: <GroupDetailsPage />
+      },
+      {
+        path: 'groups/new',
+        element: <CreateGroupPage />
       },
       {
         path: 'events',

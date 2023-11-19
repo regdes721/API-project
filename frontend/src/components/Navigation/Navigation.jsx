@@ -13,6 +13,9 @@ function Navigation({ isLoaded }) {
         {/* <NavLink exact to="/"><img src="https://logos-download.com/wp-content/uploads/2016/10/Meetup_logo-700x250.png" /></NavLink> */}
       </div>
       <nav>
+        {isLoaded && sessionUser && (
+          <NavLink to="/groups/new" className="start-group-link"><h3>Start a new group</h3></NavLink>
+        )}
         {isLoaded && (
           <ProfileButton user={sessionUser} />
         )}
