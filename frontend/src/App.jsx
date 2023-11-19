@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet, NavLink} from 'react-route
 import Navigation from './components/Navigation';
 import GroupsPage from './components/GroupsPage';
 import GroupDetailsPage from './components/GroupsPage/GroupDetailsPage';
+import EventsPage from './components/EventsPage';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
           <h1>Welcome!</h1>
           <div>
             <NavLink to="/groups">See all groups</NavLink>
+            <NavLink to="/events">Find an event</NavLink>
           </div>
         </>
       },
@@ -45,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: 'groups/:groupId',
         element: <GroupDetailsPage />
+      },
+      {
+        path: 'events',
+        element: <EventsPage />
       }
     ]
   }

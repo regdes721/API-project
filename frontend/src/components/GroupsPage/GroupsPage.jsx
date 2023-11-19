@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGroups } from "../../store/groups";
 import { NavLink } from 'react-router-dom';
-import './GroupsPage.css';
+import { fetchGroups } from "../../store/groups";
 import { fetchEvents } from "../../store/events";
+import './GroupsPage.css';
 
 const GroupsPage = () => {
     const dispatch = useDispatch();
@@ -23,8 +23,8 @@ const GroupsPage = () => {
         <div className="groupsList-container">
             <div className="groupsList-header-container">
                 <div className="groups-events-links-container">
-                    <h2><NavLink to="/events" className="eventsLink">Events</NavLink></h2>
-                    <h2><NavLink to="/groups" className="groupsLink">Groups</NavLink></h2>
+                    <h2><NavLink to="/events" className="groups-eventsLink">Events</NavLink></h2>
+                    <h2><NavLink to="/groups" className="groups-groupsLink">Groups</NavLink></h2>
                 </div>
                 <p>Groups in Meetup</p>
             </div>

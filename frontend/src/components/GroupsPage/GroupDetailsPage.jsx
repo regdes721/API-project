@@ -13,6 +13,23 @@ const GroupDetailsPage = () => {
     // console.log(group);
     const eventsObj = useSelector(state => state.events.entries)
     const events = Object.values(eventsObj)
+    const sessionUser = useSelector((state) => state.session.user);
+
+    const buttonClassName = (!sessionUser || group.length === 1 && sessionUser.id === group[0].Organizer.id) ? "hidden" : null
+
+    const sortedUpcomingEvents = group.length === 1 ? events.filter((event) => event.groupId === group[0].id && new Date(event.startDate) > new Date()).sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+        : []
+
+    const upcomingEventCount = group.length === 1 ? `(${events.filter((event) => event.groupId === group[0].id && new Date(event.startDate) > new Date()).length})`
+        : `(0)`
+
+    const sortedPastEvents = group.length === 1 ? events.filter((event) => event.groupId === group[0].id && new Date(event.startDate) < new Date()).sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
+        : []
+
+    const pastEventCount = group.length === 1 ? `(${events.filter((event) => event.groupId === group[0].id && new Date(event.startDate) < new Date()).length})`
+        : `(0)`
+
+    console.log(sortedPastEvents)
 
     useEffect(() => {
         dispatch(fetchGroupDetails(groupId))
@@ -28,39 +45,67 @@ const GroupDetailsPage = () => {
                     )) : null}
                 </div>
                 <div className="group-header-text-container">
-                    <h1>{group[0].name}</h1>
-                    <h3>{`${group[0].city}, ${group[0].state}`}</h3>
-                    <h3>{events.filter((event) => event.groupId === group[0].id).length === 1 ? `${events.filter((event) => event.groupId === group[0].id).length} Event` : `${events.filter((event) => event.groupId === group[0].id).length} Events`} · {group[0].private === true ? "Private" : "Public"}</h3>
-                    <h3>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</h3>
-                    <button>Join this group</button>
+                    {group.length === 1 ? <h1>{group[0].name}</h1> : null}
+                    {group.length === 1 ? <h3>{`${group[0].city}, ${group[0].state}`}</h3> : null}
+                    {group.length === 1 ? <h3>{events.filter((event) => event.groupId === group[0].id).length === 1 ? `${events.filter((event) => event.groupId === group[0].id).length} Event` : `${events.filter((event) => event.groupId === group[0].id).length} Events`} · {group[0].private === true ? "Private" : "Public"}</h3> : null}
+                    {group.length === 1 ? <h3>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</h3> : null}
+                    <button className={buttonClassName} onClick={() => (alert(`Feature Coming Soon...`))}>Join this group</button>
                 </div>
             </div>
-            <div>
-                <h2>Organizer</h2>
-                <p>Firstname Lastname</p>
-                <h2>What we are about</h2>
-                <p>about</p>
-                <h2>Upcoming Events</h2>
-                <div>
-                    <div>
-                    </div>
-                    <div>
-                        <h4>YYYY-MM-DD · time</h4>
-                        <h3>Event title with word wrapping</h3>
-                        <h4>Location</h4>
-                    </div>
-                    <div>Details</div>
+            <div className="group-body-container">
+                <div className="group-body-content-container">
+                    <h2>Organizer</h2>
+                    {group.length === 1 ? <p>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</p> : null}
                 </div>
-                <h2>Past Events</h2>
-                <div>
-                    <div>
-                    </div>
-                    <div>
-                        <h4>YYYY-MM-DD · time</h4>
-                        <h3>Event title with word wrapping</h3>
-                        <h4>Location</h4>
-                    </div>
-                    <div>Details</div>
+                <div className="group-body-content-container">
+                    <h2>What we&apos;re about</h2>
+                    {group.length === 1 ? <p>{group[0].about}</p> : null}
+                </div>
+                <div className="group-body-content-container">
+                    {group.length === 1 ? (
+                        <h2>
+                            {`Upcoming Events ${upcomingEventCount}`}
+                        </h2>
+                    ) : (
+                        null
+                    )}
+                    {sortedUpcomingEvents.map((event) =>
+                        <div className="group-events-container">
+                            <div>
+                                <img src={event.previewImage} />
+                            </div>
+                            <div>
+                                <h4>{event.startDate.split(" ").join(" · ")}</h4>
+                                <h3>{event.name}</h3>
+                                {event.Venue ?
+                                    <h4>{`${event.Venue.city}, ${event.Venue.state}`}</h4> : <h4>Online</h4>}
+                            </div>
+                            <div>Details</div>
+                        </div>
+                    )}
+                </div>
+                <div className="group-body-content-container">
+                    {group.length === 1 ? (
+                        <h2>
+                            {`Past Events ${pastEventCount}`}
+                        </h2>
+                    ) : (
+                        null
+                    )}
+                    {sortedPastEvents.map((event) =>
+                        <div className="group-events-container">
+                            <div>
+                                <img src={event.previewImage} />
+                            </div>
+                            <div>
+                                <h4>{event.startDate.split(" ").join(" · ")}</h4>
+                                <h3>{event.name}</h3>
+                                {event.Venue ?
+                                    <h4>{`${event.Venue.city}, ${event.Venue.state}`}</h4> : <h4>Online</h4>}
+                            </div>
+                            <div>Details</div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
