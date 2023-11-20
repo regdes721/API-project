@@ -9,7 +9,7 @@ const CreateGroupPage = () => {
     const [about, setAbout] = useState("");
     const [url, setUrl] = useState("");
     const [type, setType] = useState(null);
-    const [privateBoolean, setPrivateBoolean] = useState(null);
+    const [isPrivate, setIsPrivate] = useState(null);
     const [errors, setErrors] = useState({});
 
     // console.log(sessionUser)
@@ -70,7 +70,7 @@ const CreateGroupPage = () => {
                     <option value="Online">Online</option>
                 </select>
                 <p>Is this group private or public?</p>
-                <select onChange={(e) => setPrivateBoolean(e.target.value === 'true')}>
+                <select onChange={(e) => setIsPrivate(e.target.value === 'true')}>
                     <option value="" disabled selected>{`(Select one)`}</option>
                     <option value="true">Private</option>
                     <option value="false">Public</option>

@@ -51,19 +51,19 @@ export const createGroup = (group) => async (dispatch) => {
     // catch (e)
 }
 
-const initialState = { entries: {} };
+const initialState = { allGroups: {}, singleGroup: {} };
 
 const groupReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOAD_GROUPS: {
-            const entries = {}
-            action.groups.Groups.forEach(group => {entries[group.id] = group})
-            return {...state, entries};
+            const allGroups = {}
+            action.groups.Groups.forEach(group => {allGroups[group.id] = group})
+            return {...state, allGroups};
         }
         case LOAD_GROUP_DETAILS: {
-            const entries = {}
-            entries[action.groups.id] = action.groups
-            return {...state, entries};
+            const singleGroup = {}
+            singleGroup[action.groups.id] = action.groups
+            return {...state, singleGroup};
         }
         default:
             return state;

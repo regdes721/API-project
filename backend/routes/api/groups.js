@@ -165,7 +165,7 @@ router.get('/:groupId', async (req, res) => {
 
 router.post('/', requireAuth, restoreUser, async (req, res, next) => {
     const organizerId = req.user.id;
-    const { name, about, type, private, city, state } = req.body;
+    const { name, about, type, isPrivate, city, state } = req.body;
     let errors = {};
     if (name.length >  60) {
         errors.name = "Name must be 60 characters or less";
@@ -176,8 +176,8 @@ router.post('/', requireAuth, restoreUser, async (req, res, next) => {
     if (type !== 'Online' && type !== 'In person') {
         errors.type = "Type must be 'Online' or 'In person'";
     }
-    if (private !== true && private !== false) {
-        errors.private = "Private must be a boolean";
+    if (isPrivate !== true && isPrivate !== false) {
+        errors.isPrivate = "Private must be a boolean";
     }
     if (!city) {
         errors.city = "City is required";
@@ -185,7 +185,7 @@ router.post('/', requireAuth, restoreUser, async (req, res, next) => {
     if (!state) {
         errors.state = "State is required";
     }
-    if (errors.name || errors.about || errors.type || errors.private || errors.city || errors.state) {
+    if (errors.name || errors.about || errors.type || errors.isPrivate || errors.city || errors.state) {
         const err = new Error("Bad Request");
         res.status(400);
         err.errors = errors
@@ -200,7 +200,7 @@ router.post('/', requireAuth, restoreUser, async (req, res, next) => {
         name,
         about,
         type,
-        private,
+        isPrivate,
         city,
         state
     });
@@ -290,7 +290,7 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err);
     }
-    const { name, about, type, private, city, state } = req.body;
+    const { name, about, type, isPrivate, city, state } = req.body;
     let errors = {};
     if (name && name.length >  60) {
         errors.name = "Name must be 60 characters or less";
@@ -301,8 +301,8 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
     if (type && type !== 'Online' && type !== 'In person') {
         errors.type = "Type must be 'Online' or 'In person'";
     }
-    if (private && private !== true && private !== false) {
-        errors.private = "Private must be a boolean";
+    if (isPrivate && isPrivate !== true && isPrivate !== false) {
+        errors.isPrivate = "Private must be a boolean";
     }
     if (city === "") {
         errors.city = "City is required";
@@ -310,7 +310,7 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
     if (state === "") {
         errors.state = "State is required";
     }
-    if (errors.name || errors.about || errors.type || errors.private || errors.city || errors.state) {
+    if (errors.name || errors.about || errors.type || errors.isPrivate || errors.city || errors.state) {
         const err = new Error("Bad Request");
         res.status(400);
         err.errors = errors
@@ -323,7 +323,7 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
     if (name) group.name = name;
     if (about) group.about = about;
     if (type) group.type = type;
-    if (private) group.private = private;
+    if (isPrivate) group.isPrivate = isPrivate;
     if (city) group.city = city;
     if (state) group.state = state;
     group.updatedAt = new Date();

@@ -7,7 +7,7 @@ import './CreateEventPage.css'
 const CreateEventPage = () => {
     const { groupId } = useParams();
     const dispatch = useDispatch();
-    const groupDetailsObj = useSelector(state => state.groups.entries);
+    const groupDetailsObj = useSelector(state => state.groups.singleGroup);
     const group = Object.values(groupDetailsObj);
     const [name, setName] = useState("");
     const [type, setType] = useState(null);

@@ -7,10 +7,10 @@ import './GroupsPage.css';
 
 const GroupsPage = () => {
     const dispatch = useDispatch();
-    const groupsObj = useSelector(state => state.groups.entries);
+    const groupsObj = useSelector(state => state.groups.allGroups);
     const groups = Object.values(groupsObj);
-    // console.log(groups)
-    const eventsObj = useSelector(state => state.events.entries)
+    console.log(groups)
+    const eventsObj = useSelector(state => state.events.allEvents)
     const events = Object.values(eventsObj)
     // console.log(events)
 
@@ -37,7 +37,7 @@ const GroupsPage = () => {
                         <NavLink to={`/groups/${group.id}`}className="groupText-name"><h3>{group.name}</h3></NavLink>
                         <NavLink to={`/groups/${group.id}`} className="groupText-location"><h4>{`${group.city}, ${group.state}`}</h4></NavLink>
                         <NavLink to={`/groups/${group.id}`}className="groupText-about"><p>{group.about}</p></NavLink>
-                        <NavLink to={`/groups/${group.id}`}className="groupText-about"><h4>{events.filter((event) => event.groupId === group.id).length === 1 ? `${events.filter((event) => event.groupId === group.id).length} Event` : `${events.filter((event) => event.groupId === group.id).length} Events`} · {group.private === true ? "Private" : "Public"}</h4></NavLink>
+                        <NavLink to={`/groups/${group.id}`}className="groupText-about"><h4>{events.filter((event) => event.groupId === group.id).length === 1 ? `${events.filter((event) => event.groupId === group.id).length} Event` : `${events.filter((event) => event.groupId === group.id).length} Events`} · {group.isPrivate === true ? "Private" : "Public"}</h4></NavLink>
                     </div>
                 </div>
             ))}

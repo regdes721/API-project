@@ -123,7 +123,7 @@ router.get('/:eventId', async (req, res) => {
         include: [
             {
                 model: Group,
-                attributes: ['id', 'name', 'private', 'city', 'state']
+                attributes: ['id', 'name', 'isPrivate', 'city', 'state']
             },
             {
                 model: Venue,

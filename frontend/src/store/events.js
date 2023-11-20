@@ -29,19 +29,19 @@ export const fetchEventDetails = (eventId) => async (dispatch) => {
     dispatch(loadEventDetails(events));
 }
 
-const initialState = { entries: {} };
+const initialState = { allEvents: {}, singleEvent: {} };
 
 const eventReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOAD_EVENTS: {
-            const entries = {}
-            action.events.Events.forEach(event => {entries[event.id] = event})
-            return {...state, entries};
+            const allEvents = {}
+            action.events.Events.forEach(event => {allEvents[event.id] = event})
+            return {...state, allEvents};
         }
         case LOAD_EVENT_DETAILS: {
-            const entries = {}
-            entries[action.events.id] = action.events
-            return {...state, entries}
+            const singleEvent = {}
+            singleEvent[action.events.id] = action.events
+            return {...state, singleEvent}
         }
         default:
             return state;

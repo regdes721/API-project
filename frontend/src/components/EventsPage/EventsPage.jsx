@@ -6,7 +6,7 @@ import './EventsPage.css';
 
 const EventsPage = () => {
     const dispatch = useDispatch();
-    const eventsObj = useSelector(state => state.events.entries)
+    const eventsObj = useSelector(state => state.events.allEvents)
     const events = Object.values(eventsObj)
     const sortedUpcomingEvents = events.filter((event) => new Date(event.startDate) > new Date()).sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
     const sortedPastEvents = events.filter((event) => new Date(event.startDate) < new Date()).sort((a, b) => new Date(b.startDate) - new Date(a.startDate))

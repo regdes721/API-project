@@ -8,7 +8,7 @@ import { fetchGroupDetails } from "../../store/groups";
 const EventDetailsPage = () => {
     const { eventId } = useParams();
     const dispatch = useDispatch();
-    const eventDetailsObj = useSelector(state => state.events.entries);
+    const eventDetailsObj = useSelector(state => state.events.singleEvent);
     const event = Object.values(eventDetailsObj);
     // const groupDetailsObj = useSelector(state => state.groups.entries);
     // const group = Object.values(groupDetailsObj);

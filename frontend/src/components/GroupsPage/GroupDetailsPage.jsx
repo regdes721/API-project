@@ -8,10 +8,10 @@ import './GroupDetailsPage.css'
 const GroupDetailsPage = () => {
     const { groupId } = useParams();
     const dispatch = useDispatch();
-    const groupDetailsObj = useSelector(state => state.groups.entries);
+    const groupDetailsObj = useSelector(state => state.groups.singleGroup);
     const group = Object.values(groupDetailsObj);
-    // console.log(group);
-    const eventsObj = useSelector(state => state.events.entries)
+    console.log(group);
+    const eventsObj = useSelector(state => state.events.allEvents)
     const events = Object.values(eventsObj)
     const sessionUser = useSelector((state) => state.session.user);
 
@@ -50,7 +50,7 @@ const GroupDetailsPage = () => {
                 <div className="group-header-text-container">
                     {group.length === 1 ? <h1>{group[0].name}</h1> : null}
                     {group.length === 1 ? <h3>{`${group[0].city}, ${group[0].state}`}</h3> : null}
-                    {group.length === 1 ? <h3>{events.filter((event) => event.groupId === group[0].id).length === 1 ? `${events.filter((event) => event.groupId === group[0].id).length} Event` : `${events.filter((event) => event.groupId === group[0].id).length} Events`} · {group[0].private === true ? "Private" : "Public"}</h3> : null}
+                    {group.length === 1 ? <h3>{events.filter((event) => event.groupId === group[0].id).length === 1 ? `${events.filter((event) => event.groupId === group[0].id).length} Event` : `${events.filter((event) => event.groupId === group[0].id).length} Events`} · {group[0].isPrivate === true ? "Private" : "Public"}</h3> : null}
                     {group.length === 1 ? <h3>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</h3> : null}
                     <button className={`${joinButtonClassName} join-button`} onClick={() => (alert(`Feature Coming Soon...`))}>Join this group</button>
                     <div className={`${organizerButtonClassName} organizer-button-container`}>
