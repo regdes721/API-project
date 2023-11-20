@@ -31,20 +31,24 @@ export const fetchGroupDetails = (groupId) => async (dispatch) => {
 
 // todo: complete this thunk
 export const createGroup = (group) => async (dispatch) => {
-    const { name, about, type, ['private']: privateBoolean, city, state } = group;
+    const { name, about, type, isPrivate, city, state } = group;
     const response = await csrfFetch("/api/groups", {
         method: "POST",
         body: JSON.stringify({
             name,
             about,
             type,
-            privateBoolean,
+            isPrivate,
             city,
             state
         })
     });
     const data = await response.json();
-    // dispatch(loadGroupDetails(data.))
+    //if response.ok:
+        // dispatch(loadGroupDetails(data.))
+        // nest the add image thunk here
+    // try
+    // catch (e)
 }
 
 const initialState = { entries: {} };

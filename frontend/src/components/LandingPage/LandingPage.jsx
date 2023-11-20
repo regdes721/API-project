@@ -34,6 +34,9 @@ const LandingPage = () => {
                     <p>Create your own Meetup group, and draw from a community of millions.</p>
                 </div>
             </div>
+            <div className='landing-section-4'>
+                <button className='join-meetup-button'>Join Meetup</button>
+            </div>
         </div>
     )
 }

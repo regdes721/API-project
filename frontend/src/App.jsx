@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { createBrowserRouter, RouterProvider, Outlet, NavLink} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet} from 'react-router-dom';
 import Navigation from './components/Navigation';
 import LandingPage from './components/LandingPage';
 import GroupsPage from './components/GroupsPage';
 import GroupDetailsPage from './components/GroupsPage/GroupDetailsPage';
+import CreateGroupPage from './components/GroupsPage/CreateGroupPage';
 import EventsPage from './components/EventsPage';
 import EventDetailsPage from './components/EventsPage/EventDetailsPage';
-import CreateGroupPage from './components/GroupsPage/CreateGroupPage';
+import CreateEventPage from './components/EventsPage/CreateEventPage';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: 'groups/:groupId',
         element: <GroupDetailsPage />
+      },
+      {
+        path: '/groups/:groupId/events/new',
+        element: <CreateEventPage />
       },
       {
         path: 'groups/new',

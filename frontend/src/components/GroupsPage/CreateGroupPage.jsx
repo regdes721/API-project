@@ -12,8 +12,7 @@ const CreateGroupPage = () => {
     const [privateBoolean, setPrivateBoolean] = useState(null);
     const [errors, setErrors] = useState({});
 
-    console.log(sessionUser)
-
+    // console.log(sessionUser)
 
     return (
         <form className="createGroup-form-container">

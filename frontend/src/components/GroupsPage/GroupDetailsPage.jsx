@@ -37,6 +37,7 @@ const GroupDetailsPage = () => {
         dispatch(fetchGroupDetails(groupId))
         dispatch(fetchEvents())
     }, [dispatch])
+
     return (
         <div>
             <div className="group-header-container">
@@ -53,7 +54,7 @@ const GroupDetailsPage = () => {
                     {group.length === 1 ? <h3>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</h3> : null}
                     <button className={`${joinButtonClassName} join-button`} onClick={() => (alert(`Feature Coming Soon...`))}>Join this group</button>
                     <div className={`${organizerButtonClassName} organizer-button-container`}>
-                        <button className="organizer-button">Create Event</button>
+                        {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/events/new`}><button className="organizer-button">Create Event</button></NavLink> : null}
                         <button className="organizer-button">Update</button>
                         <button className="organizer-button">Delete</button>
                     </div>

@@ -1,0 +1,23 @@
+.createEvent-form-container {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.createEvent-form-section-container {
+    border-bottom: 1px solid #707070;
+}
+
+.createEvent-form-input {
+    width: 315px;
+    margin-bottom: 20px;
+}
+
+.createEvent-form-p {
+    margin-top: 40px;
+}
+
+.createEvent-form-price-input {
+    text-align: end;
+    width: 90px;
+    margin-bottom: 20px;
+}
