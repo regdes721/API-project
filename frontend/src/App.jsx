@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet, NavLink} from 'react-router-dom';
 import Navigation from './components/Navigation';
+import LandingPage from './components/LandingPage';
 import GroupsPage from './components/GroupsPage';
 import GroupDetailsPage from './components/GroupsPage/GroupDetailsPage';
 import EventsPage from './components/EventsPage';
@@ -33,15 +34,8 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element:
-        <>
-          <h1>Welcome!</h1>
-          <div>
-            <NavLink to="/groups">See all groups</NavLink>
-            <NavLink to="/events">Find an event</NavLink>
-            <NavLink to="/groups/new">Start a new group</NavLink>
-          </div>
-        </>
+        element: <LandingPage />
+
       },
       {
         path: 'groups',

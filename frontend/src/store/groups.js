@@ -29,6 +29,24 @@ export const fetchGroupDetails = (groupId) => async (dispatch) => {
     dispatch(loadGroupDetails(groups));
 }
 
+// todo: complete this thunk
+export const createGroup = (group) => async (dispatch) => {
+    const { name, about, type, ['private']: privateBoolean, city, state } = group;
+    const response = await csrfFetch("/api/groups", {
+        method: "POST",
+        body: JSON.stringify({
+            name,
+            about,
+            type,
+            privateBoolean,
+            city,
+            state
+        })
+    });
+    const data = await response.json();
+    // dispatch(loadGroupDetails(data.))
+}
+
 const initialState = { entries: {} };
 
 const groupReducer = (state = initialState, action) => {

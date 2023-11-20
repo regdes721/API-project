@@ -1,16 +1,18 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import './CreateGroupPage.css'
 
 const CreateGroupPage = () => {
+    const sessionUser = useSelector((state) => state.session.user);
     const [location, setLocation] = useState("");
     const [name, setName] = useState("");
     const [about, setAbout] = useState("");
     const [url, setUrl] = useState("");
     const [type, setType] = useState(null);
     const [privateBoolean, setPrivateBoolean] = useState(null);
+    const [errors, setErrors] = useState({});
 
-    // console.log(typeof privateBoolean)
-    // console.log(privateBoolean)
+    console.log(sessionUser)
 
 
     return (
