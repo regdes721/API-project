@@ -71,6 +71,10 @@ const EventDetailsPage = () => {
                             </div>
                         </div>
                     </div>
+                    <div>
+                        <h2>Details</h2>
+                        {event.length === 1 ? <p>{event[0].description}</p> : null }
+                    </div>
                 </div>
             </div>
         </div>

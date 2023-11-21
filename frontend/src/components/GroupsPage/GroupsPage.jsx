@@ -9,7 +9,7 @@ const GroupsPage = () => {
     const dispatch = useDispatch();
     const groupsObj = useSelector(state => state.groups.allGroups);
     const groups = Object.values(groupsObj);
-    console.log(groups)
+    // console.log(groups)
     const eventsObj = useSelector(state => state.events.allEvents)
     const events = Object.values(eventsObj)
     // console.log(events)

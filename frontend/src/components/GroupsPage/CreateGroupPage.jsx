@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { thunkCreateGroup } from '../../store/groups';
 import './CreateGroupPage.css'
 
 const CreateGroupPage = () => {
+    const dispatch = useDispatch();
     const sessionUser = useSelector((state) => state.session.user);
+    const groupsObj = useSelector(state => state.groups.allGroups);
+    const groups = Object.values(groupsObj);
     const [location, setLocation] = useState("");
     const [name, setName] = useState("");
     const [about, setAbout] = useState("");
@@ -12,10 +16,31 @@ const CreateGroupPage = () => {
     const [isPrivate, setIsPrivate] = useState(null);
     const [errors, setErrors] = useState({});
 
-    // console.log(sessionUser)
+    console.log(sessionUser)
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setErrors({});
+        const city = location.split(", ")[0]
+        const state = location.split(", ")[1]
+        console.log("city", city)
+        console.log("state", state)
+        dispatch(
+            thunkCreateGroup({
+                name,
+                about,
+                type,
+                isPrivate,
+                city,
+                state,
+                url
+            })
+        )
+        console.log(groups)
+    }
 
     return (
-        <form className="createGroup-form-container">
+        <form className="createGroup-form-container" onSubmit={handleSubmit}>
             <div className='createGroup-form-section-container'>
                 <h3 className='createGroup-teal'>BECOME AN ORGANIZER</h3>
                 <h2>We&apos;ll walk you through a few steps to build your local community</h2>
