@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// import { Navigate } from 'react-router-dom';
 import { thunkCreateGroup } from '../../store/groups';
 import './CreateGroupPage.css'
 
 const CreateGroupPage = () => {
     const dispatch = useDispatch();
-    const sessionUser = useSelector((state) => state.session.user);
-    const groupsObj = useSelector(state => state.groups.allGroups);
-    const groups = Object.values(groupsObj);
+    // const sessionUser = useSelector((state) => state.session.user);
+    const groupObj = useSelector ((state) => state.groups.newGroup)
     const [location, setLocation] = useState("");
     const [name, setName] = useState("");
     const [about, setAbout] = useState("");
@@ -15,16 +15,18 @@ const CreateGroupPage = () => {
     const [type, setType] = useState(null);
     const [isPrivate, setIsPrivate] = useState(null);
     const [errors, setErrors] = useState({});
+    const [goodForm, setGoodForm] = useState(false)
 
-    console.log(sessionUser)
+    // console.log(sessionUser)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
         const city = location.split(", ")[0]
         const state = location.split(", ")[1]
-        console.log("city", city)
-        console.log("state", state)
+        // if (!name) submitErrors.name = "Name is required"
+        // console.log("name?", name)
+        // setErrors(submitErrors)
         dispatch(
             thunkCreateGroup({
                 name,
@@ -35,9 +37,26 @@ const CreateGroupPage = () => {
                 state,
                 url
             })
-        )
-        console.log(groups)
+        ).then(setGoodForm(true)).catch(async (res) => {
+            const data = await res.json();
+            if (data && data.errors) {
+                setErrors(data.errors)
+                console.log(data.errors)
+            }
+        })
+        setLocation("");
+        setName("");
+        setAbout("");
+        setUrl("");
+        setType(null);
+        setIsPrivate(null);
     }
+
+    if (goodForm && !groupObj["0"]) return null
+
+    if (goodForm && groupObj["0"]) console.log(groupObj);
+
+    // return <Navigate to="/" replace={true} />;
 
     return (
         <form className="createGroup-form-container" onSubmit={handleSubmit}>
@@ -54,8 +73,16 @@ const CreateGroupPage = () => {
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     placeholder="City, STATE"
-                    required
                 />
+                {errors.location && (
+                    <p>{errors.location}</p>
+                )}
+                 {errors.city && !errors.location && (
+                    <p>{errors.city}</p>
+                )}
+                 {errors.state && !errors.location && (
+                    <p>{errors.state}</p>
+                )}
             </div>
             <div className='createGroup-form-section-container'>
                 <h2>What will your group&apos;s name be?</h2>
@@ -66,7 +93,6 @@ const CreateGroupPage = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder='What is your group name?'
-                    required
                 />
             </div>
             <div className='createGroup-form-section-container'>
@@ -107,7 +133,6 @@ const CreateGroupPage = () => {
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                     placeholder='Image Url'
-                    required
                 />
             </div>
             <button type="submit" className='create-button'>Create group</button>

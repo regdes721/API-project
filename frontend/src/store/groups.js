@@ -4,6 +4,7 @@ const LOAD_GROUPS = 'groups/loadGroups';
 const LOAD_GROUP_DETAILS = 'groups/loadGroupDetails'
 const CREATE_GROUP = 'groups/createGroup';
 const CREATE_GROUP_IMAGE = 'groups/createGroupImage';
+const RESET_NEW_GROUP = 'groups/resetNewGroup'
 
 
 export const loadGroups = (groups) => {
@@ -34,6 +35,12 @@ export const createGroupImage = (groupImage) => {
     }
 }
 
+// export const resetNewGroup = () => {
+//     return {
+//         type: RESET_NEW_GROUP
+//     }
+// }
+
 export const fetchGroups = () => async (dispatch) => {
     const response = await csrfFetch('/api/groups');
     const groups = await response.json();
@@ -57,7 +64,8 @@ export const thunkCreateGroup = (group) => async (dispatch) => {
             type,
             isPrivate,
             city,
-            state
+            state,
+            url
         })
     });
     const data = await response.json();
@@ -66,6 +74,8 @@ export const thunkCreateGroup = (group) => async (dispatch) => {
         const object = { groupId, url }
         dispatch(createGroup(data))
         dispatch(thunkCreatePreviewImage(object))
+    } else {
+        return data
     }
     //if response.ok:
 
@@ -78,15 +88,12 @@ export const thunkCreatePreviewImage = (groupImage) => async (dispatch) => {
     const { groupId, url } = groupImage;
     const response = await csrfFetch(`/api/groups/${groupId}/images`, {
         method: "POST",
-        body: JSON.stringify({ url })
+        body: JSON.stringify({ url, preview: true })
     })
-    console.log("groupImage", groupImage)
     const data = await response.json();
-    console.log("data", await response.json())
     if (response.ok) {
         dispatch(createGroupImage(data))
     }
-    // dispatch(createGroupImage(groupImage))
 }
 
 const initialState = { allGroups: {}, singleGroup: {} };
@@ -105,7 +112,7 @@ const groupReducer = (state = initialState, action) => {
         }
         case CREATE_GROUP: {
             const newGroup = {}
-            newGroup[action.group.id] = action.group
+            newGroup[0] = action.group
             return { ...state, newGroup }
         }
         case CREATE_GROUP_IMAGE: {
@@ -113,6 +120,10 @@ const groupReducer = (state = initialState, action) => {
             newGroupImage[0] = action.groupImage
             return {...state, newGroupImage}
         }
+        // case RESET_NEW_GROUP: {
+        //     const newGroup = {}
+        //     return { ...state, newGroup }
+        // }
         default:
             return state;
     }

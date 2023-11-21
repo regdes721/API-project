@@ -165,19 +165,28 @@ router.get('/:groupId', async (req, res) => {
 
 router.post('/', requireAuth, restoreUser, async (req, res, next) => {
     const organizerId = req.user.id;
-    const { name, about, type, isPrivate, city, state } = req.body;
+    const { name, about, type, isPrivate, city, state, url } = req.body; //
     let errors = {};
+    if (!name) {
+        errors.name = "Name is required" //
+    }
     if (name.length >  60) {
         errors.name = "Name must be 60 characters or less";
     }
     if (about.length < 50) {
-        errors.about = "About must be 50 characters or more";
+        errors.about = "Description must be 50 characters long"; //
+        // errors.about = "About must be 50 characters or more";
     }
     if (type !== 'Online' && type !== 'In person') {
-        errors.type = "Type must be 'Online' or 'In person'";
+        errors.type = "Group Type is required" //
+        // errors.type = "Type must be 'Online' or 'In person'";
     }
     if (isPrivate !== true && isPrivate !== false) {
-        errors.isPrivate = "Private must be a boolean";
+        errors.isPrivate = "Visibility Type is required"
+        // errors.isPrivate = "Private must be a boolean";
+    }
+    if (!city && !state) {
+        errors.location = "Location is required" //
     }
     if (!city) {
         errors.city = "City is required";
@@ -185,7 +194,10 @@ router.post('/', requireAuth, restoreUser, async (req, res, next) => {
     if (!state) {
         errors.state = "State is required";
     }
-    if (errors.name || errors.about || errors.type || errors.isPrivate || errors.city || errors.state) {
+    if (!url || (!url.endsWith('.png') && !url.endsWith('.jpg') && !url.endsWith('.jpeg'))) {
+        errors.url = "Image URL must end in .png, .jpg, or .jpeg"
+    }
+    if (errors.name || errors.about || errors.type || errors.isPrivate || errors.location || errors.city || errors.state || errors.url) {
         const err = new Error("Bad Request");
         res.status(400);
         err.errors = errors
