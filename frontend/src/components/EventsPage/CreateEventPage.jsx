@@ -90,8 +90,8 @@ const CreateEventPage = () => {
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder='Please include at least 30 characters'
                 />
-                <button type="submit" className='createEvent-button'>Create Event</button>
             </div>
+            <button type="submit" className='createEvent-button'>Create Event</button>
         </form>
     )
 }

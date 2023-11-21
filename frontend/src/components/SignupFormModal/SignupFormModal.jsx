@@ -31,6 +31,8 @@ function SignupFormModal() {
         })
       ).catch(async (res) => {
         const data = await res.json();
+        console.log(data)
+        // todo: get remaining errors from signup action response
         if (data?.errors) {
           setErrors(data.errors);
         }
@@ -105,7 +107,7 @@ function SignupFormModal() {
           />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        {!email.length || !username.length || !firstName.length || !lastName.length || !password.length || !confirmPassword.length || username.length < 4 || password.length < 6 ? <button type="submit" disabled={true}>Sign Up</button> : <button type="submit">Sign Up</button> }
       </form>
     </>
   );

@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import * as sessionActions from '../../store/session';
-import OpenModalMenuItem from './OpenModalMenuItem';
-import LoginFormModal from '../LoginFormModal';
-import SignupFormModal from '../SignupFormModal';
+// import OpenModalMenuItem from './OpenModalMenuItem';
+// import LoginFormModal from '../LoginFormModal';
+// import SignupFormModal from '../SignupFormModal';
 import './ProfileButton.css';
 
 function ProfileButton({ user }) {
@@ -49,27 +49,29 @@ function ProfileButton({ user }) {
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            {/* <li>{user.username}</li> */}
             <li>Hello, {user.firstName}</li>
             <li>{user.email}</li>
             <li>
               <button onClick={logout}><Link to="/" className='logout-button-link'>Log Out</Link></button>
             </li>
           </>
-        ) : (
-          <>
-            <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
-          </>
-        )}
+        ) :
+        // (
+        //   <>
+        //     <OpenModalMenuItem
+        //       itemText="Log In"
+        //       onItemClick={closeMenu}
+        //       modalComponent={<LoginFormModal />}
+        //     />
+        //     <OpenModalMenuItem
+        //       itemText="Sign Up"
+        //       onItemClick={closeMenu}
+        //       modalComponent={<SignupFormModal />}
+        //     />
+        //   </>
+        // )
+        null
+        }
         <li><NavLink to="/groups">View groups</NavLink></li>
         <li><NavLink to="/events">View events</NavLink></li>
       </ul>

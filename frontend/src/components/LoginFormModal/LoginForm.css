@@ -1,0 +1,32 @@
+.login-form-container {
+    width: 400px
+}
+
+.login-header {
+    text-align: center;
+}
+
+.login-form-content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px
+}
+
+.login-button {
+    width: 380px;
+    height: 50px;
+    font-size: 20px;
+    box-shadow: 5px 5px 5px #778899;
+    text-align: center;
+    margin: 10px
+}
+
+.enabled {
+    color: white;
+    background-color: red;
+}
+
+/* .login-form-content-container label {
+    margin: 10px
+} */
