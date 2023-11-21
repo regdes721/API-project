@@ -105,7 +105,7 @@ router.get('/', async (req, res) => {
         // eventData.startDate = new Date(eventData.startDate).toISOString().slice(0, 19).replace('T', ' ');
         // eventData.endDate = new Date(eventData.endDate).toISOString().slice(0, 19).replace('T', ' ');
 
-        delete eventData.description;
+        // delete eventData.description;
         delete eventData.capacity;
         delete eventData.price;
         delete eventData.createdAt;

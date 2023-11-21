@@ -1,4 +1,5 @@
 import { csrfFetch } from './csrf';
+import { fetchGroupDetails } from './groups';
 
 const LOAD_EVENTS = 'events/loadEvents';
 const LOAD_EVENT_DETAILS = 'events/loadEventDetails'
@@ -27,6 +28,7 @@ export const fetchEventDetails = (eventId) => async (dispatch) => {
     const response = await csrfFetch(`/api/events/${eventId}`);
     const events = await response.json();
     dispatch(loadEventDetails(events));
+    if (response.ok) dispatch(fetchGroupDetails(events.Group.id))
 }
 
 const initialState = { allEvents: {}, singleEvent: {} };

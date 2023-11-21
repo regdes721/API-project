@@ -10,7 +10,6 @@ const GroupDetailsPage = () => {
     const dispatch = useDispatch();
     const groupDetailsObj = useSelector(state => state.groups.singleGroup);
     const group = Object.values(groupDetailsObj);
-    console.log(group);
     const eventsObj = useSelector(state => state.events.allEvents)
     const events = Object.values(eventsObj)
     const sessionUser = useSelector((state) => state.session.user);
@@ -54,7 +53,7 @@ const GroupDetailsPage = () => {
                     {group.length === 1 ? <h3>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</h3> : null}
                     <button className={`${joinButtonClassName} join-button`} onClick={() => (alert(`Feature Coming Soon...`))}>Join this group</button>
                     <div className={`${organizerButtonClassName} organizer-button-container`}>
-                        {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/events/new`}><button className="organizer-button">Create Event</button></NavLink> : null}
+                        {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/events/new` } className="organizer-button-link"><button className="organizer-button">Create Event</button></NavLink> : null}
                         <button className="organizer-button">Update</button>
                         <button className="organizer-button">Delete</button>
                     </div>
@@ -79,16 +78,20 @@ const GroupDetailsPage = () => {
                     )}
                     {sortedUpcomingEvents.map((event) =>
                         <div className="group-events-container">
-                            <div>
-                                <img src={event.previewImage} />
+                            <div className="group-events-details-container">
+                                <div>
+                                <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>
+                                </div>
+                                <div>
+                                    <NavLink to={`/events/${event.id}`} className="eventText-date"><h4>{event.startDate.split(" ").join(" · ")}</h4></NavLink>
+                                    <NavLink to={`/events/${event.id}`} className="eventText-name"><h3>{event.name}</h3></NavLink>
+                                    <NavLink to={`/events/${event.id}`} className="eventText-location">{event.Venue ?
+                                        <h4>{`${event.Venue.city}, ${event.Venue.state}`}</h4> : <h4>Online</h4>}</NavLink>
+                                </div>
                             </div>
                             <div>
-                                <h4>{event.startDate.split(" ").join(" · ")}</h4>
-                                <h3>{event.name}</h3>
-                                {event.Venue ?
-                                    <h4>{`${event.Venue.city}, ${event.Venue.state}`}</h4> : <h4>Online</h4>}
+                                <NavLink to={`/events/${event.id}`} className="eventText-name"><p>{event.description}</p></NavLink>
                             </div>
-                            <div>Details</div>
                         </div>
                     )}
                 </div>
@@ -102,16 +105,20 @@ const GroupDetailsPage = () => {
                     )}
                     {sortedPastEvents.map((event) =>
                         <div className="group-events-container">
-                            <div>
-                                <img src={event.previewImage} />
+                            <div className="group-events-details-container">
+                                <div>
+                                    <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>
+                                </div>
+                                <div>
+                                    <NavLink to={`/events/${event.id}`} className="eventText-date"><h4>{event.startDate.split(" ").join(" · ")}</h4></NavLink>
+                                    <NavLink to={`/events/${event.id}`} className="eventText-name"><h3>{event.name}</h3></NavLink>
+                                    <NavLink to={`/events/${event.id}`} className="eventText-location">{event.Venue ?
+                                        <h4>{`${event.Venue.city}, ${event.Venue.state}`}</h4> : <h4>Online</h4>}</NavLink>
+                                </div>
                             </div>
                             <div>
-                                <h4>{event.startDate.split(" ").join(" · ")}</h4>
-                                <h3>{event.name}</h3>
-                                {event.Venue ?
-                                    <h4>{`${event.Venue.city}, ${event.Venue.state}`}</h4> : <h4>Online</h4>}
+                                <NavLink to={`/events/${event.id}`} className="eventText-name"><p>{event.description}</p></NavLink>
                             </div>
-                            <div>Details</div>
                         </div>
                     )}
                 </div>

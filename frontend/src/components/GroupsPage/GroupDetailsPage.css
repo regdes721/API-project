@@ -42,6 +42,10 @@
     font-size: 15px;
 }
 
+.organizer-button-link :hover {
+    cursor: pointer;
+}
+
 .hidden {
     display: none;
 }
@@ -57,8 +61,6 @@
 }
 
 .group-events-container {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
     width: 60%;
     background-color: white;
     margin-bottom: 25px;
@@ -69,4 +71,9 @@
 
 .group-events-container img {
     width: 100%;
+}
+
+.group-events-details-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
 }

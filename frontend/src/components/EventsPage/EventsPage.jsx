@@ -28,17 +28,24 @@ const EventsPage = () => {
                 <p>Events in Meetup</p>
             </div>
             {sortedEvents.map((event) => (
-                <div key={event.id} className="event-container">
-                    <div className="eventImg-container">
-                        <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>
+                <div className="event-container">
+                    <div key={event.id} className="event-details-container">
+                        <div className="eventImg-container">
+                            <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>
+                        </div>
+                        <div className="eventText-container">
+                            <NavLink to={`/events/${event.id}`} className="eventText-date"><h4>{event.startDate.split(" ").join(" · ")}</h4></NavLink>
+                            <NavLink to={`/events/${event.id}`} className="eventText-name"><h3>{event.name}</h3></NavLink>
+                            <NavLink to={`/events/${event.id}`} className="eventText-location">{event.Venue ? <h4>{`${event.Venue.city}, ${event.Venue.state}`}</h4> : <h4>Online</h4>}</NavLink>
+                        </div>
                     </div>
-                    <div className="eventText-container">
-                        <NavLink to={`/events/${event.id}`} className="eventText-date"><h4>{event.startDate.split(" ").join(" · ")}</h4></NavLink>
-                        <NavLink to={`/events/${event.id}`} className="eventText-name"><h3>{event.name}</h3></NavLink>
-                        <NavLink to={`/events/${event.id}`} className="eventText-location">{event.Venue ? <h4>{`${event.Venue.city}, ${event.Venue.state}`}</h4> : <h4>Online</h4>}</NavLink>
+                    <div>
+                        <NavLink to={`/events/${event.id}`} className="eventText-name"><p>
+                            {event.description}
+                        </p></NavLink>
                     </div>
-                    <div>Details</div>
                 </div>
+
 
             ))}
         </div>

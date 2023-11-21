@@ -12,6 +12,10 @@ const CreateEventPage = () => {
     const [name, setName] = useState("");
     const [type, setType] = useState(null);
     const [price, setPrice] = useState(null);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [url, setUrl] = useState("");
+    const [description, setDescription] = useState("");
     // console.log(group)
     // console.log(type)
 
@@ -47,6 +51,46 @@ const CreateEventPage = () => {
                     onChange={(e) => setPrice(e.target.value)}
                     placeholder="0"
                 />
+            </div>
+            <div className='createEvent-form-section-container'>
+                <p>When does your event start?</p>
+                <input
+                    type="text"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    placeholder='MM/DD/YYYY HH:mm AM'
+                />
+                <i className="fa-regular fa-calendar-days"></i>
+                <p className='createEvent-form-p'>When does your event end?</p>
+                <input
+                    className='createEvent-form-date-input'
+                    type="text"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    placeholder='MM/DD/YYYY HH:mm PM'
+                />
+                <i className="fa-regular fa-calendar-days"></i>
+            </div>
+            <div className='createEvent-form-section-container'>
+                <p>Please add an image url for your event below:</p>
+                <input
+                    className='createEvent-form-input'
+                    type="text"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    placeholder='Image URL'
+                />
+            </div>
+            <div>
+                <p>Please describe your event:</p>
+                <textarea
+                    rows="13"
+                    cols="90"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder='Please include at least 30 characters'
+                />
+                <button type="submit" className='createEvent-button'>Create Event</button>
             </div>
         </form>
     )

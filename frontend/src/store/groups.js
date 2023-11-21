@@ -2,6 +2,7 @@ import { csrfFetch } from './csrf';
 
 const LOAD_GROUPS = 'groups/loadGroups';
 const LOAD_GROUP_DETAILS = 'groups/loadGroupDetails'
+const CREATE_GROUP = 'groups/createGroup';
 
 export const loadGroups = (groups) => {
     return {
@@ -17,6 +18,10 @@ export const loadGroupDetails = (groups) => {
     }
 }
 
+// export const createGroup = (group) => {
+//     type: CREATE_GROUP
+// }
+
 export const fetchGroups = () => async (dispatch) => {
     const response = await csrfFetch('/api/groups');
     const groups = await response.json();
@@ -30,26 +35,29 @@ export const fetchGroupDetails = (groupId) => async (dispatch) => {
 }
 
 // todo: complete this thunk
-export const createGroup = (group) => async (dispatch) => {
-    const { name, about, type, isPrivate, city, state } = group;
-    const response = await csrfFetch("/api/groups", {
-        method: "POST",
-        body: JSON.stringify({
-            name,
-            about,
-            type,
-            isPrivate,
-            city,
-            state
-        })
-    });
-    const data = await response.json();
-    //if response.ok:
-        // dispatch(loadGroupDetails(data.))
-        // nest the add image thunk here
-    // try
-    // catch (e)
-}
+// export const createGroup = (group) => async (dispatch) => {
+//     const { name, about, type, isPrivate, city, state, url } = group;
+//     const response = await csrfFetch("/api/groups", {
+//         method: "POST",
+//         body: JSON.stringify({
+//             name,
+//             about,
+//             type,
+//             isPrivate,
+//             city,
+//             state
+//         })
+//     });
+//     const data = await response.json();
+//     if (response.ok) {
+
+//     }
+//     //if response.ok:
+//         // dispatch(loadGroupDetails(data.))
+//         // nest the add image thunk here
+//     // try
+//     // catch (e)
+// }
 
 const initialState = { allGroups: {}, singleGroup: {} };
 

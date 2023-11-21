@@ -1,7 +1,10 @@
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import './LandingPage.css'
 
 const LandingPage = () => {
+    const sessionUser = useSelector((state) => state.session.user);
+
     return (
         <div className='landing-container'>
             <div className="landing-section-1">
@@ -19,23 +22,23 @@ const LandingPage = () => {
             </div>
             <div className='landing-section-3'>
                 <div className='landing-section-3-links'>
-                    <img src="https://imgur.com/a/iIUMddn" />
-                    <NavLink to="/groups" className="landing-link-teal"><h3>See all groups</h3></NavLink>
+                    <i className="fa-solid fa-magnifying-glass"></i>
+                    <NavLink to="/groups" className="landing-link-teal landing-section-3-navlinks"><h3>See all groups</h3></NavLink>
                     <p>See who&apos;s hosting local events for all the things you love</p>
                 </div>
                 <div className='landing-section-3-links'>
-                    <img src="https://imgur.com/a/iIUMddn" />
-                    <NavLink to="/events" className="landing-link-teal"><h3>Find an event</h3></NavLink>
+                    <i className="fa-solid fa-ticket"></i>
+                    <NavLink to="/events" className="landing-link-teal landing-section-3-navlinks"><h3>Find an event</h3></NavLink>
                     <p>Find your next adventure and connect with like-minded people - your next memorable experience is just a click away!</p>
                 </div>
                 <div className='landing-section-3-links'>
-                    <img src="https://imgur.com/a/iIUMddn" />
-                    <NavLink to="/groups/new" className="landing-link-teal"><h3>Start a new group</h3></NavLink>
+                    <i className="fa-solid fa-plus"></i>
+                    {!sessionUser? <h3 className='landing-link-gray'>Start a new group</h3> : <NavLink to="/groups/new" className="landing-link-teal landing-section-3-navlinks"><h3>Start a new group</h3></NavLink>}
                     <p>Create your own Meetup group, and draw from a community of millions.</p>
                 </div>
             </div>
             <div className='landing-section-4'>
-                <button className='join-meetup-button'>Join Meetup</button>
+                {!sessionUser ? <button className='join-meetup-button'>Join Meetup</button> : null}
             </div>
         </div>
     )
