@@ -12,7 +12,7 @@ const EventDetailsPage = () => {
     const groupDetailsObj = useSelector(state => state.groups.singleGroup);
     const group = Object.values(groupDetailsObj);
 
-    // console.log("event", event)
+    console.log("event", event)
     // console.log("group", group)
     // console.log("eventDetailsObj", eventDetailsObj)
     // console.log("event", event)
@@ -28,7 +28,50 @@ const EventDetailsPage = () => {
             <div className="event-header-container">
                 <p>{`<`} <NavLink to="/events" className="breadcrumb">Events</NavLink></p>
                 {event.length === 1 ? <h1>{event[0].name}</h1> : null}
-                {group.length === 1 ? <h3>{`Hosted by ${group[0].Organizer.firstName} ${group[0].Organizer.lastName}`}</h3> : null}
+                {group.length === 1 ? <h3 className="event-header-name">{`Hosted by ${group[0].Organizer.firstName} ${group[0].Organizer.lastName}`}</h3> : null}
+            </div>
+            <div className="event-body-container">
+                <div className="event-body-content-container">
+                    <div className="event-body-section1-container">
+                        <div className="event-body-section1-img">
+                            {event.length === 1 ? <img src={event[0].EventImages[0].url}/> : null}
+                        </div>
+                        <div className="event-body-cards-container">
+                            <div className="event-group-card-container event-group-card1-container">
+                                {event.length === 1 ? <img src={group[0].GroupImages[0].url}/> : null}
+                                <div>
+                                    {event.length === 1 ? <h4 className="event-group-card1-name">{group[0].name}</h4> : null}
+                                    {event.length === 1 ? group[0].isPrivate === true ? <h5 className="event-group-card1-isPrivate">Private</h5> : <h5 className="event-group-card1-isPrivate">Public</h5> : null}
+                                </div>
+                            </div>
+                            <div className="event-group-card-container">
+                                <div className="event-card2-content">
+                                    <i className="fa-regular fa-clock"></i>
+                                    <div className="event-card2-dates">
+                                        <h5>START</h5>
+                                        <h5>END</h5>
+                                    </div>
+                                    <div>
+                                        {event.length === 1 ? <h4 className="eventText-date">{event[0].startDate.split(" ").join(" · ")}</h4> : null}
+                                        {event.length === 1 ? <h4 className="eventText-date">{event[0].endDate.split(" ").join(" · ")}</h4> : null}
+                                    </div>
+                                </div>
+                                <div className="event-card2-content">
+                                    <i className="fa-solid fa-dollar-sign"></i>
+                                    <div>
+                                        {event.length === 1 ? event[0].price > 0 ? <h5>{event[0].price.toFixed(2)}</h5> : <h5>FREE</h5> : null}
+                                    </div>
+                                </div>
+                                <div className="event-card2-content">
+                                    <i className="fa-solid fa-location-dot"></i>
+                                    <div>
+                                        {event.length === 1 ? <h5>{event[0].type}</h5> : null}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )

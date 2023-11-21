@@ -2,3 +2,73 @@
     width: 80%;
     margin: 0 auto;
 }
+
+.event-header-name {
+    margin-bottom: 50px;
+}
+
+.event-body-container {
+    background-color: #F6F7F8;
+}
+
+.event-body-content-container {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+.event-body-section1-container {
+    display: grid;
+    grid-template-columns: 4fr 2fr;
+    margin-top: 20px;
+    gap: 20px
+}
+
+.event-body-section1-img img {
+    width: 100%;
+}
+
+.event-body-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px
+}
+
+.event-group-card-container {
+    background-color: white;
+    width: 100%;
+    padding: 20px;
+    border-radius: 5%;
+}
+
+.event-group-card1-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px
+}
+
+.event-group-card1-container img {
+    width: 100%;
+}
+
+.event-group-card1-name {
+    margin-bottom: 10px;
+}
+
+.event-group-card1-isPrivate {
+    margin-top: 0
+}
+
+.event-card2-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 4fr;
+}
+
+.event-card2-content i {
+    align-self: center
+}
+
+.event-card2-dates {
+    align-self: center;
+
+}
