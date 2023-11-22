@@ -3,6 +3,8 @@ import { fetchGroupDetails } from './groups';
 
 const LOAD_EVENTS = 'events/loadEvents';
 const LOAD_EVENT_DETAILS = 'events/loadEventDetails'
+const CREATE_EVENT = 'events/createEvent'
+const CREATE_EVENT_IMAGE = 'events/createEventImage'
 
 export const loadEvents = (events) => {
     return {
@@ -15,6 +17,20 @@ export const loadEventDetails = (events) => {
     return {
         type: LOAD_EVENT_DETAILS,
         events
+    }
+}
+
+export const createEvent = (event) => {
+    return {
+        type: CREATE_EVENT,
+        event
+    }
+}
+
+export const createEventImage = (eventImage) => {
+    return {
+        type: CREATE_EVENT_IMAGE,
+        eventImage
     }
 }
 
@@ -31,6 +47,45 @@ export const fetchEventDetails = (eventId) => async (dispatch) => {
     if (response.ok) dispatch(fetchGroupDetails(events.Group.id))
 }
 
+export const thunkCreateEvent = (event) => async (dispatch) => {
+    const { groupId, name, type, capacity, price, description, startDate, endDate, url } = event;
+    const response = await csrfFetch(`/api/groups/${groupId}/events`, {
+        method: "POST",
+        body: JSON.stringify({
+            name,
+            type,
+            capacity,
+            price,
+            description,
+            startDate,
+            endDate,
+            url
+        })
+    })
+    const data = await response.json();
+    if (response.ok) {
+        const eventId = data.id
+        const object = {eventId, url}
+        dispatch(createEvent(data))
+        dispatch(thunkCreateEventPreviewImage(object))
+        return data
+    } else {
+        return data
+    }
+}
+
+export const thunkCreateEventPreviewImage = (eventImage) => async (dispatch) => {
+    const { eventId, url } = eventImage;
+    const response = await csrfFetch(`/api/events/${eventId}/images`, {
+        method: "POST",
+        body: JSON.stringify({ url, preview: true })
+    })
+    const data = await response.json();
+    if (response.ok) {
+        dispatch(createEventImage(data))
+    }
+}
+
 const initialState = { allEvents: {}, singleEvent: {} };
 
 const eventReducer = (state = initialState, action) => {
@@ -44,6 +99,16 @@ const eventReducer = (state = initialState, action) => {
             const singleEvent = {}
             singleEvent[action.events.id] = action.events
             return {...state, singleEvent}
+        }
+        case CREATE_EVENT: {
+            const newEvent = {}
+            newEvent[0] = action.event
+            return {...state, newEvent}
+        }
+        case CREATE_EVENT_IMAGE: {
+            const newEventImage = {}
+            newEvent[0] = action.eventImage
+            return {...state, newEventImage}
         }
         default:
             return state;

@@ -9,6 +9,7 @@ import CreateGroupPage from './components/GroupsPage/CreateGroupPage';
 import EventsPage from './components/EventsPage';
 import EventDetailsPage from './components/EventsPage/EventDetailsPage';
 import CreateEventPage from './components/EventsPage/CreateEventPage';
+import UpdateGroupPage from './components/GroupsPage/UpdateGroupPage';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: 'groups/:groupId',
         element: <GroupDetailsPage />
+      },
+      {
+        path: 'groups/:groupId/edit',
+        element: <UpdateGroupPage />
       },
       {
         path: '/groups/:groupId/events/new',

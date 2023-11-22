@@ -1,23 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import { thunkCreateGroup } from '../../store/groups';
+import { Navigate, useParams } from 'react-router-dom';
+import { fetchGroupDetails, thunkUpdateGroup } from '../../store/groups';
 import './CreateGroupPage.css'
 
-const CreateGroupPage = () => {
+const UpdateGroupPage = () => {
+    const { groupId } = useParams();
     const dispatch = useDispatch();
-    // const sessionUser = useSelector((state) => state.session.user);
-    // const groupObj = useSelector ((state) => state.groups.newGroup)
+    const sessionUser = useSelector((state) => state.session.user);
+    const groupObj = useSelector ((state) => state.groups.singleGroup)
+    const group = Object.values(groupObj);
     const [newGroupId, setNewGroupId] = useState(null)
-    const [location, setLocation] = useState("");
-    const [name, setName] = useState("");
-    const [about, setAbout] = useState("");
+    const [location, setLocation] = useState(group && group[0] && group[0].city && group[0].state ? [group[0].city, group[0].state].join(", ") : "")
+    const [name, setName] = useState(group && group[0] && group[0].name ? group[0].name : "");
+    const [about, setAbout] = useState(group && group[0] && group[0].about ? group[0].about : "");
     const [url, setUrl] = useState("");
-    const [type, setType] = useState("");
-    const [isPrivate, setIsPrivate] = useState("");
+    const [type, setType] = useState(group && group[0] && group[0].type ? group[0].type : "");
+    const [isPrivate, setIsPrivate] = useState(group && group[0] && group[0].isPrivate ? group[0].isPrivate : "");
     const [errors, setErrors] = useState({});
-    // const [goodForm, setGoodForm] = useState(false)
 
+    // console.log(group)
     // console.log(sessionUser)
 
     const handleSubmit = async (e) => {
@@ -29,7 +31,8 @@ const CreateGroupPage = () => {
         // console.log("name?", name)
         // setErrors(submitErrors)
         dispatch(
-            thunkCreateGroup({
+            thunkUpdateGroup({
+                groupId,
                 name,
                 about,
                 type,
@@ -44,25 +47,37 @@ const CreateGroupPage = () => {
             const data = await res.json();
             if (data && data.errors) {
                 setErrors(data.errors)
-                setType("");
+                // setType("");
             }
 
         })
-        setLocation("");
-        setName("");
-        setAbout("");
-        setUrl("");
-        setType("");
-        setIsPrivate("");
+        // setLocation("");
+        // setName("");
+        // setAbout("");
+        // setUrl("");
+        // setType("");
+        // setIsPrivate("");
     }
 
+    // console.log("isPrivate", isPrivate)
+
+    useEffect(() => {
+        dispatch(fetchGroupDetails(parseInt(groupId)))
+    }, [dispatch])
+
     if (newGroupId) return <Navigate to={`/groups/${newGroupId}`} replace={true} />
+
+    if (!group) return null
+
+    console.log(sessionUser);
+
+    if (!sessionUser || sessionUser && group && group[0] && group[0].Organizer && group[0].Organizer.id && sessionUser.id !== group[0].Organizer.id) return <Navigate to={`/`} replace={true} />
 
     return (
         <form className="createGroup-form-container" onSubmit={handleSubmit}>
             <div className='createGroup-form-section-container'>
                 <h3 className='createGroup-teal'>BECOME AN ORGANIZER</h3>
-                <h2>We&apos;ll walk you through a few steps to build your local community</h2>
+                <h2>We&apos;ll walk you through a few steps to update your group's information</h2>
             </div>
             <div className='createGroup-form-section-container'>
                 <h2>First, set your group&apos;s location.</h2>
@@ -77,10 +92,10 @@ const CreateGroupPage = () => {
                 {errors.location && (
                     <p>{errors.location}</p>
                 )}
-                {errors.city && !errors.location && (
+                 {errors.city && !errors.location && (
                     <p>{errors.city}</p>
                 )}
-                {errors.state && !errors.location && (
+                 {errors.state && !errors.location && (
                     <p className='errors'>{errors.state}</p>
                 )}
             </div>
@@ -94,7 +109,7 @@ const CreateGroupPage = () => {
                     onChange={(e) => setName(e.target.value)}
                     placeholder='What is your group name?'
                 />
-                {errors.name && (
+                    {errors.name && (
                     <p className='errors'>{errors.name}</p>
                 )}
             </div>
@@ -114,7 +129,7 @@ const CreateGroupPage = () => {
                     onChange={(e) => setAbout(e.target.value)}
                     placeholder="Please write at least 50 characters"
                 />
-                {errors.about && (
+                    {errors.about && (
                     <p className='errors'>{errors.about}</p>
                 )}
             </div>
@@ -146,13 +161,13 @@ const CreateGroupPage = () => {
                     onChange={(e) => setUrl(e.target.value)}
                     placeholder='Image Url'
                 />
-                {errors.url && (
+                    {errors.url && (
                     <p className='errors'>{errors.url}</p>
                 )}
             </div>
-            <button type="submit" className='create-button'>Create group</button>
+            <button type="submit" className='create-button'>Update group</button>
         </form>
     )
 }
 
-export default CreateGroupPage;
+export default UpdateGroupPage;

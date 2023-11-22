@@ -82,13 +82,20 @@ router.get('/', async (req, res) => {
                 status: "attending"
             }
         })
-        let eventImage = await EventImage.findOne({
+        // let eventImage = await EventImage.findOne({
+        //     where: {
+        //         eventId: event.id,
+        //         preview: true
+        //     }
+        // });
+        // if (eventImage) eventData.previewImage = eventImage.url;
+        let eventImage = await EventImage.findAll({
             where: {
                 eventId: event.id,
                 preview: true
             }
         });
-        if (eventImage) eventData.previewImage = eventImage.url;
+        if (eventImage.length > 0) eventData.previewImage = eventImage[eventImage.length - 1].url;
         // if (!eventData.Venue || !eventData.Venue.length) eventData.Venue = null;
         const startDate = new Date(eventData.startDate);
         const endDate = new Date(eventData.endDate);

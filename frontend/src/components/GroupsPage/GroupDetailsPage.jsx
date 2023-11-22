@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, NavLink } from "react-router-dom";
 import { fetchGroupDetails } from "../../store/groups";
 import { fetchEvents } from "../../store/events";
+import OpenModalActionButton from "./OpenModalActionButton";
 import './GroupDetailsPage.css'
+import DeleteGroupModal from "./DeleteGroupModal/DeleteGroupModal";
 
 const GroupDetailsPage = () => {
     const { groupId } = useParams();
@@ -53,9 +55,14 @@ const GroupDetailsPage = () => {
                     {group.length === 1 ? <h3>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</h3> : null}
                     <button className={`${joinButtonClassName} join-button`} onClick={() => (alert(`Feature Coming Soon...`))}>Join this group</button>
                     <div className={`${organizerButtonClassName} organizer-button-container`}>
-                        {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/events/new` } className="organizer-button-link"><button className="organizer-button">Create Event</button></NavLink> : null}
-                        <button className="organizer-button">Update</button>
+                        {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/events/new`} className="organizer-button-link"><button className="organizer-button">Create Event</button></NavLink> : null}
+                        {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/edit`} className="organizer-button-link">                        <button className="organizer-button">Update</button>
+                        </NavLink> : null}
                         <button className="organizer-button">Delete</button>
+                        <OpenModalActionButton
+                        itemText="Delete 2"
+                        modalComponent={<DeleteGroupModal />}
+                        />
                     </div>
                 </div>
             </div>
@@ -80,7 +87,7 @@ const GroupDetailsPage = () => {
                         <div className="group-events-container">
                             <div className="group-events-details-container">
                                 <div>
-                                <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>
+                                    <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>
                                 </div>
                                 <div>
                                     <NavLink to={`/events/${event.id}`} className="eventText-date"><h4>{event.startDate.split(" ").join(" · ")}</h4></NavLink>

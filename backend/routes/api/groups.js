@@ -22,13 +22,20 @@ router.get('/', async (req, res) => {
                     }
                 }
             });
-            let groupImage = await GroupImage.findOne({
+            // let groupImage = await GroupImage.findOne({
+            //     where: {
+            //         groupId: group.id,
+            //         preview: true
+            //     }
+            // });
+            // if (groupImage) groupData.previewImage = groupImage.url;
+            let groupImage = await GroupImage.findAll({
                 where: {
                     groupId: group.id,
                     preview: true
                 }
             });
-            if (groupImage) groupData.previewImage = groupImage.url;
+            if (groupImage.length > 0) groupData.previewImage = groupImage[groupImage.length - 1].url;
 
             const createdAt = new Date(groupData.createdAt);
             const updatedAt = new Date(groupData.updatedAt);
@@ -81,7 +88,7 @@ router.get('/current', requireAuth, restoreUser, async (req, res) => {
                     preview: true
                 }
             });
-            if (groupImage) groupData.previewImage = groupImage.url
+            if (groupImage.length > 0) groupData.previewImage = groupImage.url
             delete groupData.createdAt;
             delete groupData.updatedAt;
             delete groupData.User;
@@ -308,20 +315,23 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
         errors.name = "Name must be 60 characters or less";
     }
     if (about && about.length < 50) {
-        errors.about = "About must be 50 characters or more";
+        errors.about = "Description must be 50 characters long"; //
+        // errors.about = "About must be 50 characters or more";
     }
     if (type && type !== 'Online' && type !== 'In person') {
-        errors.type = "Type must be 'Online' or 'In person'";
+        errors.type = "Group Type is required" //
+        // errors.type = "Type must be 'Online' or 'In person'";
     }
     if (isPrivate && isPrivate !== true && isPrivate !== false) {
-        errors.isPrivate = "Private must be a boolean";
+        errors.isPrivate = "Visibility Type is required"
+        // errors.isPrivate = "Private must be a boolean";
     }
-    if (city === "") {
-        errors.city = "City is required";
-    }
-    if (state === "") {
-        errors.state = "State is required";
-    }
+    // if (city && city === "") {
+    //     errors.city = "City is required";
+    // }
+    // if (state === "") {
+    //     errors.state = "State is required";
+    // }
     if (errors.name || errors.about || errors.type || errors.isPrivate || errors.city || errors.state) {
         const err = new Error("Bad Request");
         res.status(400);
@@ -335,7 +345,7 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
     if (name) group.name = name;
     if (about) group.about = about;
     if (type) group.type = type;
-    if (isPrivate) group.isPrivate = isPrivate;
+    group.isPrivate = isPrivate;
     if (city) group.city = city;
     if (state) group.state = state;
     group.updatedAt = new Date();
@@ -552,13 +562,21 @@ router.get('/:groupId/events', async (req, res) => {
                     status: "attending"
                 }
             });
-            let eventImage = await EventImage.findOne({
+            // let eventImage = await EventImage.findOne({
+            //     where: {
+            //         eventId: event.id,
+            //         preview: true
+            //     }
+            // });
+            // if (eventImage) eventData.previewImage = eventImage.url;
+
+            let eventImage = await EventImage.findAll({
                 where: {
                     eventId: event.id,
                     preview: true
                 }
             });
-            if (eventImage) eventData.previewImage = eventImage.url;
+            if (eventImage.length > 0) eventData.previewImage = eventImage[eventImage.length - 1].url;
             const startDate = new Date(eventData.startDate);
             const endDate = new Date(eventData.endDate);
             const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
@@ -617,7 +635,7 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err);
     }
-    let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    let { venueId, name, type, capacity, price, description, startDate, endDate, url } = req.body;
     const priceRegex = /^\d{1,7}(\.\d{1,2})?$/;
     const currentDate = new Date();
     let parsedStartDate;
@@ -635,14 +653,24 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
         });
     }
     if ((venueId && !venue)) errors.venueId = "Venue does not exist";
-    if ((name && name.length < 5) || !name) errors.name = "Name must be at least 5 characters";
-    if (type !== "Online" && type !== "In person") errors.type = "Type must be Online or In person";
+    if (!name) errors.name = "Name is required";
+    if ((name && name.length < 5)) errors.name = "Name must be at least 5 characters";
+    if (type !== "Online" && type !== "In person") errors.type = "Event Type is required"; //
+    // if (type !== "Online" && type !== "In person") errors.type = "Type must be Online or In person";
     if (!Number.isInteger(capacity) || typeof capacity !== 'number' || !capacity) errors.capacity = "Capacity must be an integer";
-    if (!priceRegex.test(price) || typeof price !== 'number' || !price) errors.price = "Price is invalid";
+    if (!priceRegex.test(price) || typeof price !== 'number') errors.price = "Price is invalid";
+    if (!price && price !== 0) errors.price = "Price is required";
     if (!description) errors.description = "Description is required";
-    if ((parsedStartDate && parsedStartDate <= currentDate) || !parsedStartDate) errors.startDate = "Start date must be in the future";
-    if ((parsedEndDate && parsedEndDate <= parsedStartDate) || !parsedEndDate) errors.endDate = "End date is less than start date";
-    if (errors.venueId || errors.name || errors.type || errors.capacity || errors.price || errors.description || errors.startDate || errors.endDate) {
+    if (description && description.length < 30) errors.description = "Description must be 50 characters long";
+    if (!parsedStartDate) errors.startDate = "Event start is required";
+    if ((parsedStartDate && parsedStartDate <= currentDate)) errors.startDate = "Start date must be in the future";
+    if (!parsedEndDate) errors.endDate = "Event end is required";
+    if ((parsedEndDate && parsedEndDate <= parsedStartDate)) errors.endDate = "End date is less than start date";
+    if ((parsedEndDate && parsedEndDate <= currentDate)) errors.endDate = "End date must be in the future";
+    if (!url || (!url.endsWith('.png') && !url.endsWith('.jpg') && !url.endsWith('.jpeg'))) {
+        errors.url = "Image URL must end in .png, .jpg, or .jpeg"
+    }
+    if (errors.venueId || errors.name || errors.type || errors.capacity || errors.price || errors.description || errors.startDate || errors.endDate || errors.url) {
         const err = new Error("Bad Request");
         res.status(400);
         err.errors = errors;

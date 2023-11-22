@@ -34,7 +34,7 @@ const EventDetailsPage = () => {
                 <div className="event-body-content-container">
                     <div className="event-body-section1-container">
                         <div className="event-body-section1-img">
-                            {event.length === 1 ? <img src={event[0].EventImages[0].url}/> : null}
+                            {event.length === 1 && event[0] && event[0].EventImages ? <img src={event[0].EventImages[0].url}/> : null}
                         </div>
                         <div className="event-body-cards-container">
                             <div className="event-group-card-container event-group-card1-container">
