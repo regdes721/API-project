@@ -74,6 +74,7 @@ export const thunkCreateGroup = (group) => async (dispatch) => {
         const object = { groupId, url }
         dispatch(createGroup(data))
         dispatch(thunkCreatePreviewImage(object))
+        return data
     } else {
         return data
     }

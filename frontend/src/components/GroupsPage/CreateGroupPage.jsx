@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { thunkCreateGroup } from '../../store/groups';
 import './CreateGroupPage.css'
 
 const CreateGroupPage = () => {
     const dispatch = useDispatch();
     // const sessionUser = useSelector((state) => state.session.user);
-    const groupObj = useSelector ((state) => state.groups.newGroup)
+    // const groupObj = useSelector ((state) => state.groups.newGroup)
+    const [newGroupId, setNewGroupId] = useState(null)
     const [location, setLocation] = useState("");
     const [name, setName] = useState("");
     const [about, setAbout] = useState("");
     const [url, setUrl] = useState("");
-    const [type, setType] = useState(null);
-    const [isPrivate, setIsPrivate] = useState(null);
+    const [type, setType] = useState("");
+    const [isPrivate, setIsPrivate] = useState("");
     const [errors, setErrors] = useState({});
     const [goodForm, setGoodForm] = useState(false)
 
@@ -37,26 +38,25 @@ const CreateGroupPage = () => {
                 state,
                 url
             })
-        ).then(setGoodForm(true)).catch(async (res) => {
+        ).then(async (res) => {
+            setNewGroupId(res.id);
+        }).catch(async (res) => {
             const data = await res.json();
             if (data && data.errors) {
                 setErrors(data.errors)
-                console.log(data.errors)
+                setType("");
             }
+
         })
         setLocation("");
         setName("");
         setAbout("");
         setUrl("");
-        setType(null);
-        setIsPrivate(null);
+        setType("");
+        setIsPrivate("");
     }
 
-    if (goodForm && !groupObj["0"]) return null
-
-    if (goodForm && groupObj["0"]) console.log(groupObj);
-
-    // return <Navigate to="/" replace={true} />;
+    if (newGroupId) return <Navigate to={`/groups/${newGroupId}`} replace={true} />
 
     return (
         <form className="createGroup-form-container" onSubmit={handleSubmit}>
@@ -81,7 +81,7 @@ const CreateGroupPage = () => {
                     <p>{errors.city}</p>
                 )}
                  {errors.state && !errors.location && (
-                    <p>{errors.state}</p>
+                    <p className='errors'>{errors.state}</p>
                 )}
             </div>
             <div className='createGroup-form-section-container'>
@@ -94,6 +94,9 @@ const CreateGroupPage = () => {
                     onChange={(e) => setName(e.target.value)}
                     placeholder='What is your group name?'
                 />
+                    {errors.name && (
+                    <p className='errors'>{errors.name}</p>
+                )}
             </div>
             <div className='createGroup-form-section-container'>
                 <h2>Now describe what your group will be about</h2>
@@ -111,21 +114,30 @@ const CreateGroupPage = () => {
                     onChange={(e) => setAbout(e.target.value)}
                     placeholder="Please write at least 50 characters"
                 />
+                    {errors.about && (
+                    <p className='errors'>{errors.about}</p>
+                )}
             </div>
             <div className='createGroup-form-section-container'>
                 <h2>Final steps...</h2>
                 <p>Is this an in-person or online group?</p>
-                <select onChange={(e) => setType(e.target.value)}>
-                    <option value="" disabled selected>{`(Select one)`}</option>
+                <select value={type} onChange={(e) => setType(e.target.value)}>
+                    <option value="" disabled>{`(Select one)`}</option>
                     <option value="In person">In Person</option>
                     <option value="Online">Online</option>
                 </select>
+                {errors.type && (
+                    <p className='errors'>{errors.type}</p>
+                )}
                 <p>Is this group private or public?</p>
-                <select onChange={(e) => setIsPrivate(e.target.value === 'true')}>
-                    <option value="" disabled selected>{`(Select one)`}</option>
+                <select value={isPrivate} onChange={(e) => setIsPrivate(e.target.value === 'true')}>
+                    <option value="" disabled>{`(Select one)`}</option>
                     <option value="true">Private</option>
                     <option value="false">Public</option>
                 </select>
+                {errors.isPrivate && (
+                    <p className='errors'>{errors.isPrivate}</p>
+                )}
                 <p>Please add an image url for your group below:</p>
                 <input
                     className='createGroup-form-input'
@@ -134,6 +146,9 @@ const CreateGroupPage = () => {
                     onChange={(e) => setUrl(e.target.value)}
                     placeholder='Image Url'
                 />
+                    {errors.url && (
+                    <p className='errors'>{errors.url}</p>
+                )}
             </div>
             <button type="submit" className='create-button'>Create group</button>
         </form>
