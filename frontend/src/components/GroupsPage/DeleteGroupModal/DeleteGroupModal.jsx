@@ -7,7 +7,7 @@ import './DeleteModal.css';
 
 function DeleteGroupModal() {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const groupDetailsObj = useSelector(state => state.groups.singleGroup);
     const group = Object.values(groupDetailsObj);
     let groupId;
