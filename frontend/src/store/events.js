@@ -5,6 +5,7 @@ const LOAD_EVENTS = 'events/loadEvents';
 const LOAD_EVENT_DETAILS = 'events/loadEventDetails'
 const CREATE_EVENT = 'events/createEvent'
 const CREATE_EVENT_IMAGE = 'events/createEventImage'
+const DELETE_EVENT = 'events/deleteEvent'
 
 export const loadEvents = (events) => {
     return {
@@ -31,6 +32,12 @@ export const createEventImage = (eventImage) => {
     return {
         type: CREATE_EVENT_IMAGE,
         eventImage
+    }
+}
+
+export const deleteEvent = () => {
+    return {
+        type: DELETE_EVENT
     }
 }
 
@@ -86,6 +93,20 @@ export const thunkCreateEventPreviewImage = (eventImage) => async (dispatch) => 
     }
 }
 
+export const thunkDeleteEvent = (event) => async (dispatch) => {
+    const { eventId } = event;
+    const response = await csrfFetch(`/api/events/${eventId}`, {
+        method: "DELETE"
+    })
+    const data = await response.json();
+    if (response.ok) {
+        dispatch(deleteEvent(data))
+        return data
+    } else {
+        return data
+    }
+}
+
 const initialState = { allEvents: {}, singleEvent: {} };
 
 const eventReducer = (state = initialState, action) => {
@@ -109,6 +130,9 @@ const eventReducer = (state = initialState, action) => {
             const newEventImage = {}
             newEvent[0] = action.eventImage
             return {...state, newEventImage}
+        }
+        case DELETE_EVENT: {
+            return {...state, singleEvent: {}}
         }
         default:
             return state;

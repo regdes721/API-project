@@ -46,7 +46,7 @@ export const updateGroup = (group) => {
 
 export const deleteGroup = () => {
     return {
-        type: DELETE_GROUP,
+        type: DELETE_GROUP
     }
 }
 

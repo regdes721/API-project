@@ -4,6 +4,7 @@ import { useParams, NavLink } from "react-router-dom";
 import { fetchEventDetails } from "../../store/events";
 import './EventDetailsPage.css';
 import OpenModalActionButton from "../GroupsPage/OpenModalActionButton";
+import DeleteEventModal from "./DeleteEventModal";
 
 const EventDetailsPage = () => {
     const { eventId } = useParams();
@@ -76,6 +77,7 @@ const EventDetailsPage = () => {
                                         <button className="organizer-button event-button">Delete</button>
                                         <OpenModalActionButton
                                         itemText="Delete 2"
+                                        modalComponent={<DeleteEventModal />}
                                         />
                                         {/* <button className="organizer-button event-button">Delete 2</button> */}
                                     </div>

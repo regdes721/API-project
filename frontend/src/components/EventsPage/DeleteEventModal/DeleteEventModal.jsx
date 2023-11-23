@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../../context/Modal";
-import { thunkDeleteGroup } from '../../../store/groups';
-import './DeleteModal.css';
+import './DeleteEvent.css';
+import { thunkDeleteEvent } from '../../../store/events';
 
-function DeleteGroupModal() {
+function DeleteEventModal() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const eventDetailsObj = useSelector(state => state.events.singleEvent)
+    const event = Object.values(eventDetailsObj);
+    let eventId;
+    if (event && event[0]) eventId = event[0].id
     const groupDetailsObj = useSelector(state => state.groups.singleGroup);
     const group = Object.values(groupDetailsObj);
     let groupId;
@@ -15,33 +19,33 @@ function DeleteGroupModal() {
     const [errors, setErrors] = useState({});
     const { closeModal } = useModal();
 
-    // console.log(message)
+    console.log("event", event)
+    console.log("group", group)
+    console.log("eventId", eventId)
+    console.log("groupId", groupId)
+
+    // console.log(group)
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(thunkDeleteGroup({groupId})).then(async (res) => {
-            setMessage(res.message)
-        }).then(() => {
-            navigate(`/groups`)
+        dispatch(thunkDeleteEvent({eventId})).then(() => {
+            navigate(`/groups/${groupId}`)
         }).then(closeModal).catch(async (res) => {
             const data = await res.json();
             if (data && data.errors) {
                 setErrors(data.errors)
-                // console.log(data.errors)
             }
         })
     }
 
-    // if (message === "Successfully deleted") return <Navigate to={`/groups`} replace={true} />
-
     return (
         <div className='delete-modal-container'>
             <h1 className='delete-modal-text'>Confirm Delete</h1>
-            <p className='delete-modal-text'>Are you sure you want to remove this group?</p>
-            <button className='delete-modal-button red-button' onClick={handleSubmit}>{`Yes (Delete Group)`}</button>
-            <button className='delete-modal-button gray-button' onClick={closeModal}>{`No (Keep Group)`}</button>
+            <p className='delete-modal-text'>Are you sure you want to remove this event?</p>
+            <button className='delete-modal-button red-button' onClick={handleSubmit}>{`Yes (Delete Event)`}</button>
+            <button className='delete-modal-button gray-button' onClick={closeModal}>{`No (Keep Event)`}</button>
         </div>
     )
 }
 
-export default DeleteGroupModal;
+export default DeleteEventModal;
