@@ -1,0 +1,10 @@
+.end-space {
+    margin-bottom: 20px;
+}
+
+.signup-form-content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 10px 30px;
+}
