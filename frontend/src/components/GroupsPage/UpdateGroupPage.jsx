@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useParams } from 'react-router-dom';
-import { fetchGroupDetails, thunkUpdateGroup } from '../../store/groups';
+import { fetchGroups, fetchGroupDetails, thunkUpdateGroup } from '../../store/groups';
 import './CreateGroupPage.css'
 
 const UpdateGroupPage = () => {
@@ -10,11 +10,12 @@ const UpdateGroupPage = () => {
     const sessionUser = useSelector((state) => state.session.user);
     const groupObj = useSelector ((state) => state.groups.singleGroup)
     const group = Object.values(groupObj);
+    const allGroupsObj = useSelector(state => state.groups.allGroups)
     const [newGroupId, setNewGroupId] = useState(null)
     const [location, setLocation] = useState(group && group[0] && group[0].city && group[0].state ? [group[0].city, group[0].state].join(", ") : "")
     const [name, setName] = useState(group && group[0] && group[0].name ? group[0].name : "");
     const [about, setAbout] = useState(group && group[0] && group[0].about ? group[0].about : "");
-    const [url, setUrl] = useState("");
+    const [url, setUrl] = useState(group && group[0] && allGroupsObj && allGroupsObj[groupId] ? allGroupsObj[groupId].previewImage : "");
     const [type, setType] = useState(group && group[0] && group[0].type ? group[0].type : "");
     const [isPrivate, setIsPrivate] = useState(group && group[0] && group[0].isPrivate ? group[0].isPrivate : "");
     const [errors, setErrors] = useState({});
@@ -63,21 +64,22 @@ const UpdateGroupPage = () => {
 
     useEffect(() => {
         dispatch(fetchGroupDetails(parseInt(groupId)))
+        dispatch(fetchGroups())
     }, [dispatch])
 
     if (newGroupId) return <Navigate to={`/groups/${newGroupId}`} replace={true} />
 
     if (!group) return null
 
-    console.log(sessionUser);
+    // console.log(url.endsWith(".jpg"));
 
     if (!sessionUser || sessionUser && group && group[0] && group[0].Organizer && group[0].Organizer.id && sessionUser.id !== group[0].Organizer.id) return <Navigate to={`/`} replace={true} />
 
     return (
         <form className="createGroup-form-container" onSubmit={handleSubmit}>
             <div className='createGroup-form-section-container'>
-                <h3 className='createGroup-teal'>BECOME AN ORGANIZER</h3>
-                <h2>We&apos;ll walk you through a few steps to update your group's information</h2>
+                <h3 className='createGroup-teal'>UPDATE YOUR GROUP&apos;S INFORMATION</h3>
+                <h2>We&apos;ll walk you through a few steps to update your group&apos;s information</h2>
             </div>
             <div className='createGroup-form-section-container'>
                 <h2>First, set your group&apos;s location.</h2>

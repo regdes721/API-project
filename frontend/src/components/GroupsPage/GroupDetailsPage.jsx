@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, NavLink } from "react-router-dom";
-import { fetchGroupDetails } from "../../store/groups";
+import { fetchGroupDetails, fetchGroups } from "../../store/groups";
 import { fetchEvents } from "../../store/events";
 import OpenModalActionButton from "./OpenModalActionButton";
 import './GroupDetailsPage.css'
@@ -12,9 +12,12 @@ const GroupDetailsPage = () => {
     const dispatch = useDispatch();
     const groupDetailsObj = useSelector(state => state.groups.singleGroup);
     const group = Object.values(groupDetailsObj);
+    const allGroupsObj = useSelector(state => state.groups.allGroups)
     const eventsObj = useSelector(state => state.events.allEvents)
     const events = Object.values(eventsObj)
     const sessionUser = useSelector((state) => state.session.user);
+
+    console.log(allGroupsObj[groupId])
 
     const joinButtonClassName = (!sessionUser || group.length === 1 && sessionUser.id === group[0].Organizer.id) ? "hidden" : null
 
@@ -36,6 +39,7 @@ const GroupDetailsPage = () => {
 
     useEffect(() => {
         dispatch(fetchGroupDetails(groupId))
+        dispatch(fetchGroups())
         dispatch(fetchEvents())
     }, [dispatch])
 
@@ -44,9 +48,10 @@ const GroupDetailsPage = () => {
             <div className="group-header-container">
                 <div>
                     <p>{`<`} <NavLink to="/groups" className="breadcrumb">Groups</NavLink></p>
-                    {group.length === 1 ? group.map((group) => (
+                    {group.length === 1 && allGroupsObj[groupId] ? <img src={allGroupsObj[groupId].previewImage} /> : null}
+                    {/* {group.length === 1 ? group.map((group) => (
                         group.GroupImages.map((image) => image.preview === true ? <img src={image.url} /> : null)
-                    )) : null}
+                    )) : null} */}
                 </div>
                 <div className="group-header-text-container">
                     {group.length === 1 ? <h1>{group[0].name}</h1> : null}

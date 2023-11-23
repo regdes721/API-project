@@ -309,7 +309,7 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
         });
         // next(err);
     }
-    const { name, about, type, isPrivate, city, state } = req.body;
+    const { name, about, type, isPrivate, city, state, url } = req.body;
     let errors = {};
     if (name && name.length >  60) {
         errors.name = "Name must be 60 characters or less";
@@ -326,13 +326,16 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
         errors.isPrivate = "Visibility Type is required"
         // errors.isPrivate = "Private must be a boolean";
     }
+    if (url && !url.endsWith('.png') && !url.endsWith('.jpg') && !url.endsWith('.jpeg')) {
+        errors.url = "Image URL must end in .png, .jpg, or .jpeg"
+    }
     // if (city && city === "") {
     //     errors.city = "City is required";
     // }
     // if (state === "") {
     //     errors.state = "State is required";
     // }
-    if (errors.name || errors.about || errors.type || errors.isPrivate || errors.city || errors.state) {
+    if (errors.name || errors.about || errors.type || errors.isPrivate || errors.city || errors.state || errors.url) {
         const err = new Error("Bad Request");
         res.status(400);
         err.errors = errors

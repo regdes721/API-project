@@ -122,15 +122,16 @@ export const thunkUpdateGroup = (group) => async (dispatch) => {
             type,
             isPrivate,
             city,
-            state
+            state,
+            url
         })
     });
     const data = await response.json();
     if (response.ok) {
-        // const groupId = data.id
-        // const object = { groupId, url }
+        const groupId = data.id
+        const object = { groupId, url }
         dispatch(updateGroup(data))
-        // dispatch(thunkCreatePreviewImage(object))
+        dispatch(thunkCreatePreviewImage(object))
         return data
     } else {
         return data

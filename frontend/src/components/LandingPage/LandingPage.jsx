@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import OpenModalJoinButton from './OpenModalJoinButton'
+import SignupFormModal from '../SignupFormModal';
 import './LandingPage.css'
 
 const LandingPage = () => {
@@ -38,7 +40,7 @@ const LandingPage = () => {
                 </div>
             </div>
             <div className='landing-section-4'>
-                {!sessionUser ? <button className='join-meetup-button'>Join Meetup</button> : null}
+                {!sessionUser ? <OpenModalJoinButton itemText="Join Meetup" modalComponent={<SignupFormModal />} /> : null}
             </div>
         </div>
     )

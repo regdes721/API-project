@@ -74,9 +74,8 @@ const EventDetailsPage = () => {
                                     </div>
                                     <div className={`${organizerButtonClassName} event-card2-button-container`}>
                                         <button className="organizer-button event-button">Update</button>
-                                        <button className="organizer-button event-button">Delete</button>
                                         <OpenModalActionButton
-                                        itemText="Delete 2"
+                                        itemText="Delete"
                                         modalComponent={<DeleteEventModal />}
                                         />
                                         {/* <button className="organizer-button event-button">Delete 2</button> */}
