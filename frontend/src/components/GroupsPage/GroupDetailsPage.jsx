@@ -58,9 +58,8 @@ const GroupDetailsPage = () => {
                         {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/events/new`} className="organizer-button-link"><button className="organizer-button">Create Event</button></NavLink> : null}
                         {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/edit`} className="organizer-button-link">                        <button className="organizer-button">Update</button>
                         </NavLink> : null}
-                        <button className="organizer-button">Delete</button>
                         <OpenModalActionButton
-                        itemText="Delete 2"
+                        itemText="Delete"
                         modalComponent={<DeleteGroupModal />}
                         />
                     </div>

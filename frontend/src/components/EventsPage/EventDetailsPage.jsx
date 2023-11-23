@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, NavLink } from "react-router-dom";
 import { fetchEventDetails } from "../../store/events";
 import './EventDetailsPage.css';
+import OpenModalActionButton from "../GroupsPage/OpenModalActionButton";
 
 const EventDetailsPage = () => {
     const { eventId } = useParams();
@@ -11,8 +12,11 @@ const EventDetailsPage = () => {
     const event = Object.values(eventDetailsObj);
     const groupDetailsObj = useSelector(state => state.groups.singleGroup);
     const group = Object.values(groupDetailsObj);
+    const sessionUser = useSelector((state) => state.session.user);
 
-    console.log("event", event)
+    const organizerButtonClassName = (!sessionUser || group.length === 1 && sessionUser.id !== group[0].Organizer.id) ? "hidden" : null
+
+    // console.log("event", event)
     // console.log("group", group)
     // console.log("eventDetailsObj", eventDetailsObj)
     // console.log("event", event)
@@ -66,6 +70,14 @@ const EventDetailsPage = () => {
                                     <i className="fa-solid fa-location-dot"></i>
                                     <div>
                                         {event.length === 1 ? <h5>{event[0].type}</h5> : null}
+                                    </div>
+                                    <div className={`${organizerButtonClassName} event-card2-button-container`}>
+                                        <button className="organizer-button event-button">Update</button>
+                                        <button className="organizer-button event-button">Delete</button>
+                                        <OpenModalActionButton
+                                        itemText="Delete 2"
+                                        />
+                                        {/* <button className="organizer-button event-button">Delete 2</button> */}
                                     </div>
                                 </div>
                             </div>
