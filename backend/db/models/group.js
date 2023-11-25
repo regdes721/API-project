@@ -103,7 +103,7 @@ module.exports = (sequelize, DataTypes) => {
         isIn: [['Online', 'In person']]
       }
     },
-    private: {
+    isPrivate: {
       type: DataTypes.BOOLEAN,
       allowNull: false
     },

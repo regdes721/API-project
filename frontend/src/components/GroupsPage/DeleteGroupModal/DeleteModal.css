@@ -1,0 +1,29 @@
+.delete-modal-container {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px
+}
+
+.delete-modal-text {
+    text-align: center;
+}
+
+.delete-modal-button {
+    height: 50px;
+    font-size: 20px;
+    box-shadow: 5px 5px 5px #778899;
+    text-align: center;
+    margin: 5px
+}
+
+.red-button {
+    color: white;
+    background-color: red;
+}
+
+.gray-button {
+    color: white;
+    background-color: gray;
+}

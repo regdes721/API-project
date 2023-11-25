@@ -26,9 +26,29 @@ module.exports = {
       description: "Don't miss this fantastic opportunity to connect with the tennis community, learn more about the sport, and make new friends who share your love for tennis. Whether you're a casual fan or a die-hard enthusiast, this online tennis meet and greet is the perfect place to connect, learn, and have a great time.",
       type: "Online",
       capacity: 50,
-      price: 0.99,
+      price: 0,
       startDate: "2023-11-19 20:00:00",
       endDate: "2023-11-19 22:00:00"
+    },
+    {
+      groupId: 1,
+      name: "Tennis Group Second Meet and Greet",
+      description: "Don't miss this fantastic opportunity to connect with the tennis community, learn more about the sport, and make new friends who share your love for tennis. Whether you're a casual fan or a die-hard enthusiast, this online tennis meet and greet is the perfect place to connect, learn, and have a great time.",
+      type: "Online",
+      capacity: 50,
+      price: 0,
+      startDate: "2024-02-11 20:00:00",
+      endDate: "2024-02-11 22:00:00"
+    },
+    {
+      groupId: 1,
+      name: "Tennis Group Third Meet and Greet",
+      description: "Don't miss this fantastic opportunity to connect with the tennis community, learn more about the sport, and make new friends who share your love for tennis. Whether you're a casual fan or a die-hard enthusiast, this online tennis meet and greet is the perfect place to connect, learn, and have a great time.",
+      type: "Online",
+      capacity: 50,
+      price: 0,
+      startDate: "2024-04-21 20:00:00",
+      endDate: "2024-04-21 22:00:00"
     },
     {
       groupId: 1,
@@ -40,6 +60,38 @@ module.exports = {
       price: 10,
       startDate: "2023-11-20 20:00:00",
       endDate: "2023-11-20 22:00:00"
+    },
+    {
+      groupId: 1,
+      venueId: 1,
+      name: "Tennis Singles",
+      description: "Are you ready to sharpen your skills, break a sweat, and have a smashing time on the tennis court? We invite you to join our upcoming in-person tennis singles session, where you can showcase your talent, meet new players, and enjoy the thrill of the game!",
+      type: 'In person',
+      capacity: 30,
+      price: 10,
+      startDate: "2023-11-27 20:00:00",
+      endDate: "2023-11-27 22:00:00"
+    },
+    {
+      groupId: 1,
+      venueId: 1,
+      name: "Tennis Singles",
+      description: "Are you ready to sharpen your skills, break a sweat, and have a smashing time on the tennis court? We invite you to join our upcoming in-person tennis singles session, where you can showcase your talent, meet new players, and enjoy the thrill of the game!",
+      type: 'In person',
+      capacity: 30,
+      price: 10,
+      startDate: "2023-12-04 20:00:00",
+      endDate: "2023-12-04 22:00:00"
+    },
+    {
+      groupId: 1,
+      name: "Tennis Group First Meet and Greet",
+      description: "Don't miss this fantastic opportunity to connect with the tennis community, learn more about the sport, and make new friends who share your love for tennis. Whether you're a casual fan or a die-hard enthusiast, this online tennis meet and greet is the perfect place to connect, learn, and have a great time.",
+      type: "Online",
+      capacity: 50,
+      price: 0,
+      startDate: "2020-11-19 20:00:00",
+      endDate: "2020-11-19 22:00:00"
     },
     {
       venueId: 2,

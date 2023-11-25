@@ -34,7 +34,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      private: {
+      isPrivate: {
         type: Sequelize.BOOLEAN,
         allowNull: false
       },

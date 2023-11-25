@@ -82,13 +82,20 @@ router.get('/', async (req, res) => {
                 status: "attending"
             }
         })
-        let eventImage = await EventImage.findOne({
+        // let eventImage = await EventImage.findOne({
+        //     where: {
+        //         eventId: event.id,
+        //         preview: true
+        //     }
+        // });
+        // if (eventImage) eventData.previewImage = eventImage.url;
+        let eventImage = await EventImage.findAll({
             where: {
                 eventId: event.id,
                 preview: true
             }
         });
-        if (eventImage) eventData.previewImage = eventImage.url;
+        if (eventImage.length > 0) eventData.previewImage = eventImage[eventImage.length - 1].url;
         // if (!eventData.Venue || !eventData.Venue.length) eventData.Venue = null;
         const startDate = new Date(eventData.startDate);
         const endDate = new Date(eventData.endDate);
@@ -105,7 +112,7 @@ router.get('/', async (req, res) => {
         // eventData.startDate = new Date(eventData.startDate).toISOString().slice(0, 19).replace('T', ' ');
         // eventData.endDate = new Date(eventData.endDate).toISOString().slice(0, 19).replace('T', ' ');
 
-        delete eventData.description;
+        // delete eventData.description;
         delete eventData.capacity;
         delete eventData.price;
         delete eventData.createdAt;
@@ -123,7 +130,7 @@ router.get('/:eventId', async (req, res) => {
         include: [
             {
                 model: Group,
-                attributes: ['id', 'name', 'private', 'city', 'state']
+                attributes: ['id', 'name', 'isPrivate', 'city', 'state']
             },
             {
                 model: Venue,

@@ -24,7 +24,7 @@ module.exports = {
       name: "Evening Tennis on the Water",
       about: "Enjoy rounds of tennis with a tight-nit group of people on the water facing the Brooklyn Bridge. Singles or doubles.",
       type: 'In person',
-      private: true,
+      isPrivate: true,
       city: "New York",
       state: "NY"
     },
@@ -33,7 +33,7 @@ module.exports = {
       name: "Evening Dinners in NYC",
       about: "Join us for unforgettable evening dinners in the heart of New York City, where delicious cuisine meets vibrant city lights.",
       type: 'In person',
-      private: true,
+      isPrivate: true,
       city: "New York",
       state: "NY"
     },
@@ -42,7 +42,7 @@ module.exports = {
       name: "Brooklyn Visions Debate Club",
       about: "Elevate your voice and critical thinking at our dynamic school debate club. Join the discourse!",
       type: 'In person',
-      private: true,
+      isPrivate: true,
       city: "New York",
       state: "NY"
     },
@@ -51,7 +51,7 @@ module.exports = {
       name: "Community Garden Club",
       about: "Grow together, nurture nature! Join our vibrant community garden club and cultivate green spaces with us.",
       type: 'In person',
-      private: false,
+      isPrivate: false,
       city: "New York",
       state: "NY"
     },
@@ -60,7 +60,7 @@ module.exports = {
       name: "Machine Learning for App Architects",
       about: "Join ML App where app development meets machine learning! Dive into case studies, engage in hands-on workshops, showcase your ML app projects, brainstorm revolutionary app ideas, and network with professionals and enthusiasts alike.",
       type: "Online",
-      private: true,
+      isPrivate: true,
       city: "New York",
       state: "NY"
     }
