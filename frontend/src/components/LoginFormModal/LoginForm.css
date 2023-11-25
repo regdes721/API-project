@@ -27,6 +27,20 @@
     background-color: red;
 }
 
+.login-form-demo-user-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.login-form-demo-user {
+    font-size: 20px;
+    font-weight: bold;
+    color: #00798A;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 /* .login-form-content-container label {
     margin: 10px
 } */
