@@ -13,7 +13,7 @@ function LoginFormModal() {
   const { closeModal } = useModal();
 
   // console.log(process.env.DEMO_USER)
-  console.log(import.meta.env.VITE_DEMO_USER)
+  // console.log(import.meta.env.VITE_DEMO_USER)
 
   const handleSubmit = (e) => {
     e.preventDefault();
