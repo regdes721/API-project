@@ -18,3 +18,8 @@ nav {
     color: #00798A;
     text-decoration: none;
 }
+
+.user-button {
+    font-size: 40px;
+    margin-top: 10px;
+}

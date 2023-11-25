@@ -17,7 +17,7 @@ const GroupDetailsPage = () => {
     const events = Object.values(eventsObj)
     const sessionUser = useSelector((state) => state.session.user);
 
-    console.log(allGroupsObj[groupId])
+    // console.log(allGroupsObj[groupId])
 
     const joinButtonClassName = (!sessionUser || group.length === 1 && sessionUser.id === group[0].Organizer.id) ? "hidden" : null
 
@@ -73,7 +73,7 @@ const GroupDetailsPage = () => {
             <div className="group-body-container">
                 <div className="group-body-content-container">
                     <h2>Organizer</h2>
-                    {group.length === 1 ? <p>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</p> : null}
+                    {group.length === 1 ? <p>{group[0].Organizer.firstName} {group[0].Organizer.lastName}</p> : null}
                 </div>
                 <div className="group-body-content-container">
                     <h2>What we&apos;re about</h2>

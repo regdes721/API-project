@@ -20,19 +20,26 @@ function Navigation({ isLoaded }) {
           <NavLink to="/groups/new" className="start-group-link"><h3>Start a new group</h3></NavLink>
         )}
         {isLoaded && !sessionUser && <>
-            <OpenModalMenuItem
-              className="start-group-link"
-              itemText="Log In"
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              modalComponent={<SignupFormModal />}
-            />
-          </>}
+          <OpenModalMenuItem
+            className="start-group-link"
+            itemText="Log In"
+            modalComponent={<LoginFormModal />}
+          />
+          <OpenModalMenuItem
+            itemText="Sign Up"
+            modalComponent={<SignupFormModal />}
+          />
+        </>}
         {isLoaded && sessionUser && (
           <ProfileButton user={sessionUser} />
         )}
+        {/* {isLoaded && sessionUser && (
+          <div>
+            <i className="fas fa-user-circle user-button" />
+            <i className="fa-solid fa-chevron-up"></i>
+          </div>
+        )} */}
+        {/* <i className="fas fa-user-circle user-button" /> */}
       </nav>
     </header>
   );

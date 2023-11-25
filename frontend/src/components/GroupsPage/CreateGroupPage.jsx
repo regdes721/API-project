@@ -44,16 +44,16 @@ const CreateGroupPage = () => {
             const data = await res.json();
             if (data && data.errors) {
                 setErrors(data.errors)
-                setType("");
+                // setType("");
             }
 
         })
-        setLocation("");
-        setName("");
-        setAbout("");
-        setUrl("");
-        setType("");
-        setIsPrivate("");
+        // setLocation("");
+        // setName("");
+        // setAbout("");
+        // setUrl("");
+        // setType("");
+        // setIsPrivate("");
     }
 
     if (newGroupId) return <Navigate to={`/groups/${newGroupId}`} replace={true} />
@@ -75,10 +75,10 @@ const CreateGroupPage = () => {
                     placeholder="City, STATE"
                 />
                 {errors.location && (
-                    <p>{errors.location}</p>
+                    <p className='errors'>{errors.location}</p>
                 )}
                 {errors.city && !errors.location && (
-                    <p>{errors.city}</p>
+                    <p className='errors'>{errors.city}</p>
                 )}
                 {errors.state && !errors.location && (
                     <p className='errors'>{errors.state}</p>

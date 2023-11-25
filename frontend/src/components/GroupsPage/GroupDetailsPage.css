@@ -28,6 +28,7 @@
     color: white;
     background-color: red;
     box-shadow: 5px 5px 5px #778899;
+    cursor: pointer;
     /* justify-self: flex-end; */
 }
 
@@ -40,6 +41,7 @@
     color: white;
     background-color: gray;
     font-size: 15px;
+    cursor: pointer;
 }
 
 .organizer-button-link :hover {

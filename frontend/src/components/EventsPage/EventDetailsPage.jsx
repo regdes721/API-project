@@ -43,10 +43,10 @@ const EventDetailsPage = () => {
                         </div>
                         <div className="event-body-cards-container">
                             <div className="event-group-card-container event-group-card1-container">
-                                {event.length === 1 ? <img src={group[0].GroupImages[0].url}/> : null}
+                                {event.length === 1 ? <NavLink to={`/groups/${group[0].id}`}><img src={group[0].GroupImages[0].url}/></NavLink> : null}
                                 <div>
-                                    {event.length === 1 ? <h4 className="event-group-card1-name">{group[0].name}</h4> : null}
-                                    {event.length === 1 ? group[0].isPrivate === true ? <h5 className="event-group-card1-isPrivate">Private</h5> : <h5 className="event-group-card1-isPrivate">Public</h5> : null}
+                                    {event.length === 1 ? <NavLink to={`/groups/${group[0].id}`} className="no-underline"><h4 className="event-group-card1-name">{group[0].name}</h4></ NavLink> : null}
+                                    {event.length === 1 ? group[0].isPrivate === true ? <NavLink to={`/groups/${group[0].id}`} className="no-underline"><h5 className="event-group-card1-isPrivate">Private</h5></NavLink> : <NavLink to={`/groups/${group[0].id}`} className="no-underline"><h5 className="event-group-card1-isPrivate">Public</h5></NavLink> : null}
                                 </div>
                             </div>
                             <div className="event-group-card-container">
