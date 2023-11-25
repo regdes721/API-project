@@ -16,13 +16,13 @@ function DeleteEventModal() {
     const group = Object.values(groupDetailsObj);
     let groupId;
     if (group && group[0]) groupId = group[0].id
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState("");
     const { closeModal } = useModal();
 
-    console.log("event", event)
-    console.log("group", group)
-    console.log("eventId", eventId)
-    console.log("groupId", groupId)
+    // console.log("event", event)
+    // console.log("group", group)
+    // console.log("eventId", eventId)
+    // console.log("groupId", groupId)
 
     // console.log(group)
 
@@ -32,8 +32,8 @@ function DeleteEventModal() {
             navigate(`/groups/${groupId}`)
         }).then(closeModal).catch(async (res) => {
             const data = await res.json();
-            if (data && data.errors) {
-                setErrors(data.errors)
+            if (data && data.message === "Event couldn't be found") {
+                setErrors(data.message)
             }
         })
     }
@@ -44,6 +44,7 @@ function DeleteEventModal() {
             <p className='delete-modal-text'>Are you sure you want to remove this event?</p>
             <button className='delete-modal-button red-button' onClick={handleSubmit}>{`Yes (Delete Event)`}</button>
             <button className='delete-modal-button gray-button' onClick={closeModal}>{`No (Keep Event)`}</button>
+            {errors && <p>{errors}</p>}
         </div>
     )
 }

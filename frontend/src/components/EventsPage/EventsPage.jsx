@@ -28,8 +28,8 @@ const EventsPage = () => {
                 <p>Events in Meetup</p>
             </div>
             {sortedEvents.map((event) => (
-                <div className="event-container">
-                    <div key={event.id} className="event-details-container">
+                <div className="event-container" key={event.id}>
+                    <div className="event-details-container">
                         <div className="eventImg-container">
                             <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>
                         </div>

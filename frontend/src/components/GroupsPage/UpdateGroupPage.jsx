@@ -65,7 +65,7 @@ const UpdateGroupPage = () => {
     useEffect(() => {
         dispatch(fetchGroupDetails(parseInt(groupId)))
         dispatch(fetchGroups())
-    }, [dispatch])
+    }, [dispatch, groupId])
 
     if (newGroupId) return <Navigate to={`/groups/${newGroupId}`} replace={true} />
 

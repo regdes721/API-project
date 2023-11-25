@@ -128,7 +128,7 @@ const eventReducer = (state = initialState, action) => {
         }
         case CREATE_EVENT_IMAGE: {
             const newEventImage = {}
-            newEvent[0] = action.eventImage
+            newEventImage[0] = action.eventImage
             return {...state, newEventImage}
         }
         case DELETE_EVENT: {

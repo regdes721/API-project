@@ -34,7 +34,7 @@ function Layout() {
   );
 }
 
-export const router = createBrowserRouter([
+const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [

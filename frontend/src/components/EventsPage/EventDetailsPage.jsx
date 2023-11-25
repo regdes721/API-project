@@ -24,7 +24,7 @@ const EventDetailsPage = () => {
 
     useEffect(() => {
         dispatch(fetchEventDetails(eventId))
-    }, [dispatch])
+    }, [dispatch, eventId])
 
     if (event.length !== 1 || group.length !== 1) return null
 

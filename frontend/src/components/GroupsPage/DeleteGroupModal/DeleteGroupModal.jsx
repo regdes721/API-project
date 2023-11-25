@@ -12,21 +12,19 @@ function DeleteGroupModal() {
     const group = Object.values(groupDetailsObj);
     let groupId;
     if (group && group[0]) groupId = group[0].id
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState("");
     const { closeModal } = useModal();
 
     // console.log(message)
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(thunkDeleteGroup({groupId})).then(async (res) => {
-            setMessage(res.message)
-        }).then(() => {
+        dispatch(thunkDeleteGroup({groupId})).then(() => {
             navigate(`/groups`)
         }).then(closeModal).catch(async (res) => {
             const data = await res.json();
-            if (data && data.errors) {
-                setErrors(data.errors)
+            if (data && data.message === "Group couldn't be found") {
+                setErrors(data.message)
                 // console.log(data.errors)
             }
         })
@@ -40,6 +38,7 @@ function DeleteGroupModal() {
             <p className='delete-modal-text'>Are you sure you want to remove this group?</p>
             <button className='delete-modal-button red-button' onClick={handleSubmit}>{`Yes (Delete Group)`}</button>
             <button className='delete-modal-button gray-button' onClick={closeModal}>{`No (Keep Group)`}</button>
+            {errors && <p>{errors}</p>}
         </div>
     )
 }

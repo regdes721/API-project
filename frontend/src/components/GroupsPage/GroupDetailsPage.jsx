@@ -41,7 +41,7 @@ const GroupDetailsPage = () => {
         dispatch(fetchGroupDetails(groupId))
         dispatch(fetchGroups())
         dispatch(fetchEvents())
-    }, [dispatch])
+    }, [dispatch, groupId])
 
     return (
         <div>
@@ -88,7 +88,7 @@ const GroupDetailsPage = () => {
                         null
                     )}
                     {sortedUpcomingEvents.map((event) =>
-                        <div className="group-events-container">
+                        <div className="group-events-container" key={event.id}>
                             <div className="group-events-details-container">
                                 <div>
                                     <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>
@@ -115,7 +115,7 @@ const GroupDetailsPage = () => {
                         null
                     )}
                     {sortedPastEvents.map((event) =>
-                        <div className="group-events-container">
+                        <div className="group-events-container" key={event.id}>
                             <div className="group-events-details-container">
                                 <div>
                                     <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>

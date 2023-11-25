@@ -44,7 +44,7 @@ const CreateEventPage = () => {
             const data = await res.json();
             if (data && data.errors) {
                 setErrors(data.errors)
-                console.log(data.errors)
+                // console.log(data.errors)
             }
         })
         setName("");
@@ -58,7 +58,7 @@ const CreateEventPage = () => {
 
     useEffect(() => {
         dispatch(fetchGroupDetails(groupId))
-    }, [dispatch])
+    }, [dispatch, groupId])
 
     if (newEventId) return <Navigate to={`/events/${newEventId}`} replace={true} />
 
