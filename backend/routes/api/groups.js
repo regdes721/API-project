@@ -181,8 +181,11 @@ router.post('/', requireAuth, restoreUser, async (req, res, next) => {
         errors.name = "Name must be 60 characters or less";
     }
     if (about.length < 50) {
-        errors.about = "Description must be 50 characters long"; //
+        errors.about = "Description must be at least 50 characters long"; //
         // errors.about = "About must be 50 characters or more";
+    }
+    if (about.length > 256) {
+        errors.about = "Description must be 256 characters or less"; //
     }
     if (type !== 'Online' && type !== 'In person') {
         errors.type = "Group Type is required" //
@@ -315,8 +318,11 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
         errors.name = "Name must be 60 characters or less";
     }
     if (about && about.length < 50) {
-        errors.about = "Description must be 50 characters long"; //
+        errors.about = "Description must be at least 50 characters long"; //
         // errors.about = "About must be 50 characters or more";
+    }
+    if (about && about.length > 256) {
+        errors.about = "Description must be 256 characters or less"; //
     }
     if (type && type !== 'Online' && type !== 'In person') {
         errors.type = "Group Type is required" //
@@ -664,7 +670,7 @@ router.post('/:groupId/events', requireAuth, restoreUser, async (req, res) => {
     if (!priceRegex.test(price) || typeof price !== 'number') errors.price = "Price is invalid";
     if (!price && price !== 0) errors.price = "Price is required";
     if (!description) errors.description = "Description is required";
-    if (description && description.length < 30) errors.description = "Description must be 50 characters long";
+    if (description && description.length < 30) errors.description = "Description must be at least 30 characters long";
     if (!parsedStartDate) errors.startDate = "Event start is required";
     if ((parsedStartDate && parsedStartDate <= currentDate)) errors.startDate = "Start date must be in the future";
     if (!parsedEndDate) errors.endDate = "Event end is required";
