@@ -12,6 +12,9 @@ function LoginFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
+  // console.log(process.env.DEMO_USER)
+  console.log(import.meta.env.VITE_DEMO_USER)
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
@@ -24,6 +27,32 @@ function LoginFormModal() {
         }
       });
   };
+
+  const handleDemo = (e) => {
+    e.preventDefault();
+    setErrors({});
+    return dispatch(sessionActions.login({ credential: import.meta.env.VITE_DEMO_USER, password: import.meta.env.VITE_DEMO_PASSWORD }))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
+  };
+
+  // const handleDemo = (e) => {
+  //   e.preventDefault();
+  //   setErrors({});
+  //   return dispatch(sessionActions.login({ credential: 'Demo-lition', password: 'password' }))
+  //     .then(closeModal)
+  //     .catch(async (res) => {
+  //       const data = await res.json();
+  //       if (data && data.errors) {
+  //         setErrors(data.errors);
+  //       }
+  //     });
+  // };
 
   return (
     <div className='login-form-container'>
@@ -69,8 +98,8 @@ function LoginFormModal() {
         <div>
           {credential.length < 4 || password.length < 6 ? <button type="submit" className='login-button' disabled={credential.length < 4 || password.length < 6}>Log In</button> : <button type="submit" className='login-button enabled' disabled={credential.length < 4 || password.length < 6}>Log In</button>}
         </div>
-        <div>
-
+        <div className='login-form-demo-user-container'>
+          <p className='login-form-demo-user' onClick={handleDemo}>Demo User</p>
         </div>
       </form>
     </div>
