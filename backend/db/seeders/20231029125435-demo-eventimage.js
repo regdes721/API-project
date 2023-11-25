@@ -23,17 +23,17 @@ module.exports = {
     await EventImage.bulkCreate([
       {
         eventId: 1,
-        url: "https://images.squarespace-cdn.com/content/v1/5a60f55d29f18717fce46ab8/1521651061197-FP3Q1NDNJSAQGIVMRON5/ke17ZwdGBToddI8pDm48kB6N0s8PWtX2k_eW8krg04V7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1URWK2DJDpV27WG7FD5VZsfFVodF6E_6KI51EW1dNf095hdyjf10zfCEVHp52s13p8g/meet+and+greet.jpg",
+        url: "https://www.belvederecl.com/wp-content/uploads/2018/11/Meet-n-Greet.png",
         preview: true
       },
       {
         eventId: 2,
-        url: "https://images.squarespace-cdn.com/content/v1/5a60f55d29f18717fce46ab8/1521651061197-FP3Q1NDNJSAQGIVMRON5/ke17ZwdGBToddI8pDm48kB6N0s8PWtX2k_eW8krg04V7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1URWK2DJDpV27WG7FD5VZsfFVodF6E_6KI51EW1dNf095hdyjf10zfCEVHp52s13p8g/meet+and+greet.jpg",
+        url: "https://www.belvederecl.com/wp-content/uploads/2018/11/Meet-n-Greet.png",
         preview: true
       },
       {
         eventId: 3,
-        url: "https://images.squarespace-cdn.com/content/v1/5a60f55d29f18717fce46ab8/1521651061197-FP3Q1NDNJSAQGIVMRON5/ke17ZwdGBToddI8pDm48kB6N0s8PWtX2k_eW8krg04V7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1URWK2DJDpV27WG7FD5VZsfFVodF6E_6KI51EW1dNf095hdyjf10zfCEVHp52s13p8g/meet+and+greet.jpg",
+        url: "https://www.belvederecl.com/wp-content/uploads/2018/11/Meet-n-Greet.png",
         preview: true
       },
       {
@@ -53,7 +53,7 @@ module.exports = {
       },
       {
         eventId: 7,
-        url: "https://images.squarespace-cdn.com/content/v1/5a60f55d29f18717fce46ab8/1521651061197-FP3Q1NDNJSAQGIVMRON5/ke17ZwdGBToddI8pDm48kB6N0s8PWtX2k_eW8krg04V7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1URWK2DJDpV27WG7FD5VZsfFVodF6E_6KI51EW1dNf095hdyjf10zfCEVHp52s13p8g/meet+and+greet.jpg",
+        url: "https://www.belvederecl.com/wp-content/uploads/2018/11/Meet-n-Greet.png",
         preview: true
       },
       {
