@@ -54,11 +54,20 @@ const validateSignup = [
 
 router.post('/', validateSignup, async (req, res) => {
       const { firstName, lastName, email, password, username } = req.body;
+      // add errors here instead so sign up modal returns multiple errors?
+      // let errors = {};
+      // if (!firstName) errors.firstName = "First Name is required"
+      // if (!lastName) errors.lastName = "Last Name is required"
+      // // how to check for email?
+      // if (username.length < 4) errors.username = "Please provide a username with at least 4 characters."
+      // // how to check if username is email?
+      // if (password.length < 6) errors.password = "Password must be 6 characters or more."
+
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({ firstName, lastName, email, username, hashedPassword });
 
-      // add errors here instead so sign up modal returns multiple errors?
-      
+
+
       const safeUser = {
         id: user.id,
         firstName: user.firstName,
