@@ -125,6 +125,17 @@ module.exports = {
       price: 19.99,
       startDate: "2023-11-11 12:00:00",
       endDate: "2023-11-11 14:00:00"
+    },
+    {
+      venueId: 5,
+      groupId: 2,
+      name: "Dinner at Raoul's",
+      description: "In a city that changes faster than you can go from uptown to down, Raoul's (open since the 1970s) is a stalwart—here long before SoHo was a brand name. Once inside, order a cocktail and admire the art-filled walls",
+      type: "In person",
+      capacity: 12,
+      price: 100,
+      startDate: "2023-12-16 20:00:00",
+      endDate: "2023-12-16 23:00:00"
     }
    ], { validate: true })
   },

@@ -71,6 +71,11 @@ module.exports = {
         url: "https://assets.marthastewart.com/styles/wmax-520-highdpi/d18/ft050_ultimatero10/ft050_ultimatero10_xl.jpg?itok=A4wA7SH6",
         preview: true
       },
+      {
+        eventId: 11,
+        url: "https://media.cntraveler.com/photos/58536e4b068587b169efdc06/16:9/w_1920,c_limit/best-restaurants-NYC-Raoul's-2016.jpg",
+        preview: true
+      }
 
      ], { validate: true })
   },

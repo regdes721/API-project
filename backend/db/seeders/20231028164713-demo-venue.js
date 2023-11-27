@@ -52,6 +52,14 @@ module.exports = {
       state: "NY",
       lat: 40.7910478,
       lng: -73.9489684
+    },
+    {
+      groupId: 2,
+      address: "180 Prince St",
+      city: "New York",
+      state: "NY",
+      lat: 40.7261535,
+      lng: -74.0021556
     }
    ], { validate: true })
   },

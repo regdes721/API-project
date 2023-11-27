@@ -96,7 +96,7 @@ function LoginFormModal() {
           <p className='login-form-content-container errors'>{errors.credential}</p>
         )}
         <div>
-          {credential.length < 4 || password.length < 6 ? <button type="submit" className='login-button' disabled={credential.length < 4 || password.length < 6}>Log In</button> : <button type="submit" className='login-button enabled' disabled={credential.length < 4 || password.length < 6}>Log In</button>}
+          {credential.length < 4 || password.length < 6 ? <button type="submit" className='login-button' disabled={credential.length < 4 || password.length < 6}>Log In</button> : <button type="submit" className='login-button enabled pointer-cursor' disabled={credential.length < 4 || password.length < 6}>Log In</button>}
         </div>
         <div className='login-form-demo-user-container'>
           <p className='login-form-demo-user' onClick={handleDemo}>Demo User</p>
