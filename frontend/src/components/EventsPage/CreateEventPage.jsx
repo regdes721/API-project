@@ -152,7 +152,7 @@ const CreateEventPage = () => {
                     <p className='errors'>{errors.description}</p>
                 )}
             </div>
-            <button type="submit" className='createEvent-button'>Create Event</button>
+            <button type="submit" className='createEvent-button pointer-cursor'>Create Event</button>
         </form>
     )
 }
