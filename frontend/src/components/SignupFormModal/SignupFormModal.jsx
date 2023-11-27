@@ -72,7 +72,7 @@ function SignupFormModal() {
             required
           />
         </div>
-        {errors.username && <p>{errors.username}</p>}
+        {errors.username && <p className='login-form-content-container errors'>{errors.username}</p>}
         <div className='login-form-content-container'>
           <label>
             First Name
@@ -121,7 +121,7 @@ function SignupFormModal() {
             />
         </div>
         {errors.confirmPassword && <p className='login-form-content-container errors'>{errors.confirmPassword}</p>}
-        {!email.length || !username.length || !firstName.length || !lastName.length || !password.length || !confirmPassword.length || username.length < 4 || password.length < 6 ? <button type="submit" className='login-button' disabled={true}>Sign Up</button> : <button type="submit" className='login-button enabled'>Sign Up</button>}
+        {!email.length || !username.length || !firstName.length || !lastName.length || !password.length || !confirmPassword.length || username.length < 4 || password.length < 6 ? <button type="submit" className='login-button' disabled={true}>Sign Up</button> : <button type="submit" className='login-button enabled pointer-cursor'>Sign Up</button>}
       </form>
     </div>
   );
