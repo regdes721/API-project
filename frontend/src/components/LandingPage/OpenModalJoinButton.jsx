@@ -17,7 +17,7 @@ function OpenModalActionButton({
   };
 
   return (
-    <button className='join-meetup-button' onClick={onClick}>{itemText}</button>
+    <button className='join-meetup-button pointer-cursor' onClick={onClick}>{itemText}</button>
   );
 }
 
