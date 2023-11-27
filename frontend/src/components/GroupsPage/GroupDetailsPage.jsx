@@ -88,7 +88,7 @@ const GroupDetailsPage = () => {
                         null
                     )}
                     {sortedUpcomingEvents.map((event) =>
-                        <div className="group-events-container" key={event.id}>
+                        <NavLink to={`/events/${event.id}`} className="no-underline" key={event.id}><div className="group-events-container" key={event.id}>
                             <div className="group-events-details-container">
                                 <div>
                                     <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>
@@ -103,7 +103,7 @@ const GroupDetailsPage = () => {
                             <div>
                                 <NavLink to={`/events/${event.id}`} className="eventText-name"><p>{event.description}</p></NavLink>
                             </div>
-                        </div>
+                        </div></NavLink>
                     )}
                 </div>
                 <div className="group-body-content-container">
@@ -115,7 +115,7 @@ const GroupDetailsPage = () => {
                         null
                     )}
                     {sortedPastEvents.map((event) =>
-                        <div className="group-events-container" key={event.id}>
+                        <NavLink to={`/events/${event.id}`} className="no-underline" key={event.id}><div className="group-events-container" key={event.id}>
                             <div className="group-events-details-container">
                                 <div>
                                     <NavLink to={`/events/${event.id}`}><img src={event.previewImage} /></NavLink>
@@ -130,7 +130,7 @@ const GroupDetailsPage = () => {
                             <div>
                                 <NavLink to={`/events/${event.id}`} className="eventText-name"><p>{event.description}</p></NavLink>
                             </div>
-                        </div>
+                        </div></NavLink>
                     )}
                 </div>
             </div>

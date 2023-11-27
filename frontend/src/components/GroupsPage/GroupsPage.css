@@ -51,3 +51,7 @@
     color: #70747D;
     text-decoration: none;
 }
+
+.no-underline {
+    text-decoration: none;
+}

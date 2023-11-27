@@ -47,13 +47,13 @@ const CreateEventPage = () => {
                 // console.log(data.errors)
             }
         })
-        setName("");
-        setType("");
-        setPrice("");
-        setStartDate("");
-        setEndDate("");
-        setDescription("");
-        setUrl("")
+        // setName("");
+        // setType("");
+        // setPrice("");
+        // setStartDate("");
+        // setEndDate("");
+        // setDescription("");
+        // setUrl("")
     }
 
     useEffect(() => {

@@ -30,7 +30,7 @@ const GroupsPage = () => {
                 <p>Groups in Meetup</p>
             </div>
             {groups.map((group) => (
-                <div key={group.id} className="group-container">
+                <NavLink to={`/groups/${group.id}`} className="no-underline" key={group.id}><div key={group.id} className="group-container">
                     <div className="groupImg-container">
                         <NavLink to={`/groups/${group.id}`}><img src={group.previewImage} /></NavLink>
                     </div>
@@ -40,7 +40,7 @@ const GroupsPage = () => {
                         <NavLink to={`/groups/${group.id}`}className="groupText-about"><p>{group.about}</p></NavLink>
                         <NavLink to={`/groups/${group.id}`}className="groupText-about"><h4>{events.filter((event) => event.groupId === group.id).length === 1 ? `${events.filter((event) => event.groupId === group.id).length} Event` : `${events.filter((event) => event.groupId === group.id).length} Events`} · {group.isPrivate === true ? "Private" : "Public"}</h4></NavLink>
                     </div>
-                </div>
+                </div></NavLink>
             ))}
         </div>
     )
