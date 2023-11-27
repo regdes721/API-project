@@ -150,7 +150,7 @@ const CreateGroupPage = () => {
                     <p className='errors'>{errors.url}</p>
                 )}
             </div>
-            <button type="submit" className='create-button'>Create group</button>
+            <button type="submit" className='create-button pointer-cursor'>Create group</button>
         </form>
     )
 }
