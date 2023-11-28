@@ -167,7 +167,7 @@ const UpdateGroupPage = () => {
                     <p className='errors'>{errors.url}</p>
                 )}
             </div>
-            <button type="submit" className='create-button'>Update group</button>
+            <button type="submit" className='create-button pointer-cursor'>Update group</button>
         </form>
     )
 }

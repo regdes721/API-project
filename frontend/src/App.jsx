@@ -69,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: 'events/:eventId',
         element: <EventDetailsPage />
+      },
+      {
+        path: '*',
+        element: <h1>Not Found</h1>
       }
     ]
   }

@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { thunkCreateGroup } from '../../store/groups';
 import './CreateGroupPage.css'
 
 const CreateGroupPage = () => {
     const dispatch = useDispatch();
-    // const sessionUser = useSelector((state) => state.session.user);
+    const sessionUser = useSelector((state) => state.session.user);
     // const groupObj = useSelector ((state) => state.groups.newGroup)
     const [newGroupId, setNewGroupId] = useState(null)
     const [location, setLocation] = useState("");
@@ -55,6 +55,9 @@ const CreateGroupPage = () => {
         // setType("");
         // setIsPrivate("");
     }
+
+    if (!sessionUser) return <Navigate to={`/`} replace={true} />
+
 
     if (newGroupId) return <Navigate to={`/groups/${newGroupId}`} replace={true} />
 
