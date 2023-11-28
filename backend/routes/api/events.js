@@ -5,6 +5,17 @@ const { Op } = require('sequelize');
 const { requireAuth, restoreUser } = require('../../utils/auth');
 const { route } = require('./groups');
 
+function convertUTCDateToLocalDate(date) {
+    var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+
+    newDate.setHours(hours - offset);
+
+    return newDate;
+}
+
 router.get('/', async (req, res) => {
     const where = {};
     const errors = {};
@@ -97,8 +108,10 @@ router.get('/', async (req, res) => {
         });
         if (eventImage.length > 0) eventData.previewImage = eventImage[eventImage.length - 1].url;
         // if (!eventData.Venue || !eventData.Venue.length) eventData.Venue = null;
-        const startDate = new Date(eventData.startDate);
-        const endDate = new Date(eventData.endDate);
+        const startDate = convertUTCDateToLocalDate(new Date(eventData.startDate))
+        const endDate = convertUTCDateToLocalDate(new Date(eventData.endDate))
+        // const startDate = new Date(eventData.startDate);
+        // const endDate = new Date(eventData.endDate);
         const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
         const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
         eventData.startDate = formattedStartDate;
@@ -167,8 +180,10 @@ router.get('/:eventId', async (req, res) => {
     if (!venue) eventData.Venue = null;
     let eventImages = eventData.EventImages;
     if (!eventImages || !eventImages.length) eventData.EventImages = null;
-    const startDate = new Date(eventData.startDate);
-    const endDate = new Date(eventData.endDate);
+    const startDate = convertUTCDateToLocalDate(new Date(eventData.startDate))
+    const endDate = convertUTCDateToLocalDate(new Date(eventData.endDate))
+    // const startDate = new Date(eventData.startDate);
+    // const endDate = new Date(eventData.endDate);
     const formattedStartDate = startDate.toISOString().replace('T', ' ').slice(0, 19);
     const formattedEndDate = endDate.toISOString().replace('T', ' ').slice(0, 19);
     eventData.startDate = formattedStartDate;
