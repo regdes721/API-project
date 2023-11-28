@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, NavLink } from "react-router-dom";
 import { fetchEventDetails } from "../../store/events";
-import './EventDetailsPage.css';
+import { fetchGroups } from "../../store/groups";
 import OpenModalActionButton from "../GroupsPage/OpenModalActionButton";
 import DeleteEventModal from "./DeleteEventModal";
+import './EventDetailsPage.css';
 
 const EventDetailsPage = () => {
     const { eventId } = useParams();
@@ -13,6 +14,7 @@ const EventDetailsPage = () => {
     const event = Object.values(eventDetailsObj);
     const groupDetailsObj = useSelector(state => state.groups.singleGroup);
     const group = Object.values(groupDetailsObj);
+    const allGroupsObj = useSelector(state => state.groups.allGroups);
     const sessionUser = useSelector((state) => state.session.user);
 
     const organizerButtonClassName = (!sessionUser || group.length === 1 && sessionUser.id !== group[0].Organizer.id) ? "hidden" : null
@@ -26,6 +28,7 @@ const EventDetailsPage = () => {
 
     useEffect(() => {
         dispatch(fetchEventDetails(eventId))
+        dispatch(fetchGroups())
     }, [dispatch, eventId])
 
     if (event.length !== 1 || group.length !== 1) return null
@@ -45,7 +48,7 @@ const EventDetailsPage = () => {
                         </div>
                         <div className="event-body-cards-container">
                             <div className="event-group-card-container event-group-card1-container">
-                                {event.length === 1 ? <NavLink to={`/groups/${group[0].id}`}><img src={group[0].GroupImages[0].url}/></NavLink> : null}
+                                {event.length === 1 && group && allGroupsObj && allGroupsObj[group[0].id] ? <NavLink to={`/groups/${group[0].id}`}><img src={allGroupsObj[group[0].id].previewImage}/></NavLink> : null}
                                 <div>
                                     {event.length === 1 ? <NavLink to={`/groups/${group[0].id}`} className="no-underline"><h4 className="event-group-card1-name">{group[0].name}</h4></ NavLink> : null}
                                     {event.length === 1 ? group[0].isPrivate === true ? <NavLink to={`/groups/${group[0].id}`} className="no-underline"><h5 className="event-group-card1-isPrivate">Private</h5></NavLink> : <NavLink to={`/groups/${group[0].id}`} className="no-underline"><h5 className="event-group-card1-isPrivate">Public</h5></NavLink> : null}
