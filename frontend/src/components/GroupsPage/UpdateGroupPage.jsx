@@ -92,10 +92,10 @@ const UpdateGroupPage = () => {
                     placeholder="City, STATE"
                 />
                 {errors.location && (
-                    <p>{errors.location}</p>
+                    <p className='errors'>{errors.location}</p>
                 )}
                  {errors.city && !errors.location && (
-                    <p>{errors.city}</p>
+                    <p className='errors'>{errors.city}</p>
                 )}
                  {errors.state && !errors.location && (
                     <p className='errors'>{errors.state}</p>

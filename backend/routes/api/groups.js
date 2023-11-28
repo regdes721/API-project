@@ -335,12 +335,12 @@ router.put('/:groupId', requireAuth, restoreUser, async (req, res) => {
     if (url && !url.endsWith('.png') && !url.endsWith('.jpg') && !url.endsWith('.jpeg')) {
         errors.url = "Image URL must end in .png, .jpg, or .jpeg"
     }
-    // if (city && city === "") {
-    //     errors.city = "City is required";
-    // }
-    // if (state === "") {
-    //     errors.state = "State is required";
-    // }
+    if (!city && state) {
+        errors.city = "City is required";
+    }
+    if (!state && city) {
+        errors.state = "State is required";
+    }
     if (errors.name || errors.about || errors.type || errors.isPrivate || errors.city || errors.state || errors.url) {
         const err = new Error("Bad Request");
         res.status(400);
