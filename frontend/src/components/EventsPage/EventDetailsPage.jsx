@@ -22,6 +22,8 @@ const EventDetailsPage = () => {
     // console.log("eventDetailsObj", eventDetailsObj)
     // console.log("event", event)
 
+    // console.log("date", new Date(event[0].startDate).getTime())
+
     useEffect(() => {
         dispatch(fetchEventDetails(eventId))
     }, [dispatch, eventId])
@@ -73,7 +75,7 @@ const EventDetailsPage = () => {
                                         {event.length === 1 ? <h5>{event[0].type}</h5> : null}
                                     </div>
                                     <div className={`${organizerButtonClassName} event-card2-button-container`}>
-                                        <button className="organizer-button event-button">Update</button>
+                                        <button className="organizer-button event-button" onClick={() => (alert(`Feature Coming Soon...`))}>Update</button>
                                         <OpenModalActionButton
                                         itemText="Delete"
                                         modalComponent={<DeleteEventModal />}

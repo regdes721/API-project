@@ -42,8 +42,8 @@ function DeleteEventModal() {
         <div className='delete-modal-container'>
             <h1 className='delete-modal-text'>Confirm Delete</h1>
             <p className='delete-modal-text'>Are you sure you want to remove this event?</p>
-            <button className='delete-modal-button red-button' onClick={handleSubmit}>{`Yes (Delete Event)`}</button>
-            <button className='delete-modal-button gray-button' onClick={closeModal}>{`No (Keep Event)`}</button>
+            <button className='delete-modal-button red-button pointer-cursor' onClick={handleSubmit}>{`Yes (Delete Event)`}</button>
+            <button className='delete-modal-button gray-button pointer-cursor' onClick={closeModal}>{`No (Keep Event)`}</button>
             {errors && <p>{errors}</p>}
         </div>
     )

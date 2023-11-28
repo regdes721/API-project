@@ -8,6 +8,7 @@ import './CreateEventPage.css'
 const CreateEventPage = () => {
     const { groupId } = useParams();
     const dispatch = useDispatch();
+    const sessionUser = useSelector((state) => state.session.user);
     const groupDetailsObj = useSelector(state => state.groups.singleGroup);
     const group = Object.values(groupDetailsObj);
     const [newEventId, setNewEventId] = useState(null);
@@ -26,6 +27,30 @@ const CreateEventPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
+        let submitErrors = {}
+        const priceRegex = /^\d{1,7}(\.\d{1,2})?$/;
+        if (!name) submitErrors.name = "Name is required";
+        if ((name && name.length < 5)) submitErrors.name = "Name must be at least 5 characters";
+        if (type !== "Online" && type !== "In person") submitErrors.type = "Event Type is required";
+        if (!priceRegex.test(price) || typeof parseFloat(price) !== 'number') submitErrors.price = "Price is invalid";
+        if (!price && price !== 0) submitErrors.price = "Price is required";
+        if (!startDate) submitErrors.startDate = "Event start is required";
+        if ((startDate && new Date(startDate) <= new Date())) submitErrors.startDate = "Start date must be in the future";
+        if (!endDate) submitErrors.endDate = "Event end is required";
+        if ((endDate && new Date(endDate) <= new Date(startDate))) submitErrors.endDate = "End date is less than start date";
+        if ((endDate && new Date(endDate) <= new Date())) errors.endDate = "End date must be in the future";
+        if (startDate && new Date(startDate).toUTCString() === 'Invalid Date') submitErrors.startDate = "Invalid Date"
+        if (endDate && new Date(endDate).toUTCString() === 'Invalid Date') submitErrors.endDate = "Invalid Date"
+        if (!url || (!url.endsWith('.png') && !url.endsWith('.jpg') && !url.endsWith('.jpeg'))) {
+            submitErrors.url = "Image URL must end in .png, .jpg, or .jpeg"
+        }
+        if (!description) submitErrors.description = "Description is required";
+        if (description && description.length < 30) submitErrors.description = "Description must be at least 30 characters long";
+        if (submitErrors.name || submitErrors.type || submitErrors.price || submitErrors.startDate || submitErrors.endDate || submitErrors.url || submitErrors.description) {
+            return setErrors(submitErrors)
+        }
+        // console.log(parseFloat(price))
+        // console.log("converted date??", new Date(startDate).toUTCString())
         dispatch(
             thunkCreateEvent({
                 groupId,
@@ -34,8 +59,8 @@ const CreateEventPage = () => {
                 capacity: 100,
                 price: parseFloat(price),
                 description,
-                startDate,
-                endDate,
+                startDate: new Date(startDate).toUTCString(),
+                endDate: new Date(endDate).toUTCString(),
                 url
             })
         ).then(async (res) => {
@@ -59,6 +84,8 @@ const CreateEventPage = () => {
     useEffect(() => {
         dispatch(fetchGroupDetails(groupId))
     }, [dispatch, groupId])
+
+    if (!sessionUser) return <Navigate to={`/`} replace={true} />
 
     if (newEventId) return <Navigate to={`/events/${newEventId}`} replace={true} />
 

@@ -43,6 +43,10 @@ const GroupDetailsPage = () => {
         dispatch(fetchEvents())
     }, [dispatch, groupId])
 
+    // console.log(allGroupsObj[groupId])
+
+    // if (group.length === 1 && allGroupsObj[groupId] === undefined) return <h1>Not Found</h1>
+
     return (
         <div>
             <div className="group-header-container">
@@ -54,19 +58,23 @@ const GroupDetailsPage = () => {
                     )) : null} */}
                 </div>
                 <div className="group-header-text-container">
-                    {group.length === 1 ? <h1>{group[0].name}</h1> : null}
-                    {group.length === 1 ? <h3>{`${group[0].city}, ${group[0].state}`}</h3> : null}
-                    {group.length === 1 ? <h3>{events.filter((event) => event.groupId === group[0].id).length === 1 ? `${events.filter((event) => event.groupId === group[0].id).length} Event` : `${events.filter((event) => event.groupId === group[0].id).length} Events`} · {group[0].isPrivate === true ? "Private" : "Public"}</h3> : null}
-                    {group.length === 1 ? <h3>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</h3> : null}
-                    <button className={`${joinButtonClassName} join-button`} onClick={() => (alert(`Feature Coming Soon...`))}>Join this group</button>
-                    <div className={`${organizerButtonClassName} organizer-button-container`}>
-                        {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/events/new`} className="organizer-button-link"><button className="organizer-button">Create Event</button></NavLink> : null}
-                        {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/edit`} className="organizer-button-link">                        <button className="organizer-button">Update</button>
-                        </NavLink> : null}
-                        <OpenModalActionButton
-                        itemText="Delete"
-                        modalComponent={<DeleteGroupModal />}
-                        />
+                    <div>
+                        {group.length === 1 ? <h1>{group[0].name}</h1> : null}
+                        {group.length === 1 ? <h3>{`${group[0].city}, ${group[0].state}`}</h3> : null}
+                        {group.length === 1 ? <h3>{events.filter((event) => event.groupId === group[0].id).length === 1 ? `${events.filter((event) => event.groupId === group[0].id).length} Event` : `${events.filter((event) => event.groupId === group[0].id).length} Events`} · {group[0].isPrivate === true ? "Private" : "Public"}</h3> : null}
+                        {group.length === 1 ? <h3>Organized by {group[0].Organizer.firstName} {group[0].Organizer.lastName}</h3> : null}
+                    </div>
+                    <div>
+                        <button className={`${joinButtonClassName} join-button`} onClick={() => (alert(`Feature Coming Soon...`))}>Join this group</button>
+                        <div className={`${organizerButtonClassName} organizer-button-container`}>
+                            {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/events/new`} className="organizer-button-link"><button className="organizer-button">Create Event</button></NavLink> : null}
+                            {group.length === 1 ? <NavLink to={`/groups/${group[0].id}/edit`} className="organizer-button-link"><button className="organizer-button">Update</button>
+                            </NavLink> : null}
+                            <OpenModalActionButton
+                                itemText="Delete"
+                                modalComponent={<DeleteGroupModal />}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
